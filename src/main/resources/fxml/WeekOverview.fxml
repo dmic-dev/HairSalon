@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="1070.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TableView maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="504.0" prefWidth="1071.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+          <columns>
+          <TableColumn editable="false" prefWidth="70" reorderable="false" resizable="false" sortable="false" text="*" />
+          <TableColumn editable="false" prefWidth="140" reorderable="false" resizable="false" sortable="false" text="Δευτέρα" />
+          <TableColumn editable="false" prefWidth="140" reorderable="false" resizable="false" sortable="false" text="Τρίτη" />
+          <TableColumn editable="false" prefWidth="140" reorderable="false" resizable="false" sortable="false" text="Τετάρτη" />
+          <TableColumn editable="false" prefWidth="140.0" reorderable="false" resizable="false" sortable="false" text="Πέμπτη" />
+          <TableColumn editable="false" prefWidth="133.99993896484375" reorderable="false" resizable="false" sortable="false" text="Παρασκευή" />
+          <TableColumn editable="false" prefWidth="140" reorderable="false" resizable="false" sortable="false" text="Σάββατο" />
+          <TableColumn editable="false" prefWidth="140" reorderable="false" resizable="false" sortable="false" text="Κυριακή" />
+          </columns>
+      </TableView>
+   </center>
+</BorderPane>

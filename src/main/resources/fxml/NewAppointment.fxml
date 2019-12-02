@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.NewAppointmentController">
+   <effect>
+      <DropShadow />
+   </effect>
+   <bottom>
+      <BorderPane prefHeight="58.0" prefWidth="677.0" BorderPane.alignment="CENTER">
+         <right>
+            <HBox spacing="15.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="6.0" prefWidth="122.0" text="Δημιουργία">
+                     <padding>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="6.0" prefWidth="122.0" text="Ακύρωση">
+                     <padding>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </HBox>
+         </right>
+      </BorderPane>
+   </bottom>
+   <top>
+      <HBox prefHeight="54.0" prefWidth="677.0" style="-fx-background-color: #a1b56c;" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="27.0" prefWidth="189.0" text="Νέο Ραντεβού">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="15.0" top="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+   <left>
+      <BorderPane prefHeight="514.0" prefWidth="841.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <center>
+            <HBox prefHeight="514.0" prefWidth="898.0" spacing="40.0" style="-fx-background-color: cornsilk;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="235.0" prefWidth="284.0" spacing="20.0">
+                     <children>
+                        <ComboBox editable="true" prefHeight="39.0" prefWidth="429.0" promptText="Ονοματεπώνυμο" />
+                        <SplitPane prefHeight="190.0" prefWidth="284.0">
+                           <items>
+                              <VBox prefHeight="159.0" prefWidth="282.0" spacing="15.0">
+                                 <children>
+                                    <Label prefHeight="0.0" prefWidth="364.0" style="-fx-background-color: #f2b9b9;" text="   Εργασίες" />
+                                    <GridPane layoutX="498.0" layoutY="96.0" prefHeight="122.0" prefWidth="251.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0" minWidth="10.0" prefWidth="122.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="154.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" selected="true" text="Λούσιμο" />
+                                          <CheckBox mnemonicParsing="false" prefHeight="19.0" prefWidth="118.0" text="Κούρεμα" GridPane.rowIndex="1" />
+                                          <CheckBox mnemonicParsing="false" text="Χτένισμα" GridPane.rowIndex="4" />
+                                          <ComboBox prefHeight="39.0" prefWidth="209.0" promptText="Είδος" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <ComboBox prefHeight="39.0" prefWidth="215.0" promptText="Μήκος μαλλιών" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <CheckBox mnemonicParsing="false" text="Βάψιμο" GridPane.rowIndex="2" />
+                                          <CheckBox mnemonicParsing="false" text="Θεραπεία" GridPane.rowIndex="3" />
+                                          <ComboBox prefHeight="39.0" prefWidth="210.0" promptText="Είδος" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </VBox>
+                  <SplitPane prefHeight="228.0" prefWidth="263.0">
+                     <items>
+                        <VBox prefHeight="233.0" prefWidth="327.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="0.0" prefWidth="282.0" style="-fx-background-color: #f2b9b9;" text="   Ημερομηνία :" />
+                              <DatePicker prefHeight="39.0" prefWidth="374.0" />
+                              <Separator prefWidth="200.0">
+                                 <padding>
+                                    <Insets bottom="7.0" top="10.0" />
+                                 </padding>
+                              </Separator>
+                              <Label prefHeight="0.0" prefWidth="282.0" style="-fx-background-color: #f2b9b9;" text="   Ώρα :" />
+                              <HBox prefHeight="243.0" prefWidth="282.0" spacing="10.0">
+                                 <children>
+                                    <TextField prefHeight="39.0" prefWidth="43.0" />
+                                    <Label alignment="CENTER" prefHeight="43.0" prefWidth="8.0" text=":" />
+                                    <TextField prefHeight="39.0" prefWidth="43.0" />
+                                    <ChoiceBox prefHeight="39.0" prefWidth="157.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                     </items>
+                  </SplitPane>
+               </children>
+               <padding>
+                  <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
+               </padding>
+            </HBox>
+         </center>
+      </BorderPane>
+   </left>
+</BorderPane>

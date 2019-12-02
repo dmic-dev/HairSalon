@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.NewContactController">
+   <top>
+      <HBox prefHeight="31.0" prefWidth="628.0" styleClass="title-background" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="title_lbl" prefHeight="48.0" prefWidth="263.0" text="Νέα Επαφή">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="15.0" top="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+   <bottom>
+      <BorderPane prefHeight="22.0" prefWidth="628.0" BorderPane.alignment="CENTER">
+         <right>
+            <HBox spacing="15.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#saveAndExit" prefHeight="25.0" prefWidth="172.0" text="Αποθήκευση &amp; Έξοδος" />
+                  <Button mnemonicParsing="false" prefHeight="6.0" prefWidth="172.0" text="Ακύρωση" />
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </HBox>
+         </right>
+      </BorderPane>
+   </bottom>
+   <center>
+      <AnchorPane prefHeight="391.0" prefWidth="628.0" styleClass="main-background" BorderPane.alignment="CENTER">
+         <children>
+            <SplitPane layoutX="32.0" layoutY="264.0" prefHeight="127.0" prefWidth="572.0">
+               <items>
+                  <VBox>
+                     <children>
+                        <Label prefHeight="27.0" prefWidth="913.0" styleClass="group-label" text="   Στοιχεία επικοινωνίας" />
+                        <TabPane layoutX="262.0" layoutY="565.0" prefHeight="217.0" prefWidth="912.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                              <Tab text="Σημειώσεις">
+                                 <content>
+                                    <BorderPane>
+                                       <center>
+                                          <TextArea fx:id="notes_txtArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                       </center>
+                                    </BorderPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Τηλέφωνα">
+                                 <content>
+                                    <TableView prefHeight="200.0" prefWidth="200.0">
+                                      <columns>
+                                        <TableColumn minWidth="2.0" prefWidth="251.0" text="Αριθμός" />
+                                        <TableColumn minWidth="0.0" prefWidth="248.0" text="Τύπος" />
+                                          <TableColumn minWidth="0.0" prefWidth="71.0" text="Επεξεργασία" />
+                                      </columns>
+                                    </TableView>
+                                 </content>
+                              </Tab>
+                            <Tab text="Διευθύνσεις">
+                                 <content>
+                                    <TableView prefHeight="200.0" prefWidth="200.0">
+                                      <columns>
+                                          <TableColumn prefWidth="222.0" text="Οδός" />
+                                        <TableColumn prefWidth="57.0" text="Αριθμός" />
+                                        <TableColumn prefWidth="54.0" text="Ταχ. Κώδικας" />
+                                          <TableColumn prefWidth="172.0" text="Περιοχή" />
+                                          <TableColumn prefWidth="65.0" text="Επεξεργασία" />
+                                      </columns>
+                                    </TableView>
+                                 </content>
+                            </Tab>
+                            <Tab text="Ηλεκτρον. Ταχυδρομείο">
+                                 <content>
+                                    <TableView prefHeight="161.0" prefWidth="933.0">
+                                      <columns>
+                                        <TableColumn prefWidth="501.0" text="Διεύθυνση e-mail" />
+                                        <TableColumn minWidth="0.0" prefWidth="69.0" text="Επεξεργασία" />
+                                      </columns>
+                                    </TableView>
+                                 </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
+            <SplitPane layoutX="32.0" layoutY="22.0" prefHeight="66.0" prefWidth="62.0">
+               <items>
+                  <BorderPane prefHeight="83.0" prefWidth="89.0">
+                     <center>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/jpg/default-female.jpg" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+               </items>
+            </SplitPane>
+            <SplitPane layoutX="228.0" layoutY="22.0" prefHeight="103.0" prefWidth="377.0">
+               <items>
+                  <VBox prefHeight="187.0" prefWidth="375.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="27.0" prefWidth="528.0" styleClass="group-label" text="   Γενικά στοιχεία" />
+                        <TextField fx:id="firstName_txtf" promptText="Όνομα" />
+                        <TextField fx:id="lastName_txtf" promptText="Επώνυμο" />
+                        <Separator prefWidth="200.0" />
+                        <TextField fx:id="profession_txtf" promptText="Επάγγελμα" />
+                        <TextField fx:id="company_txtf" promptText="Οργανισμός/Εταιρία" />
+                        <TextField fx:id="position_txtf" promptText="Θέση" />
+                     </children>
+                     <padding>
+                        <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </SplitPane>
+            <SplitPane layoutX="32.0" layoutY="123.0" prefHeight="70.0" prefWidth="185.0">
+               <items>
+                  <VBox prefHeight="64.0" prefWidth="183.0" spacing="11.0">
+                     <children>
+                        <Label prefHeight="27.0" prefWidth="298.0" styleClass="group-label" text="   Φύλο" />
+                        <RadioButton mnemonicParsing="false" text="Άνδρας">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="gender_tglb" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton mnemonicParsing="false" selected="true" text="Γυναίκα" toggleGroup="$gender_tglb" />
+                        <RadioButton mnemonicParsing="false" text="Αδιευκρίνηστο" toggleGroup="$gender_tglb" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="7.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </SplitPane>
+            <VBox layoutX="622.0" layoutY="22.0" prefHeight="224.0" prefWidth="106.0" spacing="13.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Εκκαθάριση πεδίων" textAlignment="CENTER" wrapText="true" />
+                  <Button mnemonicParsing="false" onAction="#save" text="Αποθήκευση επαφης" textAlignment="CENTER" wrapText="true" />
+                  <VBox prefHeight="80.0" prefWidth="106.0">
+                     <children>
+                        <HBox prefHeight="51.0" prefWidth="106.0" spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="&lt;" />
+                              <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="&gt;" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="56.0" prefWidth="106.0" spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="|&lt;" />
+                              <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="&gt;|" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <Label fx:id="message_lbl" layoutX="622.0" layoutY="264.0" prefHeight="59.0" prefWidth="105.0" text="* Επαφή αποθηκεύτηκε" textFill="RED" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
