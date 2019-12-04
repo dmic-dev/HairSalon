@@ -122,8 +122,4 @@ public class DayOverviewManager {
         return (AppointmentDto)appointmentDtoItem.getAppointmentDto(rowData);
     }
     
-    @Component
-    public class TimeTableState extends TableviewStateDetails{
-        
-    }
 }

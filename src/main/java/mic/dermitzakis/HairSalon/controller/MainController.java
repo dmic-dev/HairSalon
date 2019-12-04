@@ -39,8 +39,6 @@ public class MainController implements FxmlController{
     private final ApplicationContext springContext;
     private final StageManager stageManager;
     private final DataLoaderService dataLoaderService;
-    @Getter @Setter private HashMap<CurrentView, TableviewStateDetails> stateDetails;
-    @Getter @Setter private CurrentView currentView;
 
     private static final Logger LOG = Logger.getLogger(MainController.class.getName());
     
@@ -80,8 +78,6 @@ public class MainController implements FxmlController{
         stageManager.newStage(FxmlView.NEW_CONTACT);
     }
     
-    // Maybe should try blankMethod !!!
-   
     @FXML
     private void showContent(){
         if (mainAccordion.getExpandedPane() != null) {
@@ -95,8 +91,6 @@ public class MainController implements FxmlController{
     }
 
     private void showAppointmentsByDay() {
-        // getCurrentAppointmentData
-        setCurrentView(CurrentView.DAY_VIEW);
         setContent(FxmlView.APPOINTMENT_VIEW);
     }
     
@@ -105,13 +99,10 @@ public class MainController implements FxmlController{
     }
     
     private void showContactsTable() {
-        // getCurrentContactData();
-        setCurrentView(CurrentView.CONTACT_VIEW);
         setContent(FxmlView.CONTACT_VIEW);
     }
 
     private void showRecycleBin() {
-        // getCurrentDeletedItemsData();
         showValidContent();
     }
 
@@ -138,23 +129,6 @@ public class MainController implements FxmlController{
         ((Region)root).prefHeightProperty().bind(content.heightProperty());
     }
     
-    public TableviewStateDetails getCurrentViewState(){
-        return stateDetails.get(currentView);
-    }
-
-    @ToString
-    public enum CurrentView {
-        DAY_VIEW("dayOverviewState"),
-        CONTACT_VIEW("contactOverviewState");
-
-        private CurrentView(String type) {
-            this.type = type;
-        }
-
-        private final String type;
-
-    }
-
 }
 
 

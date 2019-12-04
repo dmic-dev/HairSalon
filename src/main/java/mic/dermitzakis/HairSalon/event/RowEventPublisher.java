@@ -45,8 +45,8 @@ public class RowEventPublisher implements EventPublisher {
 
     @Override
     public void notifyObservers() {
-        observers.stream().forEach((observer) -> { 
-            observer.update(selectedItem, focusedItem, status); });
+        observers.stream()
+                .forEach((observer) ->  observer.update(selectedItem, focusedItem, status));
     }
     
 }

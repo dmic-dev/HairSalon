@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.ToString;
 import mic.dermitzakis.HairSalon.controller.AppointmentOverviewController;
 import mic.dermitzakis.HairSalon.controller.MainController;
-import mic.dermitzakis.HairSalon.controller.MainController.CurrentView;
 import mic.dermitzakis.HairSalon.controller.TableviewStateDetails;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,6 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
     
     @Autowired
     private ApplicationContext springContext;
-    @Autowired
-    private MainController mainController;
     
     public MyLabel() {
         super();
@@ -57,7 +54,6 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
         this.focusedItem = focusedItem;
         if (identity == focusedItem) this.appointmentStatus = appointmentStatus;
         setStyle(getLabelStyle());
-        notifyTableStateChange();
     }
  
     private void setEventHandler(){
@@ -66,13 +62,6 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
         setOnMouseClicked(this);
     }
     
-    private void notifyTableStateChange(){
-        TableviewStateDetails stateDetails = mainController.getCurrentViewState();
-        stateDetails.setSelectedItem(selectedItem);
-        stateDetails.setFocusedItem(focusedItem);
-        CurrentView key = mainController.getCurrentView();
-        mainController.getStateDetails().replace(key, stateDetails);
-    }
     // do not touch  !!!!
     public void setAppointmentStatus(AppointmentStatus appointmentStatus){
         this.appointmentStatus = appointmentStatus;
@@ -98,33 +87,25 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
         return setTextFill()+setBackground();
     }
 
-    private long getSelectedItem(){ // Bullshit
-        return mainController.getCurrentViewState().getSelectedItem();
-    }
-    
-    private long getFocusedItem(){
-        return mainController.getCurrentViewState().getFocusedItem();
-    }
-    
     @Override
     public void handle(MouseEvent event) {
         RowEventPublisher rowEventPublisher = springContext.getBean(RowEventPublisher.class);
         if (event.getEventType() ==  MouseEvent.MOUSE_ENTERED){
             if (event.getSource().getClass() == MyLabel.class){
                 MyLabel focusedLabel = ((MyLabel)event.getSource());
-                rowEventPublisher.setRowInformation(getSelectedItem(), focusedLabel.getIdentity(), focusedLabel.getAppointmentStatus());
+                rowEventPublisher.setRowInformation(selectedItem, focusedLabel.getIdentity(), focusedLabel.getAppointmentStatus());
             }    
         } else 
         if (event.getEventType() ==  MouseEvent.MOUSE_EXITED){
             if (event.getSource().getClass() == MyLabel.class){
                 MyLabel unfocusedLabel = (MyLabel)event.getSource();
-                rowEventPublisher.setRowInformation(getSelectedItem(), getFocusedItem(), unfocusedLabel.getAppointmentStatus());
+                rowEventPublisher.setRowInformation(selectedItem, focusedItem, unfocusedLabel.getAppointmentStatus());
             }    
         } else 
         if (event.getEventType() ==  MouseEvent.MOUSE_CLICKED){
             if (event.getSource().getClass() == MyLabel.class){
                 MyLabel selectedLabel = (MyLabel)event.getSource();
-                rowEventPublisher.setRowInformation(selectedLabel.getIdentity(), getFocusedItem(), selectedLabel.getAppointmentStatus());
+                rowEventPublisher.setRowInformation(selectedLabel.getIdentity(), focusedItem, selectedLabel.getAppointmentStatus());
             }
         }
     }

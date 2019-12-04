@@ -40,12 +40,13 @@ public class ChoiceBoxManager{
             
 
     public MyChoiceBox getChoiceBoxWithProperties(RowDto rowDto) {
-        ObservableList<AppointmentStatus> statusList = 
+        final ObservableList<AppointmentStatus> statusList = 
                 FXCollections.observableArrayList(AppointmentStatus.COMPLETED,AppointmentStatus.CANCELED,AppointmentStatus.PENDING);
         MyChoiceBox myChoiceBox = springContext.getBean(MyChoiceBox.class, statusList);
         
         myChoiceBox.setIdentity(rowDto.getAppointmentId());
         myChoiceBox.setValue(rowDto.getAppointmentStatus());
+        rowEventPublisher.registerObserver(myChoiceBox);
         return myChoiceBox;
     }
     

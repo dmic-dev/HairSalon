@@ -29,18 +29,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import mic.dermitzakis.HairSalon.event.MyLabel;
+import mic.dermitzakis.HairSalon.event.RowEventObserver;
 import mic.dermitzakis.HairSalon.event.RowEventPublisher;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 import mic.dermitzakis.HairSalon.services.DataLoaderService;
 
 //@Data
 @Controller
-public class DayOverviewController implements FxmlController, TableviewState, EventHandler<MouseEvent>{
+public class DayOverviewController implements FxmlController, RowEventObserver, EventHandler<MouseEvent>{
     private final ApplicationContext springContext;
     private final DataLoaderService dataLoaderService;
     private final RowEventPublisher rowEventPublisher;
-    private final MainController mainController;
-    private TableviewStateDetails stateDetails;
     private static final Logger LOG = Logger.getLogger(DayOverviewController.class.getName());
     
     @FXML
@@ -70,19 +69,24 @@ public class DayOverviewController implements FxmlController, TableviewState, Ev
     private Text last_modified_txt;
     
     private Optional<List<Appointment>> appointments;
-    private MyLabel myLabel;
+    private long selectedItem;
 
     @Autowired
     public DayOverviewController(ApplicationContext springContext) {
         this.springContext = springContext;
         this.dataLoaderService = springContext.getBean(DataLoaderService.class);
         this.rowEventPublisher = springContext.getBean(RowEventPublisher.class);
-        this.mainController = springContext.getBean(MainController.class);
-//        this.stateData = springContext.getBean(TableviewStateDetails.class);
+        rowEventPublisher.registerObserver(this);
+    }
+
+    @Override
+    public void update(long selectedItem, long focusedItem, AppointmentStatus status) {
+        this.selectedItem = selectedItem;
     }
 
     @Override
     public void initialize() {
+        assignTableEventHandler();
         assignTableColumns();
         insertDataIntoTable(); ///// ???????????????
         restorePreviusState(); /// what if date changes ????
@@ -93,7 +97,6 @@ public class DayOverviewController implements FxmlController, TableviewState, Ev
     }
     
     private void assignTableColumns(){
-        assignTableEventHandler();
         time_Column.setCellValueFactory(new PropertyValueFactory<>("timeLabel"));
         name_Column.setCellValueFactory(new PropertyValueFactory<>("namesVbox"));
         operations_Column.setCellValueFactory(new PropertyValueFactory<>("operationsVbox"));
@@ -114,15 +117,13 @@ public class DayOverviewController implements FxmlController, TableviewState, Ev
     }
 
     private void InitializeTable() {
-        restoreTableState();
         setRowInformation();
-        notifyTableRows();
     }
 
     @Override
     public void handle(MouseEvent event) {
        if (event.getSource().getClass() == TableView.class){
-            rowEventPublisher.setRowInformation(stateDetails.getSelectedItem(), -1, null);
+            rowEventPublisher.setRowInformation(selectedItem, -1, null);
         }
     }
 
@@ -137,48 +138,38 @@ public class DayOverviewController implements FxmlController, TableviewState, Ev
     }
 
     
-    ///////////////    TO REPAIR    \\\\\\\\\\\\\\\\\\\\\
-    private void restoreTableState() {
-        if (mainController.getCurrentViewState() != null)
-            stateDetails = mainController.getCurrentViewState();
-        else {
-            stateDetails = springContext.getBean(TableviewStateDetails.class);
-            stateDetails.setSelectedItem(getFirstLabel().getIdentity());
-            stateDetails.setFocusedItem(stateDetails.getSelectedItem());//Should be first item or none (-1)
-            stateDetails.setPlaceholder(appointmentTable.getPlaceholder());
-        }
-    }
-    
+     
     private void setRowInformation(){
-        Appointment appointment = appointments.get().get((int)stateDetails.getSelectedItem());/// How does it work?
-        rowEventPublisher.setRowInformation(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.extractStatus(appointment));
+        long firstItemId = getFirstLabel().getIdentity();
+        Appointment appointment = appointments.get().get((int)firstItemId);/// How does it work?
+        rowEventPublisher.setRowInformation(firstItemId, firstItemId, AppointmentStatus.extractStatus(appointment));
     }
  
-    private void notifyTableRows(){
-        Iterator namesVBoxItr;
-        for (AppointmentDto appointmentDto : appointmentTable.getItems()){
-            namesVBoxItr = appointmentDto.getNamesVbox().getChildrenUnmodifiable().iterator();
-            while (namesVBoxItr.hasNext()){
-                myLabel = (MyLabel)namesVBoxItr.next();
-                notifyLabel();
-            }
-        } 
-    }
-    
-    private void notifyLabel() {
-        appointments.get().stream()
-                .findFirst()
-                .filter(this::matchingLabelIdentity).stream()
-                .forEach(this::updateLabel);
-    }
-    
-    private boolean matchingLabelIdentity(Appointment appointment){
-        return appointment.getAppointmentId() == myLabel.getIdentity();
-    }
-    
-    private void updateLabel(Appointment appointment){
-        myLabel.update(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.extractStatus(appointment));
-    }
+//    private void notifyTableRows(){
+//        Iterator namesVBoxItr;
+//        for (AppointmentDto appointmentDto : appointmentTable.getItems()){
+//            namesVBoxItr = appointmentDto.getNamesVbox().getChildrenUnmodifiable().iterator();
+//            while (namesVBoxItr.hasNext()){
+//                myLabel = (MyLabel)namesVBoxItr.next();
+//                notifyLabel();
+//            }
+//        } 
+//    }
+//    
+//    private void notifyLabel() {
+//        appointments.get().stream()
+//                .findFirst()
+//                .filter(this::matchingLabelIdentity).stream()
+//                .forEach(this::updateLabel);
+//    }
+//    
+//    private boolean matchingLabelIdentity(Appointment appointment){
+//        return appointment.getAppointmentId() == myLabel.getIdentity();
+//    }
+//    
+//    private void updateLabel(Appointment appointment){
+//        myLabel.update(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.extractStatus(appointment));
+//    }
     
 /////////////  DANGER - DANGER - DANGER  \\\\\\\\\\\\\\
     private MyLabel getFirstLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
@@ -193,16 +184,16 @@ public class DayOverviewController implements FxmlController, TableviewState, Ev
         return (MyLabel)namesVBoxList.get(0); // !!!!!!!!
     }
     
-    @Override
-    public TableviewStateDetails getState() {
-        stateDetails.setPlaceholder(appointmentTable.getPlaceholder());
-        return stateDetails;
-    }
-
-    @Override
-    public void setState(TableviewStateDetails stateDetails) { // fix AppointmentStatus
-        rowEventPublisher.setRowInformation(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.PENDING);
-        appointmentTable.setPlaceholder(stateDetails.getPlaceholder());
-    }
+//    @Override
+//    public TableviewStateDetails getState() {
+//        stateDetails.setPlaceholder(appointmentTable.getPlaceholder());
+//        return stateDetails;
+//    }
+//
+//    @Override
+//    public void setState(TableviewStateDetails stateDetails) { // fix AppointmentStatus
+//        rowEventPublisher.setRowInformation(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.PENDING);
+//        appointmentTable.setPlaceholder(stateDetails.getPlaceholder());
+//    }
 
 }

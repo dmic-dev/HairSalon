@@ -5,24 +5,15 @@
  */
 package mic.dermitzakis.HairSalon.controller;
 
-import java.util.Objects;
-import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import lombok.Data;
-import mic.dermitzakis.HairSalon.event.MyChoiceBox;
-import mic.dermitzakis.HairSalon.event.MyLabel;
 import mic.dermitzakis.HairSalon.view.FxmlController;
 import mic.dermitzakis.HairSalon.view.FxmlView;
 import mic.dermitzakis.HairSalon.view.StageManager;
-import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 

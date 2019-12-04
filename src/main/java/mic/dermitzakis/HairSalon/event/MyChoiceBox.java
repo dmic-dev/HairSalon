@@ -26,14 +26,15 @@ import org.springframework.context.annotation.Lazy;
 @Data
 @EqualsAndHashCode(callSuper = true)
 
-public class MyChoiceBox extends ChoiceBox implements EventHandler<MouseEvent>{
+public class MyChoiceBox extends ChoiceBox implements RowEventObserver, EventHandler<MouseEvent>{
      
     private long identity;
+    private long selectedItem;
+    private long focusedItem;
+    private AppointmentStatus appointmentStatus;
 
     @Autowired
     private ApplicationContext springContext;
-    @Autowired
-    private MainController mainController;
    
     public MyChoiceBox(ObservableList<AppointmentStatus> choiceBoxList) {
         super(choiceBoxList);
@@ -46,18 +47,16 @@ public class MyChoiceBox extends ChoiceBox implements EventHandler<MouseEvent>{
         setOnAction(this::onAction);
     }
  
-    private long getSelectedItem(){
-        return mainController.getCurrentViewState().getSelectedItem();
+
+    @Override
+    public void update(long selectedItem, long focusedItem, AppointmentStatus status) {
+        this.selectedItem = selectedItem;
+        this.focusedItem = focusedItem;
     }
-    
-    private long getFocusedItem(){
-        return mainController.getCurrentViewState().getFocusedItem();
-    }
-    
     private void onAction(Event t){
         RowEventPublisher rowEventPublisher = springContext.getBean(RowEventPublisher.class);
         MyChoiceBox focusedChoiceBox = (MyChoiceBox)t.getSource();
-        rowEventPublisher.setRowInformation(getSelectedItem(), focusedChoiceBox.getIdentity(), (AppointmentStatus)focusedChoiceBox.getSelectionModel().getSelectedItem());
+        rowEventPublisher.setRowInformation(selectedItem, focusedChoiceBox.getIdentity(), (AppointmentStatus)focusedChoiceBox.getSelectionModel().getSelectedItem());
     }
     
     @Override
@@ -66,13 +65,13 @@ public class MyChoiceBox extends ChoiceBox implements EventHandler<MouseEvent>{
         if (event.getEventType() ==  MouseEvent.MOUSE_ENTERED){
             if (event.getSource().getClass() == MyChoiceBox.class){
                 MyChoiceBox focusedChoiceBox = (MyChoiceBox)event.getSource();
-                rowEventPublisher.setRowInformation(getSelectedItem(), focusedChoiceBox.getIdentity(), (AppointmentStatus)focusedChoiceBox.getSelectionModel().getSelectedItem());
+                rowEventPublisher.setRowInformation(selectedItem, focusedChoiceBox.getIdentity(), (AppointmentStatus)focusedChoiceBox.getSelectionModel().getSelectedItem());
             }
         } else
         if (event.getEventType() ==  MouseEvent.MOUSE_EXITED){
             if (event.getSource().getClass() == MyChoiceBox.class){
                 MyChoiceBox unfocusedChoiceBox = (MyChoiceBox)event.getSource();
-                rowEventPublisher.setRowInformation(getSelectedItem(), unfocusedChoiceBox.getIdentity(),
+                rowEventPublisher.setRowInformation(selectedItem, unfocusedChoiceBox.getIdentity(),
                         (AppointmentStatus)unfocusedChoiceBox.getSelectionModel().getSelectedItem());
             }
         }

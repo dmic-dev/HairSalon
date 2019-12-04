@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
-import mic.dermitzakis.HairSalon.business.logic.SampleDataAccessManager;
+import mic.dermitzakis.HairSalon.database.SampleDataAccessManager;
 import mic.dermitzakis.HairSalon.model.EntityType;
 
 
@@ -30,6 +30,8 @@ public class LoadReposCommandLineRunner implements CommandLineRunner{
     private final AppointmentRepository appointmentRepository;
 
     private final List<Appointment> appointmentList;
+    private final List<Contact> contactList;
+    
 
     @Autowired
     public LoadReposCommandLineRunner(SampleDataAccessManager dataService, ContactRepository contactRepository,
@@ -40,13 +42,13 @@ public class LoadReposCommandLineRunner implements CommandLineRunner{
         contactList = (List<Contact>)this.dataService.read(EntityType.CONTACT).stream().collect(toList());
         appointmentList = (List<Appointment>)this.dataService.read(EntityType.APPOINTMENT).stream().collect(toList());
     }
-
+    
     @Override
     public void run(String... args) throws Exception {
         contactList.forEach(contactRepository::save);
         appointmentList.forEach(appointmentRepository::save);
     }
-    private final List<Contact> contactList;
+    
 }
 
 //    private static final Logger LOG = LoggerFactory.getLogger(LoadReposCommandLineRunner.class);
