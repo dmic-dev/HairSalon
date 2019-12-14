@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Lazy;
 @Data
 @EqualsAndHashCode(callSuper = true)
 
-public class MyLabel extends Label implements RowEventObserver, EventHandler<MouseEvent>{
+public class CustomLabel extends Label implements RowEventObserver, EventHandler<MouseEvent>{
     private long identity;
     private long selectedItem;
     private long focusedItem;
@@ -38,12 +38,12 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
     @Autowired
     private ApplicationContext springContext;
     
-    public MyLabel() {
+    public CustomLabel() {
         super();
         setEventHandler();
     }
     
-    public MyLabel(String text) {
+    public CustomLabel(String text) {
         super(text);
         setEventHandler();
     }
@@ -71,40 +71,42 @@ public class MyLabel extends Label implements RowEventObserver, EventHandler<Mou
     private String setTextFill(){
         switch (appointmentStatus){
             case COMPLETED : return "-fx-text-fill: green;";
-            case CANCELED  : return  "-fx-text-fill: red;";
-            case PENDING   : return  "-fx-text-fill: black;";
+            case CANCELED  : return "-fx-text-fill: red;";
+            case PENDING   : return "-fx-text-fill: black;";
+            case EMPTY     : return "-fx-text-fill: black;";
             default : return "-fx-text-fill: black;";
         }
     }
     
     private String setBackground(){
-        if (this.identity == selectedItem) return "-fx-background-color: lightblue;";
-        if (this.identity == focusedItem) return "-fx-background-color: orange;";
+        if (identity == selectedItem) return "-fx-background-color: lightblue;";
+        if (identity == focusedItem) return "-fx-background-color: orange;";
+        if (identity == -1) return "-fx-background-color: orange;";
         return "";
     }
     
     public String getLabelStyle(){
-        return setTextFill()+setBackground();
+        return setTextFill() + setBackground();
     }
 
     @Override
     public void handle(MouseEvent event) {
         RowEventPublisher rowEventPublisher = springContext.getBean(RowEventPublisher.class);
         if (event.getEventType() ==  MouseEvent.MOUSE_ENTERED){
-            if (event.getSource().getClass() == MyLabel.class){
-                MyLabel focusedLabel = ((MyLabel)event.getSource());
+            if (event.getSource().getClass() == CustomLabel.class){
+                CustomLabel focusedLabel = ((CustomLabel)event.getSource());
                 rowEventPublisher.setRowInformation(selectedItem, focusedLabel.getIdentity(), focusedLabel.getAppointmentStatus());
             }    
         } else 
         if (event.getEventType() ==  MouseEvent.MOUSE_EXITED){
-            if (event.getSource().getClass() == MyLabel.class){
-                MyLabel unfocusedLabel = (MyLabel)event.getSource();
+            if (event.getSource().getClass() == CustomLabel.class){
+                CustomLabel unfocusedLabel = (CustomLabel)event.getSource();
                 rowEventPublisher.setRowInformation(selectedItem, focusedItem, unfocusedLabel.getAppointmentStatus());
             }    
         } else 
         if (event.getEventType() ==  MouseEvent.MOUSE_CLICKED){
-            if (event.getSource().getClass() == MyLabel.class){
-                MyLabel selectedLabel = (MyLabel)event.getSource();
+            if (event.getSource().getClass() == CustomLabel.class){
+                CustomLabel selectedLabel = (CustomLabel)event.getSource();
                 rowEventPublisher.setRowInformation(selectedLabel.getIdentity(), focusedItem, selectedLabel.getAppointmentStatus());
             }
         }

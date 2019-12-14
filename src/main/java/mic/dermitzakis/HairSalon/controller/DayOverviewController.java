@@ -5,15 +5,19 @@
  */
 package mic.dermitzakis.HairSalon.controller;
 
+import java.net.URL;
+import java.util.ArrayList;
 import mic.dermitzakis.HairSalon.view.FxmlController;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -28,11 +32,13 @@ import mic.dermitzakis.HairSalon.model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import mic.dermitzakis.HairSalon.event.MyLabel;
+import mic.dermitzakis.HairSalon.event.CustomLabel;
 import mic.dermitzakis.HairSalon.event.RowEventObserver;
 import mic.dermitzakis.HairSalon.event.RowEventPublisher;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 import mic.dermitzakis.HairSalon.services.DataLoaderService;
+import net.bytebuddy.asm.Advice;
+import org.springframework.context.annotation.Lazy;
 
 //@Data
 @Controller
@@ -68,15 +74,20 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     @FXML
     private Text last_modified_txt;
     
-    private Optional<List<Appointment>> appointments;
+    private List<Appointment> appointments;
     private long selectedItem;
-
+    private static DayOverviewController instance;
+    
+    public static DayOverviewController getInstance(){
+        return instance;
+    }
+    
     @Autowired
     public DayOverviewController(ApplicationContext springContext) {
         this.springContext = springContext;
         this.dataLoaderService = springContext.getBean(DataLoaderService.class);
         this.rowEventPublisher = springContext.getBean(RowEventPublisher.class);
-        rowEventPublisher.registerObserver(this);
+        instance = this;
     }
 
     @Override
@@ -86,14 +97,16 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
 
     @Override
     public void initialize() {
-        assignTableEventHandler();
         assignTableColumns();
         insertDataIntoTable(); ///// ???????????????
-        restorePreviusState(); /// what if date changes ????
+        assignTableEventHandler();
+        notifyTableRows();
+        setDetailsArea();
     }
 
     private void assignTableEventHandler(){
         appointmentTable.setOnMouseExited(this);
+        rowEventPublisher.registerObserver(this);
     }
     
     private void assignTableColumns(){
@@ -105,25 +118,21 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     }
     
     private void insertDataIntoTable(){
-        appointments = dataLoaderService.getWeeksAppointments(); ///// Should be todays appointments
+        // Should be todays appointments
+        appointments = getAppointments();
+//        if (appointments == FXCollections.observableArrayList())
+//            System.out.println("");
         appointmentTable.setItems(getTimetable());
     }
     
-    private void restorePreviusState() { // incomplete
-        if (appointments.isPresent()){
-            InitializeTable();
-            setDetailsArea();
-        }
+    public List<Appointment> getAppointments(){
+        return dataLoaderService.getWeeksAppointments().orElse(new ArrayList<>());// Should be todays appointments
     }
-
-    private void InitializeTable() {
-        setRowInformation();
-    }
-
+    
     @Override
     public void handle(MouseEvent event) {
        if (event.getSource().getClass() == TableView.class){
-            rowEventPublisher.setRowInformation(selectedItem, -1, null);
+            rowEventPublisher.setRowInformation(selectedItem, 0, null);
         }
     }
 
@@ -133,67 +142,28 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
  
     private ObservableList<AppointmentDto> getTimetable(){
         DayOverviewManager dayOverviewManager = springContext.getBean(DayOverviewManager.class);
-        List<Appointment> appointmentList = appointments.orElse(FXCollections.observableArrayList());
-        return dayOverviewManager.getAppointmentDtoList(appointmentList);
+        return dayOverviewManager.getAppointmentDtoList(appointments);
     }
 
-    
-     
-    private void setRowInformation(){
+    private void notifyTableRows(){
         long firstItemId = getFirstLabel().getIdentity();
-        Appointment appointment = appointments.get().get((int)firstItemId);/// How does it work?
+        Appointment appointment = appointments.get((int)firstItemId);/// How does it work? //check!
         rowEventPublisher.setRowInformation(firstItemId, firstItemId, AppointmentStatus.extractStatus(appointment));
     }
  
-//    private void notifyTableRows(){
-//        Iterator namesVBoxItr;
-//        for (AppointmentDto appointmentDto : appointmentTable.getItems()){
-//            namesVBoxItr = appointmentDto.getNamesVbox().getChildrenUnmodifiable().iterator();
-//            while (namesVBoxItr.hasNext()){
-//                myLabel = (MyLabel)namesVBoxItr.next();
-//                notifyLabel();
-//            }
-//        } 
-//    }
-//    
-//    private void notifyLabel() {
-//        appointments.get().stream()
-//                .findFirst()
-//                .filter(this::matchingLabelIdentity).stream()
-//                .forEach(this::updateLabel);
-//    }
-//    
-//    private boolean matchingLabelIdentity(Appointment appointment){
-//        return appointment.getAppointmentId() == myLabel.getIdentity();
-//    }
-//    
-//    private void updateLabel(Appointment appointment){
-//        myLabel.update(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.extractStatus(appointment));
-//    }
-    
-/////////////  DANGER - DANGER - DANGER  \\\\\\\\\\\\\\
-    private MyLabel getFirstLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
-        ObservableList<AppointmentDto> dtoList = appointmentTable.getItems();
-        ObservableList<Node> namesVBoxList = dtoList.get(0).getNamesVbox().getChildrenUnmodifiable();
-        for (var dto : dtoList){
-            namesVBoxList = dto.getNamesVbox().getChildrenUnmodifiable();
-            if (!namesVBoxList.isEmpty()){
+    public CustomLabel getFirstLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
+        ObservableList<Node> namesVBox = getFirstVBox();
+        for (var dto : appointmentTable.getItems()){
+            namesVBox = dto.getNamesVbox().getChildrenUnmodifiable();
+            if (((CustomLabel)namesVBox.get(0)).getIdentity() > 0){
                 break;
             }
         }
-        return (MyLabel)namesVBoxList.get(0); // !!!!!!!!
+        return (CustomLabel)namesVBox.get(0); // !!!!!!!! get first Label
     }
-    
-//    @Override
-//    public TableviewStateDetails getState() {
-//        stateDetails.setPlaceholder(appointmentTable.getPlaceholder());
-//        return stateDetails;
-//    }
-//
-//    @Override
-//    public void setState(TableviewStateDetails stateDetails) { // fix AppointmentStatus
-//        rowEventPublisher.setRowInformation(stateDetails.getSelectedItem(), stateDetails.getFocusedItem(), AppointmentStatus.PENDING);
-//        appointmentTable.setPlaceholder(stateDetails.getPlaceholder());
-//    }
+
+    public ObservableList<Node> getFirstVBox() {
+        return appointmentTable.getItems().get(0).getNamesVbox().getChildrenUnmodifiable();
+    }
 
 }

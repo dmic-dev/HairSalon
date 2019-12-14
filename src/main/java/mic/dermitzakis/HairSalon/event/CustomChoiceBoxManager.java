@@ -10,21 +10,23 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.Node;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import mic.dermitzakis.HairSalon.controller.DayOverviewController;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.dto.AppointmentDto;
-import mic.dermitzakis.HairSalon.dto.RowDto;
+import mic.dermitzakis.HairSalon.dto.Row;
 
 /**
  *
  * @author mderm
  */
+@NoArgsConstructor
 @Data
 @Component
-public class ChoiceBoxManager{
+public class CustomChoiceBoxManager{
     @Autowired
     private ApplicationContext springContext;
     @Autowired
@@ -32,20 +34,17 @@ public class ChoiceBoxManager{
     @Autowired
     private RowEventPublisher rowEventPublisher;
     
-    private AppointmentDto appointmentDto;
-
-    public ChoiceBoxManager(AppointmentDto appointmentDto) {
-        this.appointmentDto = appointmentDto;
-    }
-            
-
-    public MyChoiceBox getChoiceBoxWithProperties(RowDto rowDto) {
-        final ObservableList<AppointmentStatus> statusList = 
+    public CustomChoiceBox getChoiceBoxWithProperties(Row row) {
+        ObservableList<AppointmentStatus> statusList = 
                 FXCollections.observableArrayList(AppointmentStatus.COMPLETED,AppointmentStatus.CANCELED,AppointmentStatus.PENDING);
-        MyChoiceBox myChoiceBox = springContext.getBean(MyChoiceBox.class, statusList);
-        
-        myChoiceBox.setIdentity(rowDto.getAppointmentId());
-        myChoiceBox.setValue(rowDto.getAppointmentStatus());
+        ObservableList<AppointmentStatus> emptyStatusList = 
+                FXCollections.observableArrayList(AppointmentStatus.EMPTY);
+        CustomChoiceBox myChoiceBox;
+        if (row.getAppointmentId() < 0) myChoiceBox = springContext.getBean(CustomChoiceBox.class, emptyStatusList);
+        else myChoiceBox = springContext.getBean(CustomChoiceBox.class, statusList);
+
+        myChoiceBox.setIdentity(row.getAppointmentId());
+        myChoiceBox.setValue(row.getAppointmentStatus());
         rowEventPublisher.registerObserver(myChoiceBox);
         return myChoiceBox;
     }

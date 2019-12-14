@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-import mic.dermitzakis.HairSalon.event.MyChoiceBox;
-import mic.dermitzakis.HairSalon.event.MyLabel;
+import mic.dermitzakis.HairSalon.event.CustomChoiceBox;
+import mic.dermitzakis.HairSalon.event.CustomLabel;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 //import mic.dermitzakis.HairSalon.services.AuthenticationManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,20 +68,20 @@ public class ApplicationConfiguration {
     
     @Bean
     @Scope("prototype")
-    public MyLabel myLabel() {
-        return new MyLabel();
+    public CustomLabel myLabel() {
+        return new CustomLabel();
     }
     
     @Bean
     @Scope("prototype")
-    public MyLabel myLabel(String text) {
-        return new MyLabel(text);
+    public CustomLabel myLabel(String text) {
+        return new CustomLabel(text);
     }
     
     @Bean
     @Scope("prototype")
-    public MyChoiceBox myChoiceBox(ObservableList<AppointmentStatus> list) {
-        return new MyChoiceBox(list);
+    public CustomChoiceBox myChoiceBox(ObservableList<AppointmentStatus> list) {
+        return new CustomChoiceBox(list);
     }
     
     

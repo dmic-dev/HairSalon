@@ -18,6 +18,7 @@ import lombok.Data;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.EntityType;
+import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -57,7 +58,7 @@ public class DataLoaderService {
     private Optional<List<Appointment>> loadTodaysAppointments(){
         LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
         LocalDateTime startingDate = dateTime.minusDays(1);
-        LocalDateTime endingDate = dateTime.minusDays(1);
+        LocalDateTime endingDate = dateTime;
 
         EntityType entityType = EntityType.APPOINTMENT;
         entityType.setStartingDate(startingDate);
@@ -76,7 +77,7 @@ public class DataLoaderService {
         return Optional.of(appointmentList);
     }
     
-    private EntityType getEntityType(){
+    public EntityType getEntityType(){
         LocalDateTime startingDate = calculateWeekStart().minusDays(1);
         LocalDateTime endingDate = calculateWeekStart().plusDays(7);
 

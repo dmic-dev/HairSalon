@@ -22,8 +22,6 @@ import mic.dermitzakis.HairSalon.database.DataAccessManager;
  * @author mderm
  */
 
-// This is where all the bussines logic resides
-// It must purely implement Business Logic methods i.e. all the Data retrieval and analyses
 @Service
 public class EntityDataService {
     
@@ -62,8 +60,7 @@ public class EntityDataService {
     ////// PRIVATE METHODS //////
     
     private List<Contact> getSampleData(EntityType entityDataType) {
-        return (List<Contact>)
-                read(entityDataType).stream()
+        return (List<Contact>) read(entityDataType).stream()
                 .collect(toList());
     }
     

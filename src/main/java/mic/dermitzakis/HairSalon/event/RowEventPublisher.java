@@ -23,14 +23,14 @@ public class RowEventPublisher implements EventPublisher {
     AppointmentStatus status;
 
     public RowEventPublisher() {
-        this.observers = new LinkedList<>();
+        observers = new LinkedList<>();
     }
 
     public void setRowInformation(long selectedItem, long focusedItem, AppointmentStatus status){
         this.selectedItem = selectedItem;
         this.focusedItem = focusedItem;
         this.status = status;
-        this.notifyObservers();
+        notifyObservers();
     }
     
     @Override

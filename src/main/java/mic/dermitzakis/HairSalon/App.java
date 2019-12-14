@@ -27,7 +27,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        TestClass testClass = springContext.getBean(TestClass.class); testClass.show();
+//        TestClass testClass = springContext.getBean(TestClass.class); testClass.show();
         stageManager = springContext.getBean(StageManager.class, stage);
         stageManager.newStage(FxmlView.MAIN);
     }

@@ -6,23 +6,26 @@
 package mic.dermitzakis.HairSalon.controller;
 
 import mic.dermitzakis.HairSalon.dto.AppointmentDtoManager;
-import mic.dermitzakis.HairSalon.event.LabelManager;
-import mic.dermitzakis.HairSalon.dto.RowDtoManager;
+import mic.dermitzakis.HairSalon.event.CustomLabelManager;
+import mic.dermitzakis.HairSalon.dto.RowManager;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import lombok.Data;
 import mic.dermitzakis.HairSalon.dto.AppointmentDto;
-import mic.dermitzakis.HairSalon.event.ChoiceBoxManager;
-import mic.dermitzakis.HairSalon.dto.RowDto;
-import mic.dermitzakis.HairSalon.event.LabelManager.ColumnType;
-import mic.dermitzakis.HairSalon.event.MyChoiceBox;
-import mic.dermitzakis.HairSalon.event.MyLabel;
+import mic.dermitzakis.HairSalon.event.CustomChoiceBoxManager;
+import mic.dermitzakis.HairSalon.dto.Row;
+import mic.dermitzakis.HairSalon.event.CustomLabelManager.ColumnType;
+import mic.dermitzakis.HairSalon.event.CustomChoiceBox;
+import mic.dermitzakis.HairSalon.event.CustomLabel;
 import mic.dermitzakis.HairSalon.model.Appointment;
+import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -35,12 +38,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DayOverviewManager {
     private final ApplicationContext springContext;
-    private final RowDtoManager rowDtoManager;
+    private final RowManager rowManager;
     
     @Autowired
-    public DayOverviewManager(ApplicationContext springContext, RowDtoManager rowDtoManager) {
+    public DayOverviewManager(ApplicationContext springContext, RowManager rowDtoManager) {
         this.springContext = springContext;
-        this.rowDtoManager = springContext.getBean(RowDtoManager.class);
+        this.rowManager = springContext.getBean(RowManager.class);
     }
    
     private ObservableList<AppointmentDto> prepareTimeTable(){
@@ -55,6 +58,7 @@ public class DayOverviewManager {
                 LocalTime.of(21, 0));
         
         AppointmentDto dto;
+        long id = 0;
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         for (LocalTime localTime : timeList){
             dto = springContext.getBean(AppointmentDto.class);
@@ -63,63 +67,76 @@ public class DayOverviewManager {
             label.setText(timeFormatter.format(localTime));
             dto.setTime(localTime);
             dto.setTimeLabel(label);
+            dto.insertRow(getEmptyAppointment(--id));
             timeTable.add(dto);
         }
         return timeTable;
+    }
+    
+    private Appointment getEmptyAppointment(long id){ 
+        Appointment appointment = springContext.getBean(Appointment.class);
+        appointment.setAppointmentId(id);
+        appointment.setStatus(AppointmentStatus.EMPTY.toString()); // !!!
+        return appointment;
     }
     
     public ObservableList<AppointmentDto> getAppointmentDtoList(List<Appointment> appointments){
         ObservableList<AppointmentDto> timeTable = prepareTimeTable();
         LocalTime appointmentTime, time, topTime, bottomTime, nextTime;
         int dtoPos = 0;
-        for (var appointment : appointments){
-            appointmentTime = appointment.getAppointedDateTime().toLocalTime();
-            topTime = timeTable.get(0).getTime();
-            bottomTime = timeTable.get(timeTable.size() - 1).getTime();
-            if (appointmentTime.isBefore(topTime)){
-                insertBefore(0, appointment, timeTable);
-            } else if (appointmentTime.isAfter(bottomTime)){ 
-                insertAfter(appointment, timeTable);
-            } else 
-                for (var dto : timeTable) {
-                    time = dto.getTime();
-                    if (appointmentTime.equals(time)) {
-                        insertAppointment(dtoPos, appointment, timeTable);
-                        break;
-                    } else 
-                        if (dtoPos != timeTable.size() - 1) {
-                            nextTime = timeTable.get(dtoPos + 1).getTime();
-                            // if appointment is after current and before next appointment insert between
-                            if (appointmentTime.isAfter(time) && appointmentTime.isBefore(nextTime)) {
-                                timeTable.add(dtoPos + 1, newAppointmentDto(rowDtoManager.getRowDto(appointment)));
-                                break;
-                            }
-                        }    
-                    dtoPos++;
-                } // for
-
-            dtoPos = 0;
-        } // for
-
+        if (!appointments.isEmpty()){
+            for (var appointment : appointments){
+                appointmentTime = appointment.getAppointedDateTime().toLocalTime();
+                topTime = timeTable.get(0).getTime();
+                bottomTime = timeTable.get(timeTable.size() - 1).getTime();
+                if (appointmentTime.isBefore(topTime)){
+                    insertBefore(0, appointment, timeTable);
+                } else if (appointmentTime.isAfter(bottomTime)){ 
+                    insertAfter(appointment, timeTable);
+                } else 
+                    for (var dto : timeTable) {
+                        time = dto.getTime();
+                        if (appointmentTime.equals(time)) {
+                            insertAppointment(dtoPos, appointment, timeTable);
+                            break;
+                        } else 
+                            if (dtoPos != timeTable.size() - 1) {
+                                nextTime = timeTable.get(dtoPos + 1).getTime();
+                                // if appointment is after current and before next appointment insert between
+                                if (appointmentTime.isAfter(time) && appointmentTime.isBefore(nextTime)) {
+                                    timeTable.add(dtoPos + 1, newAppointmentDto(rowManager.getRow(appointment)));
+                                    break;
+                                }
+                            }    
+                        dtoPos++;
+                    }
+                dtoPos = 0;
+            }
+        }
         return timeTable;
     }
     
     private void insertBefore(int pos, Appointment appointment, ObservableList<AppointmentDto> timeTable){
-        timeTable.add(pos, newAppointmentDto(rowDtoManager.getRowDto(appointment)));
+        timeTable.add(pos, newAppointmentDto(rowManager.getRow(appointment)));
     }
     
     private void insertAppointment(int pos, Appointment appointment, ObservableList<AppointmentDto> timeTable) {
-        AppointmentDto tmpDto = timeTable.get(pos);
-        tmpDto.insertAppointmentToDto(appointment);
+        AppointmentDto appointmentDto = timeTable.get(pos);
+//        if (((CustomLabel)getNamesVBoxList(appointmentDto).get(0)).getText().equals("")) 
+//            appointmentDto.removeRow();
+        appointmentDto.insertRow(appointment);
     }
 
     private void insertAfter(Appointment appointment, ObservableList<AppointmentDto> timeTable) {
-        timeTable.add(newAppointmentDto(rowDtoManager.getRowDto(appointment)));
+        timeTable.add(newAppointmentDto(rowManager.getRow(appointment)));
     }
 
-    private AppointmentDto newAppointmentDto(RowDto rowData){
-        AppointmentDtoManager appointmentDtoItem = springContext.getBean(AppointmentDtoManager.class);
-        return (AppointmentDto)appointmentDtoItem.getAppointmentDto(rowData);
+    private ObservableList<Node> getNamesVBoxList(AppointmentDto appointmentDto){
+        return appointmentDto.getNamesVbox().getChildren();
     }
-    
+    private AppointmentDto newAppointmentDto(Row row){
+        AppointmentDtoManager appointmentDtoManager = springContext.getBean(AppointmentDtoManager.class);
+        return (AppointmentDto)appointmentDtoManager.getAppointmentDto(row);
+    }
+
 }

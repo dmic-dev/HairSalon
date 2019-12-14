@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 public enum AppointmentStatus {
     COMPLETED("Ολοκληρώθηκε"),
     CANCELED("Ακύρωση"),
-    PENDING("Εκκρεμεί");    
+    PENDING("Εκκρεμεί"),  
+    EMPTY("-");
  
     private String status;
     private static final Logger LOG = Logger.getLogger(AppointmentStatus.class.getName());
@@ -31,6 +32,7 @@ public enum AppointmentStatus {
             case "Εκκρεμεί"     : {st = AppointmentStatus.PENDING; break;}
             case "Ολοκληρώθηκε" : {st = AppointmentStatus.COMPLETED; break;}
             case "Ακύρωση"      : {st = AppointmentStatus.CANCELED; break;}
+            case "-"            : {st = AppointmentStatus.EMPTY; break;}
             default: LOG.log(Level.SEVERE, "No such item in AppointmentStatus: {0}", appointment.getStatus());
         } 
         return st;

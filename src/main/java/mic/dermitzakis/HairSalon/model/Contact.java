@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode
-@ToString
+//@ToString
 @Entity
 @Component
 @Scope("prototype")
@@ -122,9 +122,15 @@ public class Contact implements Serializable{
         return ! this.isDeleted();
     }
     
+    @Override
+    public String toString(){
+        return getFullName();
+    }
+    
     public String getFullName(){
         return firstName+" "+lastName;
     }
+    
     public String getDetails(){    ////    TEST METHOD
         return String.format("Contact   [ Id = %d,\t  firstName = %s,\t  lastName = %s ]", contactId, getFirstName(), getLastName());
     }

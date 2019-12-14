@@ -26,5 +26,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @EntityGraph(value = "Appointment.Overview", type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT appointment FROM Appointment appointment WHERE appointedDateTime BETWEEN :startingDate AND :endingDate")
     Optional<List<Appointment>> findByAppointedDateBetween(@Param("startingDate")LocalDateTime startingDate, @Param("endingDate")LocalDateTime endingDate);
+    Optional<List<Appointment>> findByAppointedDateTime(LocalDateTime date);
 
 }

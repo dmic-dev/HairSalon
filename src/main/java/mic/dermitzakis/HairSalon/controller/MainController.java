@@ -55,7 +55,6 @@ public class MainController implements FxmlController{
         this.stageManager = stageManager;
         this.dataLoaderService = dataLoaderService;
     }
-
 //////////////  INITIALIZATION  ////////////    
     @Override
     public void initialize() {
@@ -63,7 +62,6 @@ public class MainController implements FxmlController{
     }
     
 /////////////////////////////////////////////
-    
     public BorderPane getContent(){
         return content;
     }
@@ -82,7 +80,7 @@ public class MainController implements FxmlController{
     private void showContent(){
         if (mainAccordion.getExpandedPane() != null) {
             switch (mainAccordion.getExpandedPane().getText()) {
-                case "Ραντεβού" : { showAppointmentsByDay(); break; }
+                case "Ραντεβού" : { showAppointments(); break; }
                 case "Επαφές"    : { showContactsTable(); break; }
                 case "Κάδος ανακύκλωσης" : { showRecycleBin(); break; }
                 default : LOG.log(Level.SEVERE, "No such Accordion title: {0}",mainAccordion.getExpandedPane().getText());
@@ -90,12 +88,8 @@ public class MainController implements FxmlController{
         } else showEmptyContent();
     }
 
-    private void showAppointmentsByDay() {
+    private void showAppointments() {
         setContent(FxmlView.APPOINTMENT_VIEW);
-    }
-    
-    private void showAppointments(){
-        showAppointmentsByDay();
     }
     
     private void showContactsTable() {

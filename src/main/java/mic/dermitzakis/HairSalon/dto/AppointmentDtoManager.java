@@ -8,14 +8,14 @@ package mic.dermitzakis.HairSalon.dto;
 import java.time.format.DateTimeFormatter;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import mic.dermitzakis.HairSalon.event.ChoiceBoxManager;
-import mic.dermitzakis.HairSalon.event.MyChoiceBox;
-import mic.dermitzakis.HairSalon.event.MyLabel;
+import mic.dermitzakis.HairSalon.event.CustomChoiceBoxManager;
+import mic.dermitzakis.HairSalon.event.CustomChoiceBox;
+import mic.dermitzakis.HairSalon.event.CustomLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import mic.dermitzakis.HairSalon.event.LabelManager;
-import mic.dermitzakis.HairSalon.event.LabelManager.ColumnType;
+import mic.dermitzakis.HairSalon.event.CustomLabelManager;
+import mic.dermitzakis.HairSalon.event.CustomLabelManager.ColumnType;
 
 /**
  *
@@ -26,30 +26,30 @@ public class AppointmentDtoManager{
     @Autowired
     private ApplicationContext springContext;
 
-    public AppointmentDto getAppointmentDto(RowDto rowData) {
+    public AppointmentDto getAppointmentDto(Row rowData) {
         AppointmentDto appointmentDto = springContext.getBean(AppointmentDto.class);
         
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         Label lbl = new Label(dateTimeFormatter.format(rowData.getTime()));
         lbl.setPadding(new Insets(4, 0, 4, 2));
         
-//        for (RowDto rowDataItem : rowDataItemList){
+//        for (Row rowDataItem : rowDataItemList){
             appointmentDto.setTime(rowData.getTime());
             appointmentDto.setTimeLabel(lbl);
-            ChoiceBoxManager choiceBoxWithProperties = springContext.getBean(ChoiceBoxManager.class, appointmentDto);
-            LabelManager labelWithProperties = springContext.getBean(LabelManager.class);
+            CustomChoiceBoxManager customChoiceBoxManager = springContext.getBean(CustomChoiceBoxManager.class, appointmentDto);
+            CustomLabelManager customLabelManager = springContext.getBean(CustomLabelManager.class);
 
             appointmentDto.getStatusVbox().getChildren()
-                    .add((MyChoiceBox)choiceBoxWithProperties.getChoiceBoxWithProperties(rowData));
-            labelWithProperties.setColumnType(ColumnType.NAME);
+                    .add((CustomChoiceBox)customChoiceBoxManager.getChoiceBoxWithProperties(rowData));
+            customLabelManager.setColumnType(ColumnType.NAME);
             appointmentDto.getNamesVbox().getChildren()
-                    .add((MyLabel)labelWithProperties.getLabelWithProperties(rowData));
-            labelWithProperties.setColumnType(ColumnType.OPERATIONS);
+                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
+            customLabelManager.setColumnType(ColumnType.OPERATIONS);
             appointmentDto.getOperationsVbox().getChildren()
-                    .add((MyLabel)labelWithProperties.getLabelWithProperties(rowData));
-            labelWithProperties.setColumnType(ColumnType.NOTES);
+                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
+            customLabelManager.setColumnType(ColumnType.NOTES);
             appointmentDto.getNotesVbox().getChildren()
-                    .add((MyLabel)labelWithProperties.getLabelWithProperties(rowData));
+                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
 //        }
 
         return appointmentDto;

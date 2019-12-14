@@ -10,7 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 import mic.dermitzakis.HairSalon.controller.DayOverviewController;
 import mic.dermitzakis.HairSalon.dto.AppointmentDto;
-import mic.dermitzakis.HairSalon.dto.RowDto;
+import mic.dermitzakis.HairSalon.dto.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @author mderm
  */
 @Component
-public class LabelManager{
+public class CustomLabelManager{
     private final ApplicationContext springContext;
     private final DayOverviewController appointmentViewController;
     private final RowEventPublisher rowEventPublisher;
@@ -34,7 +34,7 @@ public class LabelManager{
     private ColumnType columnType;
     
     @Autowired
-    public LabelManager(ApplicationContext springContext, DayOverviewController appointmentViewController, RowEventPublisher rowEventPublisher) {
+    public CustomLabelManager(ApplicationContext springContext, DayOverviewController appointmentViewController, RowEventPublisher rowEventPublisher) {
         this.springContext = springContext;
         this.appointmentViewController = appointmentViewController;
         this.rowEventPublisher = rowEventPublisher;
@@ -44,22 +44,22 @@ public class LabelManager{
         this.columnType = columnType;
     }
 
-    public MyLabel getLabelWithProperties(RowDto rowData) {
-        MyLabel myLabel = springContext.getBean(MyLabel.class);
+    public CustomLabel getLabelWithProperties(Row row) {
+        CustomLabel customLabel = springContext.getBean(CustomLabel.class);
         TableColumn<AppointmentDto, VBox> nameColumn = appointmentViewController.getName_Column();
         switch (columnType){
-            case NAME :         { myLabel.setText(rowData.getName()); break; }
-            case OPERATIONS :   { myLabel.setText(rowData.getOperations()); break; }
-            case NOTES :        { myLabel.setText(rowData.getNotes()); break; }
+            case NAME :         { customLabel.setText(row.getName()); break; }
+            case OPERATIONS :   { customLabel.setText(row.getOperations()); break; }
+            case NOTES :        { customLabel.setText(row.getNotes()); break; }
         }
-        myLabel.setIdentity(rowData.getAppointmentId());
-        myLabel.setAppointmentStatus(rowData.getAppointmentStatus());
-        myLabel.prefWidthProperty().bind(nameColumn.maxWidthProperty());
-        myLabel.setPadding(new Insets(4,0,4,3));
+        customLabel.setIdentity(row.getAppointmentId());
+        customLabel.setAppointmentStatus(row.getAppointmentStatus());
+        customLabel.prefWidthProperty().bind(nameColumn.maxWidthProperty());
+        customLabel.setPadding(new Insets(4,0,4,3));
 //        label.setStyle("-fx-text-fill: red; -fx-background-color: lightblue; -fx-border-color: blue; -fx-border-radius: 7;");
-        rowEventPublisher.registerObserver(myLabel);
+        rowEventPublisher.registerObserver(customLabel);
       
-        return myLabel;
+        return customLabel;
     }
     
 }

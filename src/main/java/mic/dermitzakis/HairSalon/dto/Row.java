@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @Scope("prototype")
-public class RowDto{
+public class Row{
     private long appointmentId;
 
     private LocalTime time;

@@ -42,7 +42,7 @@ public class SampleDataAccessManager implements DataAccessManager{
         this.springContext = springContext;
         
         contactSampleList = List.of(       //Immutable list
-            newContactBean("Μιχάλης", "Welsch"),        newContactBean("Jill", "Tompson"), 
+            newContactBean("Martin", "Welsch"),        newContactBean("Jill", "Tompson"), 
             newContactBean("Andreas", "Nicopolidis"),   newContactBean("Michael", "Johnson"), 
             newContactBean("Eva", "Stanich"),           newContactBean("Μιχάλης", "Δερμιτζάκης"), 
             newContactBean("Nick", "Ibrahimovich"),     newContactBean("Joseph", "Johnson"), 
@@ -70,7 +70,7 @@ public class SampleDataAccessManager implements DataAccessManager{
             newAppointmentBean(date.plusDays(7),LocalTime.of(21, 00), (Contact)contactSampleList.get(8)),
             newAppointmentBean(date.plusDays(7),LocalTime.of(22, 15), (Contact)contactSampleList.get(9)),
             newAppointmentBean(date.plusDays(7),LocalTime.of(21, 46), (Contact)contactSampleList.get(10)),
-            newAppointmentBean(date.plusDays(7),LocalTime.of(21, 47), (Contact)contactSampleList.get(16))
+            newAppointmentBean(date.plusDays(7),LocalTime.of(21, 46), (Contact)contactSampleList.get(16))
         );
         
         operationsSampleList = List.of(

@@ -7,6 +7,7 @@ package mic.dermitzakis.HairSalon.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import lombok.Data;
@@ -27,13 +28,8 @@ public class AppointmentOverviewController implements FxmlController{
     
     private final StageManager stageManager;
     
-//    private MyLabel selectedLabel, focusedLabel, unfocusedLabel;
-//    private MyChoiceBox focusedChoiceBox, unfocusedChoiceBox;
-    
-    @FXML
-    BorderPane day_tab;
-    @FXML
-    BorderPane week_tab;
+    @FXML Tab dayTab;
+    @FXML Tab weekTab;
 
     @Autowired
     @Lazy // StageManager
@@ -41,19 +37,15 @@ public class AppointmentOverviewController implements FxmlController{
         this.stageManager = stageManager;
     }
     
-    
-    
     @Override
     public void initialize() {
-        setContent(FxmlView.DAY_VIEW, day_tab);
-        setContent(FxmlView.WEEK_VIEW, week_tab);
+        setContent(FxmlView.DAY_VIEW, dayTab);
+        setContent(FxmlView.WEEK_VIEW, weekTab);
     }
     
-    private void setContent(FxmlView fxmlView, BorderPane tabView) {
+    private void setContent(FxmlView fxmlView, Tab tab) {
         Parent root = stageManager.loadViewNodeHierarchy(fxmlView);
-        tabView.setCenter(root);  // check! "root" becomes "content" check OK!
-        ((Region)root).prefWidthProperty().bind(tabView.widthProperty());
-        ((Region)root).prefHeightProperty().bind(tabView.heightProperty());
+        tab.setContent(root);
     }
     
 }

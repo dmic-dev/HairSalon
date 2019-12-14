@@ -59,7 +59,7 @@ public class H2DataAccessManager implements DataAccessManager{
     
     @Override
     public List<? extends Object> read(EntityType entityType) {
-        List<Object> list = new LinkedList<>();
+        List<Object> list = new ArrayList<>();
         switch (entityType) {
             case CONTACT :{
                 Optional<List<Contact>> contactList =
@@ -77,7 +77,6 @@ public class H2DataAccessManager implements DataAccessManager{
         }
         return list;
     }
-//(List<AbstractEntity>) List.copyOf((Collection<? extends AbstractEntity>) contactRepository.findAll());
     
     
     @Override

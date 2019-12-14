@@ -19,26 +19,40 @@ import mic.dermitzakis.HairSalon.model.AppointmentStatus;
  * @author mderm
  */
 @Component
-public class RowDtoManager{
+public class RowManager{
     @Autowired
     private final ApplicationContext springContext;
 
-    public RowDtoManager(ApplicationContext springContext) {
+    public RowManager(ApplicationContext springContext) {
         this.springContext = springContext;
     }
     
 
-    public RowDto getRowDto(Appointment appointment) {
+    public Row getRow(Appointment appointment) {
+        if (appointment.getAppointmentId() < 0) return newEmptyRow(appointment);
+        return newRow(appointment);
+    }
+    
+    private Row newEmptyRow(Appointment appointment){
+        Row rowData = springContext.getBean(Row.class);
+        rowData.setAppointmentId(appointment.getAppointmentId());
+        rowData.setName("");
+        rowData.setNotes("");
+        rowData.setOperations("");
+        rowData.setAppointmentStatus(AppointmentStatus.EMPTY);
+        return rowData;
+    }
+    
+    private Row newRow(Appointment appointment){
         NotesItemImpl notesItem = springContext.getBean(NotesItemImpl.class);
         OperationsItemImpl operationsItem = springContext.getBean(OperationsItemImpl.class);
-        RowDto rowData = springContext.getBean(RowDto.class);
+        Row rowData = springContext.getBean(Row.class);
         rowData.setAppointmentId(appointment.getAppointmentId());
         rowData.setTime(appointment.getAppointedDateTime().toLocalTime());
         rowData.setName(appointment.getContact().getFirstName()+ " " + appointment.getContact().getLastName());
         rowData.setOperations((String)operationsItem.get(appointment));
         rowData.setNotes((String)notesItem.get(appointment));
         rowData.setAppointmentStatus(extractStatus(appointment));
-        
         return rowData;
     }
     

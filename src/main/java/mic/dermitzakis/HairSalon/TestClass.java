@@ -41,50 +41,48 @@ import mic.dermitzakis.HairSalon.services.DataLoaderService;
  */
 @Component
 public class TestClass {
-    
-    private final ApplicationContext springContext;
-    private final EntityDataService entityDataService;
-    
-    private static final Logger LOG = LoggerFactory.getLogger(TestClass.class);
-    
-    @Autowired
-    public TestClass(ApplicationContext springContext) {
-        this.springContext = springContext;
-        entityDataService = springContext.getBean(EntityDataService.class);
-    }
+//    
+//    private final ApplicationContext springContext;
+//    private final EntityDataService entityDataService;
+//    
+//    private static final Logger LOG = LoggerFactory.getLogger(TestClass.class);
+//    
+//    @Autowired
+//    public TestClass(ApplicationContext springContext) {
+//        this.springContext = springContext;
+//        entityDataService = springContext.getBean(EntityDataService.class);
+//    }
     
     
     public void show() throws ParseException, UnsupportedEncodingException{
 //        EntityDataService entityDataService = springContext.getBean(EntityDataService.class);
 //        entityDataService.showContactList();
-        List<Contact> contacts = (List<Contact>)
-                entityDataService.read(EntityType.CONTACT).stream()
-                .collect(toList());
-        Map<String, List<Contact>> byName = contacts.stream()
-                .collect(groupingBy(Contact::getFirstName));
-        Set<String> keySet = contacts.stream()
-                .map(Contact::getFirstName)
-                .collect(toSet());
-        for (String key : keySet){
-            List<Contact> contactsList = byName.get(key);
-            contactsList.forEach((contact) -> { 
-                System.out.println(contact.getFullName());
-            });
-        }
-        
-        byte ptext[] = "Michael Dermitzakis Owes 30".getBytes(StandardCharsets.UTF_8);
-        String inputString = new String(ptext, StandardCharsets.UTF_8);
-        System.out.println(inputString);
-        Scanner sc = new Scanner(inputString);
-        List<String> stringList = new LinkedList<>();
-        while (sc.hasNext()) stringList.add(sc.next());
-        String s = stringList.stream().collect(joining(", ","(",")"));
-        System.out.println("s: "+s);
+//        List<Contact> contacts = (List<Contact>)
+//                entityDataService.read(EntityType.CONTACT).stream()
+//                .collect(toList());
+//        Map<String, List<Contact>> byName = contacts.stream()
+//                .collect(groupingBy(Contact::getFirstName));
+//        Set<String> keySet = contacts.stream()
+//                .map(Contact::getFirstName)
+//                .collect(toSet());
+//        for (String key : keySet){
+//            List<Contact> contactsList = byName.get(key);
+//            contactsList.forEach(System.out::println);
+//        }
+//        
+//        byte ptext[] = "Michael Dermitzakis Owes 30".getBytes(StandardCharsets.UTF_8);
+//        String inputString = new String(ptext, StandardCharsets.UTF_8);
+//        System.out.println(inputString);
+//        Scanner sc = new Scanner(inputString);
+//        List<String> stringList = new LinkedList<>();
+//        while (sc.hasNext()) stringList.add(sc.next());
+//        String s = stringList.stream().collect(joining(", ","(",")"));
+//        System.out.println("s: "+s);
     }
 
-    private void calculateStartingDate(){
-        var dataLoaderService =springContext.getBean(DataLoaderService.class);
-        dataLoaderService.calculateWeekStart();
-    }
+//    private void calculateStartingDate(){
+//        var dataLoaderService =springContext.getBean(DataLoaderService.class);
+//        dataLoaderService.calculateWeekStart();
+//    }
     
 }
