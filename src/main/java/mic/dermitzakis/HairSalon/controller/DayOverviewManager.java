@@ -58,7 +58,6 @@ public class DayOverviewManager {
                 LocalTime.of(21, 0));
         
         AppointmentDto dto;
-        long id = 0;
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         for (LocalTime localTime : timeList){
             dto = springContext.getBean(AppointmentDto.class);
@@ -67,15 +66,15 @@ public class DayOverviewManager {
             label.setText(timeFormatter.format(localTime));
             dto.setTime(localTime);
             dto.setTimeLabel(label);
-            dto.insertRow(getEmptyAppointment(--id));
+            dto.insertRow(getEmptyAppointment());
             timeTable.add(dto);
         }
         return timeTable;
     }
     
-    private Appointment getEmptyAppointment(long id){ 
+    private Appointment getEmptyAppointment(){ 
         Appointment appointment = springContext.getBean(Appointment.class);
-        appointment.setAppointmentId(id);
+        appointment.setAppointmentId(0);
         appointment.setStatus(AppointmentStatus.EMPTY.toString()); // !!!
         return appointment;
     }
@@ -90,7 +89,7 @@ public class DayOverviewManager {
                 topTime = timeTable.get(0).getTime();
                 bottomTime = timeTable.get(timeTable.size() - 1).getTime();
                 if (appointmentTime.isBefore(topTime)){
-                    insertBefore(0, appointment, timeTable);
+                    insertBefore(appointment, timeTable);
                 } else if (appointmentTime.isAfter(bottomTime)){ 
                     insertAfter(appointment, timeTable);
                 } else 
@@ -104,7 +103,7 @@ public class DayOverviewManager {
                                 nextTime = timeTable.get(dtoPos + 1).getTime();
                                 // if appointment is after current and before next appointment insert between
                                 if (appointmentTime.isAfter(time) && appointmentTime.isBefore(nextTime)) {
-                                    timeTable.add(dtoPos + 1, newAppointmentDto(rowManager.getRow(appointment)));
+                                    timeTable.add(dtoPos + 1, newAppointmentDto(rowManager.createRow(appointment)));
                                     break;
                                 }
                             }    
@@ -116,19 +115,20 @@ public class DayOverviewManager {
         return timeTable;
     }
     
-    private void insertBefore(int pos, Appointment appointment, ObservableList<AppointmentDto> timeTable){
-        timeTable.add(pos, newAppointmentDto(rowManager.getRow(appointment)));
+    private void insertBefore(Appointment appointment, ObservableList<AppointmentDto> timeTable){
+        timeTable.add(0, newAppointmentDto(rowManager.createRow(appointment)));
     }
     
     private void insertAppointment(int pos, Appointment appointment, ObservableList<AppointmentDto> timeTable) {
         AppointmentDto appointmentDto = timeTable.get(pos);
-//        if (((CustomLabel)getNamesVBoxList(appointmentDto).get(0)).getText().equals("")) 
-//            appointmentDto.removeRow();
+        if (((CustomLabel)getNamesVBoxList(appointmentDto).get(0)).getText().equals("")) 
+            appointmentDto.removeRow();
         appointmentDto.insertRow(appointment);
+        timeTable.set(pos, appointmentDto);
     }
 
     private void insertAfter(Appointment appointment, ObservableList<AppointmentDto> timeTable) {
-        timeTable.add(newAppointmentDto(rowManager.getRow(appointment)));
+        timeTable.add(newAppointmentDto(rowManager.createRow(appointment)));
     }
 
     private ObservableList<Node> getNamesVBoxList(AppointmentDto appointmentDto){

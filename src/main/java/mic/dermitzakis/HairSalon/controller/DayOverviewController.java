@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -75,7 +76,7 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     private Text last_modified_txt;
     
     private List<Appointment> appointments;
-    private long selectedItem;
+    private UUID selectedItem;
     private static DayOverviewController instance;
     
     public static DayOverviewController getInstance(){
@@ -91,7 +92,7 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     }
 
     @Override
-    public void update(long selectedItem, long focusedItem, AppointmentStatus status) {
+    public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus status) {
         this.selectedItem = selectedItem;
     }
 
@@ -120,8 +121,6 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     private void insertDataIntoTable(){
         // Should be todays appointments
         appointments = getAppointments();
-//        if (appointments == FXCollections.observableArrayList())
-//            System.out.println("");
         appointmentTable.setItems(getTimetable());
     }
     
@@ -132,7 +131,7 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     @Override
     public void handle(MouseEvent event) {
        if (event.getSource().getClass() == TableView.class){
-            rowEventPublisher.setRowInformation(selectedItem, 0, null);
+            rowEventPublisher.setRowInformation(selectedItem, null, null);
         }
     }
 
@@ -146,16 +145,16 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     }
 
     private void notifyTableRows(){
-        long firstItemId = getFirstLabel().getIdentity();
-        Appointment appointment = appointments.get((int)firstItemId);/// How does it work? //check!
-        rowEventPublisher.setRowInformation(firstItemId, firstItemId, AppointmentStatus.extractStatus(appointment));
+        CustomLabel label = getFirstNonEmptyLabel();
+        Appointment appointment = appointments.get((int)label.getAppointmentId());/// How does it work? //check!
+        rowEventPublisher.setRowInformation(label.getIdentity(), label.getIdentity(), AppointmentStatus.extractStatus(appointment));
     }
  
-    public CustomLabel getFirstLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
+    public CustomLabel getFirstNonEmptyLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
         ObservableList<Node> namesVBox = getFirstVBox();
         for (var dto : appointmentTable.getItems()){
             namesVBox = dto.getNamesVbox().getChildrenUnmodifiable();
-            if (((CustomLabel)namesVBox.get(0)).getIdentity() > 0){
+            if (((CustomLabel)namesVBox.get(0)).isEmpty() == false){
                 break;
             }
         }

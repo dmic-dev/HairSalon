@@ -7,6 +7,7 @@ package mic.dermitzakis.HairSalon.event;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.UUID;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -30,9 +31,13 @@ import org.springframework.context.annotation.Lazy;
 @EqualsAndHashCode(callSuper = true)
 
 public class CustomLabel extends Label implements RowEventObserver, EventHandler<MouseEvent>{
-    private long identity;
-    private long selectedItem;
-    private long focusedItem;
+    
+    private long appointmentId = 0;
+    
+    private boolean empty = true;
+    private UUID identity;
+    private UUID selectedItem;
+    private UUID focusedItem;
     private AppointmentStatus appointmentStatus;
     
     @Autowired
@@ -49,7 +54,7 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
     }
     
     @Override
-    public void update(long selectedItem, long focusedItem, AppointmentStatus appointmentStatus) {
+    public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus appointmentStatus) {
         this.selectedItem = selectedItem;
         this.focusedItem = focusedItem;
         if (identity == focusedItem) this.appointmentStatus = appointmentStatus;
@@ -73,7 +78,7 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
             case COMPLETED : return "-fx-text-fill: green;";
             case CANCELED  : return "-fx-text-fill: red;";
             case PENDING   : return "-fx-text-fill: black;";
-            case EMPTY     : return "-fx-text-fill: black;";
+            case EMPTY     : return "";
             default : return "-fx-text-fill: black;";
         }
     }
@@ -81,7 +86,7 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
     private String setBackground(){
         if (identity == selectedItem) return "-fx-background-color: lightblue;";
         if (identity == focusedItem) return "-fx-background-color: orange;";
-        if (identity == -1) return "-fx-background-color: orange;";
+//        if (empty == true) return "-fx-background-color: orange;";
         return "";
     }
     

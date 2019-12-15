@@ -7,6 +7,7 @@ package mic.dermitzakis.HairSalon.dto;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class Row{
     private long appointmentId;
+    
+    private UUID identity;
 
     private LocalTime time;
     private String name;

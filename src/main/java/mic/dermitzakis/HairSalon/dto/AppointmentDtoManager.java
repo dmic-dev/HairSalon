@@ -26,31 +26,25 @@ public class AppointmentDtoManager{
     @Autowired
     private ApplicationContext springContext;
 
-    public AppointmentDto getAppointmentDto(Row rowData) {
+    public AppointmentDto getAppointmentDto(Row row) {
         AppointmentDto appointmentDto = springContext.getBean(AppointmentDto.class);
         
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a");
-        Label lbl = new Label(dateTimeFormatter.format(rowData.getTime()));
+        Label lbl = new Label(dateTimeFormatter.format(row.getTime()));
         lbl.setPadding(new Insets(4, 0, 4, 2));
         
-//        for (Row rowDataItem : rowDataItemList){
-            appointmentDto.setTime(rowData.getTime());
-            appointmentDto.setTimeLabel(lbl);
-            CustomChoiceBoxManager customChoiceBoxManager = springContext.getBean(CustomChoiceBoxManager.class, appointmentDto);
-            CustomLabelManager customLabelManager = springContext.getBean(CustomLabelManager.class);
+        appointmentDto.setTime(row.getTime());
+        appointmentDto.setTimeLabel(lbl);
+        CustomChoiceBoxManager customChoiceBoxManager = springContext.getBean(CustomChoiceBoxManager.class, appointmentDto);
+        CustomLabelManager customLabelManager = springContext.getBean(CustomLabelManager.class);
 
-            appointmentDto.getStatusVbox().getChildren()
-                    .add((CustomChoiceBox)customChoiceBoxManager.getChoiceBoxWithProperties(rowData));
-            customLabelManager.setColumnType(ColumnType.NAME);
-            appointmentDto.getNamesVbox().getChildren()
-                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
-            customLabelManager.setColumnType(ColumnType.OPERATIONS);
-            appointmentDto.getOperationsVbox().getChildren()
-                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
-            customLabelManager.setColumnType(ColumnType.NOTES);
-            appointmentDto.getNotesVbox().getChildren()
-                    .add((CustomLabel)customLabelManager.getLabelWithProperties(rowData));
-//        }
+        appointmentDto.getStatusVbox().getChildren().add(customChoiceBoxManager.getChoiceBoxWithProperties(row));
+        customLabelManager.setColumnType(ColumnType.NAME);
+        appointmentDto.getNamesVbox().getChildren().add(customLabelManager.getLabelWithProperties(row));
+        customLabelManager.setColumnType(ColumnType.OPERATIONS);
+        appointmentDto.getOperationsVbox().getChildren().add(customLabelManager.getLabelWithProperties(row));
+        customLabelManager.setColumnType(ColumnType.NOTES);
+        appointmentDto.getNotesVbox().getChildren().add(customLabelManager.getLabelWithProperties(row));
 
         return appointmentDto;
     }

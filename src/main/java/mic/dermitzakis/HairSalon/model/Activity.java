@@ -41,8 +41,8 @@ public class Activity implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "operation_id")
-    private long operationId;
+    @Column(name = "activity_id")
+    private long activityId;
     
     @ManyToOne
     @JoinColumn(name = "appointment_id")

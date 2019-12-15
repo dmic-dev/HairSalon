@@ -5,6 +5,7 @@
  */
 package mic.dermitzakis.HairSalon.event;
 
+import java.util.UUID;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
 
@@ -13,5 +14,5 @@ import mic.dermitzakis.HairSalon.model.AppointmentStatus;
  * @author mderm
  */
 public interface RowEventObserver{
-    public void update(long selectedItem, long focusedItem, AppointmentStatus status);
+    public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus status);
 }

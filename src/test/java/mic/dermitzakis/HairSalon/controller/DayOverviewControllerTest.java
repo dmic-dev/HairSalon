@@ -85,7 +85,7 @@ public class DayOverviewControllerTest {
     @Test
     public void testGetFirstLabel_ShouldBeEqualToFirstContact(){
         CustomLabel expected = new CustomLabel("Martin Welsch");
-        CustomLabel actual = dayOverviewController.getFirstLabel();
+        CustomLabel actual = dayOverviewController.getFirstNonEmptyLabel();
         assertEquals(expected, actual);
     }
     

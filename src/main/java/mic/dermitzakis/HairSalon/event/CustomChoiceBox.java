@@ -29,9 +29,11 @@ import org.springframework.context.annotation.Lazy;
 
 public class CustomChoiceBox extends ChoiceBox implements RowEventObserver, EventHandler<MouseEvent>{
     
-    private long identity;
-    private long selectedItem;
-    private long focusedItem;
+    private long appointmentId = 0;
+    
+    private UUID identity;
+    private UUID selectedItem;
+    private UUID focusedItem;
     private AppointmentStatus appointmentStatus;
 
     @Autowired
@@ -50,7 +52,7 @@ public class CustomChoiceBox extends ChoiceBox implements RowEventObserver, Even
  
 
     @Override
-    public void update(long selectedItem, long focusedItem, AppointmentStatus status) {
+    public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus status) {
         this.selectedItem = selectedItem;
         this.focusedItem = focusedItem;
     }

@@ -30,8 +30,6 @@ public class CustomChoiceBoxManager{
     @Autowired
     private ApplicationContext springContext;
     @Autowired
-    private DayOverviewController appointmentViewController;
-    @Autowired
     private RowEventPublisher rowEventPublisher;
     
     public CustomChoiceBox getChoiceBoxWithProperties(Row row) {
@@ -39,14 +37,17 @@ public class CustomChoiceBoxManager{
                 FXCollections.observableArrayList(AppointmentStatus.COMPLETED,AppointmentStatus.CANCELED,AppointmentStatus.PENDING);
         ObservableList<AppointmentStatus> emptyStatusList = 
                 FXCollections.observableArrayList(AppointmentStatus.EMPTY);
-        CustomChoiceBox myChoiceBox;
-        if (row.getAppointmentId() < 0) myChoiceBox = springContext.getBean(CustomChoiceBox.class, emptyStatusList);
-        else myChoiceBox = springContext.getBean(CustomChoiceBox.class, statusList);
+        CustomChoiceBox customChoiceBox;
+        if (row.getAppointmentStatus() == AppointmentStatus.EMPTY) // works perfectly
+            customChoiceBox = springContext.getBean(CustomChoiceBox.class, emptyStatusList);
+        else customChoiceBox = springContext.getBean(CustomChoiceBox.class, statusList);
 
-        myChoiceBox.setIdentity(row.getAppointmentId());
-        myChoiceBox.setValue(row.getAppointmentStatus());
-        rowEventPublisher.registerObserver(myChoiceBox);
-        return myChoiceBox;
+        customChoiceBox.setIdentity(row.getIdentity());
+        customChoiceBox.setAppointmentId(row.getAppointmentId());
+        customChoiceBox.getSelectionModel().select(row.getAppointmentStatus().ordinal());
+        rowEventPublisher.registerObserver(customChoiceBox);
+        
+        return customChoiceBox;
     }
     
 }

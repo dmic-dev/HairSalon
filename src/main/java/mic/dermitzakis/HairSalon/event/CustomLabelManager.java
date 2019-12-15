@@ -26,6 +26,7 @@ public class CustomLabelManager{
     private final RowEventPublisher rowEventPublisher;
     
     public enum ColumnType {
+        STATUS,
         NAME,
         OPERATIONS,
         NOTES
@@ -48,11 +49,13 @@ public class CustomLabelManager{
         CustomLabel customLabel = springContext.getBean(CustomLabel.class);
         TableColumn<AppointmentDto, VBox> nameColumn = appointmentViewController.getName_Column();
         switch (columnType){
+            case STATUS :       { customLabel.setText(""); break; }
             case NAME :         { customLabel.setText(row.getName()); break; }
             case OPERATIONS :   { customLabel.setText(row.getOperations()); break; }
             case NOTES :        { customLabel.setText(row.getNotes()); break; }
         }
-        customLabel.setIdentity(row.getAppointmentId());
+        customLabel.setIdentity(row.getIdentity());
+        customLabel.setAppointmentId(row.getAppointmentId());
         customLabel.setAppointmentStatus(row.getAppointmentStatus());
         customLabel.prefWidthProperty().bind(nameColumn.maxWidthProperty());
         customLabel.setPadding(new Insets(4,0,4,3));

@@ -6,6 +6,7 @@
 package mic.dermitzakis.HairSalon.dto;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.Note;
@@ -28,28 +29,30 @@ public class RowManager{
     }
     
 
-    public Row getRow(Appointment appointment) {
-        if (appointment.getAppointmentId() < 0) return newEmptyRow(appointment);
+    public Row createRow(Appointment appointment) {
+        if (appointment.getStatus().equals(AppointmentStatus.EMPTY.toString())) return newEmptyRow();
         return newRow(appointment);
     }
     
-    private Row newEmptyRow(Appointment appointment){
-        Row rowData = springContext.getBean(Row.class);
-        rowData.setAppointmentId(appointment.getAppointmentId());
-        rowData.setName("");
-        rowData.setNotes("");
-        rowData.setOperations("");
-        rowData.setAppointmentStatus(AppointmentStatus.EMPTY);
-        return rowData;
+    private Row newEmptyRow(){
+        Row row = springContext.getBean(Row.class);
+        row.setIdentity(UUID.randomUUID());
+        row.setAppointmentId(0);
+        row.setName("");
+        row.setNotes("");
+        row.setOperations("");
+        row.setAppointmentStatus(AppointmentStatus.EMPTY);
+        return row;
     }
     
     private Row newRow(Appointment appointment){
         NotesItemImpl notesItem = springContext.getBean(NotesItemImpl.class);
         OperationsItemImpl operationsItem = springContext.getBean(OperationsItemImpl.class);
         Row rowData = springContext.getBean(Row.class);
+        rowData.setIdentity(UUID.randomUUID());
         rowData.setAppointmentId(appointment.getAppointmentId());
         rowData.setTime(appointment.getAppointedDateTime().toLocalTime());
-        rowData.setName(appointment.getContact().getFirstName()+ " " + appointment.getContact().getLastName());
+        rowData.setName(appointment.getContact().getFullName());
         rowData.setOperations((String)operationsItem.get(appointment));
         rowData.setNotes((String)notesItem.get(appointment));
         rowData.setAppointmentStatus(extractStatus(appointment));
@@ -62,6 +65,7 @@ public class RowManager{
             case "Εκκρεμεί" : {status = AppointmentStatus.PENDING; break;}
             case "Ολοκληρώθηκε" : {status = AppointmentStatus.COMPLETED; break;}
             case "Ακύρωση" : {status = AppointmentStatus.CANCELED; break;}
+            case "-" : {status = AppointmentStatus.EMPTY; break;}
             default : status = AppointmentStatus.PENDING;
         }
         return status;
