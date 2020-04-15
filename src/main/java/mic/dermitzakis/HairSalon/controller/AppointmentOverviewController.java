@@ -7,6 +7,7 @@ package mic.dermitzakis.HairSalon.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;

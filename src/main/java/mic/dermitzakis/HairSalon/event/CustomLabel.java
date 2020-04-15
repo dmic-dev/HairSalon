@@ -5,6 +5,7 @@
  */
 package mic.dermitzakis.HairSalon.event;
 
+import com.google.common.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.UUID;
@@ -42,6 +43,10 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
     
     @Autowired
     private ApplicationContext springContext;
+    @Autowired
+    private EventBus eventBus;
+    @Autowired
+    private EventManager eventManager;
     
     public CustomLabel() {
         super();
@@ -113,6 +118,10 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
             if (event.getSource().getClass() == CustomLabel.class){
                 CustomLabel selectedLabel = (CustomLabel)event.getSource();
                 rowEventPublisher.setRowInformation(selectedLabel.getIdentity(), focusedItem, selectedLabel.getAppointmentStatus());
+                EventRowSelected eventRowSelected = eventManager.getEventRowChanged();
+                if (eventBus == null) System.out.println("eventBus == null");
+                eventBus.post(eventRowSelected);
+                
             }
         }
     }

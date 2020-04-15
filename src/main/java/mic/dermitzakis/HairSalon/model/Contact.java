@@ -8,6 +8,8 @@ package mic.dermitzakis.HairSalon.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Column;
@@ -48,7 +50,8 @@ import org.springframework.stereotype.Component;
 @Primary
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 //@DiscriminatorColumn( name = "contact_type" )
-@NamedEntityGraph(name = "Contact.Overview", attributeNodes = {@NamedAttributeNode("phones"), @NamedAttributeNode("notes")})
+@NamedEntityGraph(name = "Contact.Overview", attributeNodes = {@NamedAttributeNode("phones"), 
+    @NamedAttributeNode("notes"), @NamedAttributeNode("picture")})
 
 public class Contact implements Serializable{
     
@@ -65,6 +68,23 @@ public class Contact implements Serializable{
         SUPPLIER
     }
 
+    public enum Gender {
+        MALE("Άνδρας"),
+        FEMALE("Γυναίκα"),
+        UNSPECIFIED("Απροσδιόριστο");
+        
+        String gender;
+        
+        private Gender(String gender){
+            this.gender = gender;
+        }
+
+        @Override
+        public String toString() {
+            return gender;
+        }
+    }
+    
     @Column(name="contact_type")
     private ContactType contactType;
 
@@ -88,7 +108,7 @@ public class Contact implements Serializable{
     
     private boolean deleted;
     
-    private String gender;
+    private Gender gender;
     
     @Column(name="first_name")
     private String firstName;
@@ -118,6 +138,20 @@ public class Contact implements Serializable{
         this.setLastName(lastName);
     }
 
+//    public Contact() {
+//        firstName = "Ονοματεπώνυμο";
+//        lastName = "";
+//        gender = Gender.UNSPECIFIED;
+////            
+////            LocalDate date = LocalDate.now();
+////            LocalDate zeroYearDate = date.withYear(0);
+////            LocalDateTime dateTime = LocalDateTime.of(zeroYearDate, LocalTime.now());
+////            
+//        dateOfBirth = LocalDate.of(0, Month.JANUARY, 1);
+//        dateCreated = LocalDateTime.now();
+//        lastModified = LocalDateTime.now();
+//    }
+
     public boolean isAvailable() {
         return ! this.isDeleted();
     }
@@ -132,7 +166,7 @@ public class Contact implements Serializable{
     }
     
     public String getDetails(){    ////    TEST METHOD
-        return String.format("Contact   [ Id = %d,\t  firstName = %s,\t  lastName = %s ]", contactId, getFirstName(), getLastName());
+        return String.format("Contact   [ Id = %d,\t  firstName = %s,\t  lastName = %s ]", contactId, firstName, lastName);
     }
 
 }

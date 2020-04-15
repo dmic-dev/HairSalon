@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import mic.dermitzakis.HairSalon.dto.ContactDetailsDto;
+import mic.dermitzakis.HairSalon.dto.ContactInfoDto;
 import mic.dermitzakis.HairSalon.model.Address;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.ContactBuilder;
@@ -76,7 +76,7 @@ public class NewContactController implements FxmlController {
     @FXML
     private void save(){
         ContactBuilder contactBuilder = springContext.getBean(ContactBuilder.class);
-        ContactDetailsDto contactDetailsDto = springContext.getBean(ContactDetailsDto.class);
+        ContactInfoDto contactDetailsDto = springContext.getBean(ContactInfoDto.class);
         Phone phone; 
         List<Phone> phones = new LinkedList<>();
         List<Address> addresses = new LinkedList<>();

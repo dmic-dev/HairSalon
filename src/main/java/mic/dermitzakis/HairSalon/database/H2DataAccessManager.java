@@ -21,7 +21,9 @@ import mic.dermitzakis.HairSalon.services.CustomQueryService;
 import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.database.DataAccessManager;
 import mic.dermitzakis.HairSalon.model.Employee;
+import mic.dermitzakis.HairSalon.model.Picture;
 import mic.dermitzakis.HairSalon.repository.EmployeeRepository;
+import mic.dermitzakis.HairSalon.repository.PictureRepository;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -33,6 +35,7 @@ public class H2DataAccessManager implements DataAccessManager{
     
     private final ApplicationContext springContext;
     
+    private final PictureRepository pictureRepository;
     private final ContactRepository contactRepository;
     private final AppointmentRepository appointmentRepository;
     private final EmployeeRepository employeeRepository;
@@ -40,6 +43,7 @@ public class H2DataAccessManager implements DataAccessManager{
 
     public H2DataAccessManager(ApplicationContext springContext) {
         this.springContext = springContext;
+        pictureRepository = springContext.getBean(PictureRepository.class);
         contactRepository = springContext.getBean(ContactRepository.class);
         appointmentRepository = springContext.getBean(AppointmentRepository.class);
         employeeRepository = springContext.getBean(EmployeeRepository.class);
@@ -71,6 +75,12 @@ public class H2DataAccessManager implements DataAccessManager{
                 Optional<List<Appointment>> appointmentList =
                         customQueryService.getAppointmentsBetween(entityType.getStartingDate(), entityType.getEndingDate());
                 if (appointmentList.isPresent()) list.addAll(appointmentList.get());
+                break;
+            }
+            case PICTURE : {
+                Optional<List<Picture>> pictureList =
+                        Optional.of(pictureRepository.findAll());
+                if (pictureList.isPresent()) list.addAll(pictureList.get());
                 break;
             }
             default :

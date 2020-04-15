@@ -37,6 +37,7 @@ public class AppointmentDto{
     @Autowired
     ApplicationContext springContext;
     
+    private List<Appointment> appointments;
     private LocalTime time;
     
     private Label timeLabel;
@@ -46,38 +47,48 @@ public class AppointmentDto{
     private VBox statusVbox;
 
     public AppointmentDto() {
-        this.statusVbox = new VBox();
-        this.notesVbox = new VBox();
-        this.operationsVbox = new VBox();
-        this.namesVbox = new VBox();
+        initializeFields();
     }
 
     public void insertRow(Appointment appointment){
-        Row row = newRow(appointment); // checked; row.AppointmentStatus == AppointmentStatus.EMPTY
-        namesVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.NAME));// new Label("Name")
-        operationsVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.OPERATIONS));// new Label("Operations")
-        notesVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.NOTES));//  new Label("Notes")
-        if (appointment.getStatus().equals(AppointmentStatus.EMPTY.toString()))
-            statusVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.STATUS));//new Label("ChoiceBox") //getChoiceBoxWithProperties(row)
-        else 
-            statusVbox.getChildren().add(getChoiceBoxWithProperties(row));
+        // if empty row ...
+        if (((CustomLabel)namesVbox.getChildrenUnmodifiable().get(0)).getText().equals("")) {
+            initializeFields();
+            insertValues(appointment);
+        } else 
+            insertValues(appointment);
     }
 
-    public void removeRow() {
+    public void removeRow(Appointment appointment) { // TO BE Implemented
+    
+    // // Use stack method
+    // {
+    //      create new fields
+    //      Copy elements except row to be removed to new row list
+    //      set fields to new fields;
+    // }
+    }    
+//    public void removeRow() {
 //        namesVbox.getChildren().remove(0);
 //        operationsVbox.getChildren().remove(0);
 //        notesVbox.getChildren().remove(0);
 //        statusVbox.getChildren().remove(0);
-        namesVbox.setVisible(false);
-        operationsVbox.setVisible(false);
-        notesVbox.setVisible(false);
-        statusVbox.setVisible(false);
-        namesVbox = new VBox();
-        operationsVbox = new VBox();
-        notesVbox = new VBox();
-        statusVbox = new VBox();
-    }
+//        namesVbox.setVisible(false);
+//        operationsVbox.setVisible(false);
+//        notesVbox.setVisible(false);
+//        statusVbox.setVisible(false);
+//        namesVbox = new VBox();
+//        operationsVbox = new VBox();
+//        notesVbox = new VBox();
+//        statusVbox = new VBox();
 
+
+    public void insertEmptyRow(){
+        Appointment appointment = springContext.getBean(Appointment.class);
+        appointment.setAppointmentId(0);
+        appointment.setStatus(AppointmentStatus.EMPTY.toString()); // !!!
+        insertValues(appointment);
+    }
 //    public void replaceRow(int pos, Appointment appointment) {
 //        namesVbox.getChildren().set(pos, getLabelWithProperties(newRow(appointment), CustomLabelManager.ColumnType.NAME));// new Label("Name")
 //        operationsVbox.getChildren().set(pos, getLabelWithProperties(newRow(appointment), CustomLabelManager.ColumnType.OPERATIONS));// new Label("Operations")
@@ -100,5 +111,25 @@ public class AppointmentDto{
         CustomChoiceBoxManager choiceBoxManager = springContext.getBean(CustomChoiceBoxManager.class);
         return choiceBoxManager.getChoiceBoxWithProperties(row);
     }
-    
+
+    private void initializeFields() {
+        appointments = new ArrayList<>();
+        statusVbox = new VBox();
+        notesVbox = new VBox();
+        operationsVbox = new VBox();
+        namesVbox = new VBox();
+    }
+
+    private void insertValues(Appointment appointment) {
+        appointments.add(appointment);
+        Row row = newRow(appointment);// checked; row.AppointmentStatus == AppointmentStatus.EMPTY
+        namesVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.NAME));// new Label("Name")
+        operationsVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.OPERATIONS));// new Label("Operations")
+        notesVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.NOTES));//  new Label("Notes")
+        if (appointment.getStatus().equals(AppointmentStatus.EMPTY.toString()))
+            statusVbox.getChildren().add(getLabelWithProperties(row, CustomLabelManager.ColumnType.STATUS));//new Label("ChoiceBox") //getChoiceBoxWithProperties(row)
+        else 
+            statusVbox.getChildren().add(getChoiceBoxWithProperties(row));
+    }
+
 }

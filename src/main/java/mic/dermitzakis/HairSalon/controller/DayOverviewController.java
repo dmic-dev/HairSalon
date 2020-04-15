@@ -5,46 +5,52 @@
  */
 package mic.dermitzakis.HairSalon.controller;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import java.net.URL;
 import java.util.ArrayList;
 import mic.dermitzakis.HairSalon.view.FxmlController;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javax.annotation.PostConstruct;
+import lombok.Data;
 import lombok.Getter;
 import mic.dermitzakis.HairSalon.dto.AppointmentDto;
+import mic.dermitzakis.HairSalon.dto.AppointmentViewDetailsDto;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import mic.dermitzakis.HairSalon.event.CustomLabel;
+import mic.dermitzakis.HairSalon.event.EventRowSelected;
 import mic.dermitzakis.HairSalon.event.RowEventObserver;
 import mic.dermitzakis.HairSalon.event.RowEventPublisher;
 import mic.dermitzakis.HairSalon.model.AppointmentStatus;
+import mic.dermitzakis.HairSalon.model.Contact;
+import mic.dermitzakis.HairSalon.model.Contact.Gender;
+import mic.dermitzakis.HairSalon.repository.DefaultImages;
 import mic.dermitzakis.HairSalon.services.DataLoaderService;
-import net.bytebuddy.asm.Advice;
-import org.springframework.context.annotation.Lazy;
 
-//@Data
+@Data
 @Controller
-public class DayOverviewController implements FxmlController, RowEventObserver, EventHandler<MouseEvent>{
+public class DayOverviewController implements FxmlController, RowEventObserver, EventHandler<MouseEvent> {
     private final ApplicationContext springContext;
+    private final EventBus eventBus;
     private final DataLoaderService dataLoaderService;
     private final RowEventPublisher rowEventPublisher;
     private static final Logger LOG = Logger.getLogger(DayOverviewController.class.getName());
@@ -62,10 +68,14 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     private TableColumn<AppointmentDto, VBox> operations_Column;
     @FXML
     private TableColumn<AppointmentDto, VBox> notes_Column;
+
+    
     @FXML
     private Text name_txt;
     @FXML
     private Text id_txt;
+    @FXML
+    private StackPane picture;
     @FXML
     private Text gender_txt;
     @FXML
@@ -74,7 +84,10 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     private Text date_created_txt;
     @FXML
     private Text last_modified_txt;
-    
+
+    @FXML
+    private Text appointment_date_created_txt;
+
     private List<Appointment> appointments;
     private UUID selectedItem;
     private static DayOverviewController instance;
@@ -86,11 +99,37 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     @Autowired
     public DayOverviewController(ApplicationContext springContext) {
         this.springContext = springContext;
+        this.eventBus = springContext.getBean(EventBus.class);
         this.dataLoaderService = springContext.getBean(DataLoaderService.class);
         this.rowEventPublisher = springContext.getBean(RowEventPublisher.class);
         instance = this;
     }
 
+    @PostConstruct
+    public void init() {
+        eventBus.register(this);
+    }
+    
+    @Subscribe
+    public void contactDetailsListener(EventRowSelected event){
+        AppointmentViewDetailsDto details = event.getDetails();
+
+//        System.out.println(contactDetailsDto.getName());
+//        if (name_txt == null) System.out.println("null pointer Exception");
+        name_txt.setText(details.getName());/*contactDetailsDto.getName()*/
+        id_txt.setText(details.getId());/*contactDetailsDto.getId()*/
+        ImageView imageView = new ImageView();
+        imageView.setImage(details.getPicture());
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        picture.getChildren().add(imageView);
+        gender_txt.setText(details.getGender());
+        dob_txt.setText(details.getDob());
+        date_created_txt.setText(details.getDateCreated());
+        last_modified_txt.setText(details.getLastModified());
+        appointment_date_created_txt.setText(details.getAppDateCreated());
+    }
+    
     @Override
     public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus status) {
         this.selectedItem = selectedItem;
@@ -102,7 +141,7 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
         insertDataIntoTable(); ///// ???????????????
         assignTableEventHandler();
         notifyTableRows();
-        setDetailsArea();
+        setDetailsArea(); // Boooo!!!!
     }
 
     private void assignTableEventHandler(){
@@ -112,25 +151,25 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     
     private void assignTableColumns(){
         time_Column.setCellValueFactory(new PropertyValueFactory<>("timeLabel"));
+        status_Column.setCellValueFactory(new PropertyValueFactory<>("statusVbox"));
         name_Column.setCellValueFactory(new PropertyValueFactory<>("namesVbox"));
         operations_Column.setCellValueFactory(new PropertyValueFactory<>("operationsVbox"));
         notes_Column.setCellValueFactory(new PropertyValueFactory<>("notesVbox"));
-        status_Column.setCellValueFactory(new PropertyValueFactory<>("statusVbox"));
     }
     
     private void insertDataIntoTable(){
-        // Should be todays appointments
-        appointments = getAppointments();
+        appointments = getTodaysAppointments();
         appointmentTable.setItems(getTimetable());
     }
     
-    public List<Appointment> getAppointments(){
-        return dataLoaderService.getWeeksAppointments().orElse(new ArrayList<>());// Should be todays appointments
+    public List<Appointment> getTodaysAppointments(){
+        // Should be todays appointments
+        return dataLoaderService.getWeeksAppointments().orElse(new ArrayList<>());// Should be todays appointments normaly
     }
     
     @Override
     public void handle(MouseEvent event) {
-       if (event.getSource().getClass() == TableView.class){
+        if (event.getSource().getClass() == TableView.class){
             rowEventPublisher.setRowInformation(selectedItem, null, null);
         }
     }
@@ -164,5 +203,5 @@ public class DayOverviewController implements FxmlController, RowEventObserver, 
     public ObservableList<Node> getFirstVBox() {
         return appointmentTable.getItems().get(0).getNamesVbox().getChildrenUnmodifiable();
     }
-
+    
 }

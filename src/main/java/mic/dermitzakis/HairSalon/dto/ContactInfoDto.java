@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 
-public class ContactDetailsDto {
+public class ContactInfoDto {
     private Contact contact;
     private List<Phone> phones;
     private List<Address> addresses;

@@ -41,7 +41,7 @@ public class DayOverviewManager {
     private final RowManager rowManager;
     
     @Autowired
-    public DayOverviewManager(ApplicationContext springContext, RowManager rowDtoManager) {
+    public DayOverviewManager(ApplicationContext springContext) {
         this.springContext = springContext;
         this.rowManager = springContext.getBean(RowManager.class);
     }
@@ -66,17 +66,10 @@ public class DayOverviewManager {
             label.setText(timeFormatter.format(localTime));
             dto.setTime(localTime);
             dto.setTimeLabel(label);
-            dto.insertRow(getEmptyAppointment());
+            dto.insertEmptyRow();
             timeTable.add(dto);
         }
         return timeTable;
-    }
-    
-    private Appointment getEmptyAppointment(){ 
-        Appointment appointment = springContext.getBean(Appointment.class);
-        appointment.setAppointmentId(0);
-        appointment.setStatus(AppointmentStatus.EMPTY.toString()); // !!!
-        return appointment;
     }
     
     public ObservableList<AppointmentDto> getAppointmentDtoList(List<Appointment> appointments){
@@ -96,7 +89,7 @@ public class DayOverviewManager {
                     for (var dto : timeTable) {
                         time = dto.getTime();
                         if (appointmentTime.equals(time)) {
-                            insertAppointment(dtoPos, appointment, timeTable);
+                            insertAppointment(dtoPos, appointment, timeTable); //check method
                             break;
                         } else 
                             if (dtoPos != timeTable.size() - 1) {
@@ -121,8 +114,6 @@ public class DayOverviewManager {
     
     private void insertAppointment(int pos, Appointment appointment, ObservableList<AppointmentDto> timeTable) {
         AppointmentDto appointmentDto = timeTable.get(pos);
-        if (((CustomLabel)getNamesVBoxList(appointmentDto).get(0)).getText().equals("")) 
-            appointmentDto.removeRow();
         appointmentDto.insertRow(appointment);
         timeTable.set(pos, appointmentDto);
     }
@@ -131,9 +122,6 @@ public class DayOverviewManager {
         timeTable.add(newAppointmentDto(rowManager.createRow(appointment)));
     }
 
-    private ObservableList<Node> getNamesVBoxList(AppointmentDto appointmentDto){
-        return appointmentDto.getNamesVbox().getChildren();
-    }
     private AppointmentDto newAppointmentDto(Row row){
         AppointmentDtoManager appointmentDtoManager = springContext.getBean(AppointmentDtoManager.class);
         return (AppointmentDto)appointmentDtoManager.getAppointmentDto(row);

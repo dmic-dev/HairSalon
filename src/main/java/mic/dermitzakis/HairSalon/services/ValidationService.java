@@ -6,7 +6,7 @@
 package mic.dermitzakis.HairSalon.services;
 
 import javafx.scene.control.Alert;
-import mic.dermitzakis.HairSalon.dto.ContactDetailsDto;
+import mic.dermitzakis.HairSalon.dto.ContactInfoDto;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +19,7 @@ public class ValidationService /*implements Validator*/{
     private String message;
     private boolean isValid;
 
-    public boolean validate(ContactDetailsDto contactDetailsDto){
+    public boolean validate(ContactInfoDto contactDetailsDto){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         message = "";
         isValid = true;
@@ -30,11 +30,11 @@ public class ValidationService /*implements Validator*/{
         }
         
         if (firstName == null || firstName.equals("")) {
-            message += "    - Τηλέφωνο";
+            message += "    - Τηλέφωνο\n";
             isValid = false;
         }
         
-        if ( ! isValid ) {
+        if ( !isValid ) {
             alert.setAlertType(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Παρακαλώ συμπληρώστε τα πεδία :");
             alert.setContentText(message);

@@ -9,8 +9,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
@@ -18,7 +16,6 @@ import lombok.Data;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.EntityType;
-import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

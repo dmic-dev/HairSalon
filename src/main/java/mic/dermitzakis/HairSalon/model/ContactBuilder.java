@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import mic.dermitzakis.HairSalon.model.Contact.Gender;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class ContactBuilder {
     private long contact_id;
     private List<Appointment> appointments;
     private boolean deleted;
-    private String gender;
+    private Gender gender;
     private String firstName;
     private String lastName;
     private String profession;
@@ -52,7 +53,7 @@ public class ContactBuilder {
         return this;
     }
     
-    public ContactBuilder setGender(String gender){
+    public ContactBuilder setGender(Gender gender){
         this.gender = gender;
         return this;
     }

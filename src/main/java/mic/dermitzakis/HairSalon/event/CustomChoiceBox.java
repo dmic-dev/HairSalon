@@ -59,9 +59,9 @@ public class CustomChoiceBox extends ChoiceBox implements RowEventObserver, Even
     
     private void onAction(Event event){
         RowEventPublisher rowEventPublisher = springContext.getBean(RowEventPublisher.class);
-        CustomChoiceBox focusedChoiceBox = (CustomChoiceBox)event.getSource();
-        rowEventPublisher.setRowInformation(selectedItem, focusedChoiceBox.getIdentity(), 
-                (AppointmentStatus)focusedChoiceBox.getSelectionModel().getSelectedItem());
+        CustomChoiceBox choiceBox = (CustomChoiceBox)event.getSource();
+        rowEventPublisher.setRowInformation(selectedItem, choiceBox.getIdentity(), 
+                (AppointmentStatus)choiceBox.getSelectionModel().getSelectedItem());
     }
     
     @Override

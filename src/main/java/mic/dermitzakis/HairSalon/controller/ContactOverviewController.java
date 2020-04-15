@@ -26,7 +26,6 @@ import javafx.scene.text.Text;
 import mic.dermitzakis.HairSalon.dto.ContactDto;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.services.DataLoaderService;
-import mic.dermitzakis.HairSalon.services.EntityDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -86,7 +85,7 @@ public class ContactOverviewController implements FxmlController, EventHandler<M
         //  ******  ASSOCIATE ContactDto FIELDS WITH COLUMNS IN TABLEVIEW ******  //
         initializeTableColumns();
         //   *****  INSERTS DATA INTO TABLE VIEW  *****
-        contactTable.setItems(getContactTable(dataLoaderService.getContacts().get()));
+        contactTable.setItems(getContactTable(dataLoaderService.getContacts().orElse(new ArrayList<>())));// get - forget
         
         setDetailsArea(0);
     }
@@ -114,7 +113,7 @@ public class ContactOverviewController implements FxmlController, EventHandler<M
 //                    ContactList.getTestData().get(id);
             name_txt.setText(contactDto.getFirstName()+ "  " + contactDto.getLastName());
             id_txt.setText(String.valueOf(contactDto.getId()));
-            gender_txt.setText(contactDto.getGender());
+            gender_txt.setText(contactDto.getGender().toString());
             dob_txt.setText(dateTimeFormatter.format(LocalDate.now()));//contactDto.getDob()
             date_created_txt.setText(dateTimeFormatter.format(LocalDateTime.now()));//contactDto.getDateCreated()
             last_modified_txt.setText(dateTimeFormatter.format(LocalDateTime.now()));//contactDto.getLastModified())
@@ -130,7 +129,7 @@ public class ContactOverviewController implements FxmlController, EventHandler<M
     }
     
     private ObservableList<ContactDto> getContactTable(List<Contact> contacts){
-        ContactOverviewManager contactTableManager = springContext.getBean(ContactOverviewManager.class);;
+        ContactOverviewManager contactTableManager = springContext.getBean(ContactOverviewManager.class);
         return contactTableManager.getContactDtoList(contacts);
     }
 

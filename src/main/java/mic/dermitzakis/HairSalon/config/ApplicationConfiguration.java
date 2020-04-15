@@ -6,6 +6,7 @@
 package mic.dermitzakis.HairSalon.config;
 
 //import com.mvp.java.logging.ExceptionWriter;
+import com.google.common.eventbus.EventBus;
 import mic.dermitzakis.HairSalon.view.SpringFXMLLoader;
 import mic.dermitzakis.HairSalon.view.StageManager;
 import java.io.IOException;
@@ -68,21 +69,25 @@ public class ApplicationConfiguration {
     
     @Bean
     @Scope("prototype")
-    public CustomLabel myLabel() {
+    public CustomLabel customLabel() {
         return new CustomLabel();
     }
     
     @Bean
     @Scope("prototype")
-    public CustomLabel myLabel(String text) {
+    public CustomLabel customLabel(String text) {
         return new CustomLabel(text);
     }
     
     @Bean
     @Scope("prototype")
-    public CustomChoiceBox myChoiceBox(ObservableList<AppointmentStatus> list) {
+    public CustomChoiceBox customChoiceBox(ObservableList<AppointmentStatus> list) {
         return new CustomChoiceBox(list);
     }
     
-    
+    @Bean
+//    @Scope("singleton")
+    public EventBus eventBus() {
+        return new EventBus("mainEventBus");
+    }
 }

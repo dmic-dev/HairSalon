@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 
 public enum EntityType {
     CONTACT,
-    APPOINTMENT;
+    APPOINTMENT,
+    PICTURE;
     
     private LocalDateTime startingDate;
     private LocalDateTime endingDate;

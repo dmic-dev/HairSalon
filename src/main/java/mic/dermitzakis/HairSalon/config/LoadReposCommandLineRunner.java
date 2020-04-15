@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
 import mic.dermitzakis.HairSalon.database.SampleDataAccessManager;
 import mic.dermitzakis.HairSalon.model.EntityType;
+import mic.dermitzakis.HairSalon.model.Picture;
+import mic.dermitzakis.HairSalon.repository.PictureRepository;
 
 
 /**
@@ -26,25 +28,32 @@ import mic.dermitzakis.HairSalon.model.EntityType;
 public class LoadReposCommandLineRunner implements CommandLineRunner{
     
     private final SampleDataAccessManager dataService;
+    private final PictureRepository pictureRepository;
     private final ContactRepository contactRepository;
     private final AppointmentRepository appointmentRepository;
 
     private final List<Appointment> appointmentList;
     private final List<Contact> contactList;
+    private final List<Picture> pictureList;
     
 
     @Autowired
-    public LoadReposCommandLineRunner(SampleDataAccessManager dataService, ContactRepository contactRepository,
+    public LoadReposCommandLineRunner(SampleDataAccessManager dataService, 
+            PictureRepository pictureRepository, 
+            ContactRepository contactRepository,
             AppointmentRepository appointmentRepository) {
         this.dataService = dataService;
+        this.pictureRepository = pictureRepository;
         this.contactRepository = contactRepository;
         this.appointmentRepository = appointmentRepository;
+        pictureList = (List<Picture>)this.dataService.read(EntityType.PICTURE).stream().collect(toList());
         contactList = (List<Contact>)this.dataService.read(EntityType.CONTACT).stream().collect(toList());
         appointmentList = (List<Appointment>)this.dataService.read(EntityType.APPOINTMENT).stream().collect(toList());
     }
     
     @Override
     public void run(String... args) throws Exception {
+        pictureList.forEach(pictureRepository::save);
         contactList.forEach(contactRepository::save);
         appointmentList.forEach(appointmentRepository::save);
     }

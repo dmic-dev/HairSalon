@@ -5,7 +5,6 @@
  */
 package mic.dermitzakis.HairSalon.services;
 
-import java.util.LinkedList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import mic.dermitzakis.HairSalon.model.Contact;

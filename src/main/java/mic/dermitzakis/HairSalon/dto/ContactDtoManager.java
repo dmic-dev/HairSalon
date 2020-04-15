@@ -7,6 +7,7 @@ package mic.dermitzakis.HairSalon.dto;
 
 import java.util.List;
 import mic.dermitzakis.HairSalon.model.Contact;
+import mic.dermitzakis.HairSalon.model.Contact.Gender;
 import mic.dermitzakis.HairSalon.model.Phone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

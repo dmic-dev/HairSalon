@@ -14,6 +14,7 @@ import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
+import mic.dermitzakis.HairSalon.repository.PictureRepository;
 
 /**
  *
@@ -22,6 +23,8 @@ import mic.dermitzakis.HairSalon.repository.ContactRepository;
 @Service
 public class CustomQueryService {
     
+    @Autowired
+    private PictureRepository pictureRepository;
     @Autowired
     private ContactRepository contactRepo;
     @Autowired

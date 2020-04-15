@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javafx.scene.control.Button;
 import lombok.Data;
+import mic.dermitzakis.HairSalon.model.Contact.Gender;
 import mic.dermitzakis.HairSalon.model.Note;
 import mic.dermitzakis.HairSalon.model.Picture;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ContactDto {
     
     private long id;
     
-    private String gender;
+    private Gender gender;
     private String firstName;
     private String lastName;
     private LocalDate dob;
