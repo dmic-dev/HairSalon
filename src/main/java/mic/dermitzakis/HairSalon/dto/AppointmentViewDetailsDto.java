@@ -29,10 +29,10 @@ public class AppointmentViewDetailsDto {
     private String lastModified;
     
     public void init(){
-        appCreator = "-";
+        appCreator = "";
         appDateCreated = "";
         name = "Ονοματεπώνυμο";
-        id = "-";
+        id = "0";
         gender = "";
         picture = new Image("file:"+getClass().getResource("/images/default-unspecified.jpg").getPath());
         dob = "";

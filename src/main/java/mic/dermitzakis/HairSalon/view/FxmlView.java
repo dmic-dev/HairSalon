@@ -137,21 +137,6 @@ public enum FxmlView {
         public String getControllerName() {
             return "weekOverviewController";
         }
-    }, DETAILS_VIEW {
-        @Override
-        public String getTitle() {
-            return getStringFromResourceBundle("appointment.view.week.title");
-        }
-
-        @Override
-        public String getFxmlFile() {
-            return "/fxml/DetailsView.fxml";
-        }
-
-        @Override
-        public String getControllerName() {
-            return "detailsViewController";
-        }
     };
     
     public abstract String getTitle();

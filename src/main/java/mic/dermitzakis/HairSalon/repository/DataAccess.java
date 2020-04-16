@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.database;
+package mic.dermitzakis.HairSalon.repository;
 
 import java.util.List;
 import mic.dermitzakis.HairSalon.model.EntityType;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public interface DataAccessManager {
+public interface DataAccess {
     
     public Object create(Object entity);
     

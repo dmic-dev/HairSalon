@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.services;
+package mic.dermitzakis.HairSalon.business;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +21,7 @@ import mic.dermitzakis.HairSalon.repository.PictureRepository;
  * @author mderm
  */
 @Service
-public class CustomQueryService {
+public class CustomDataQueries {
     
     @Autowired
     private PictureRepository pictureRepository;

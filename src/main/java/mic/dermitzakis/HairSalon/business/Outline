@@ -1,0 +1,7 @@
+This package contails all the business logic
+
+eg..
+
+1. DAO/repository --> (READ [Any input) 
+2. business logic --> (SHORT) *
+3. UI presantation--> (SHOW)

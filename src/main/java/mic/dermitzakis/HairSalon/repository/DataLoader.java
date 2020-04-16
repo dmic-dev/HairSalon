@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.services;
+package mic.dermitzakis.HairSalon.repository;
 
+import mic.dermitzakis.HairSalon.repository.EntityDataService;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-public class DataLoaderService {
+public class DataLoader {
     
     private final EntityDataService entityDataService;
     
@@ -34,7 +35,7 @@ public class DataLoaderService {
     private Optional<List<Appointment>> weeksAppointments;
 
     @Autowired
-    public DataLoaderService(EntityDataService entityDataService) {
+    public DataLoader(EntityDataService entityDataService) {
         this.entityDataService = entityDataService;
     }
     

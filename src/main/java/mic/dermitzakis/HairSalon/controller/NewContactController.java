@@ -7,7 +7,6 @@ package mic.dermitzakis.HairSalon.controller;
 
 import mic.dermitzakis.HairSalon.view.FxmlController;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -20,7 +19,7 @@ import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.ContactBuilder;
 import mic.dermitzakis.HairSalon.model.Email;
 import mic.dermitzakis.HairSalon.model.Phone;
-import mic.dermitzakis.HairSalon.services.ValidationService;
+import mic.dermitzakis.HairSalon.business.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -76,13 +75,11 @@ public class NewContactController implements FxmlController {
     @FXML
     private void save(){
         ContactBuilder contactBuilder = springContext.getBean(ContactBuilder.class);
-        ContactInfoDto contactDetailsDto = springContext.getBean(ContactInfoDto.class);
-        Phone phone; 
-        List<Phone> phones = new LinkedList<>();
-        List<Address> addresses = new LinkedList<>();
-        List<Email> emails = new LinkedList<>();
+        ContactInfoDto contactInfoDto = springContext.getBean(ContactInfoDto.class);
+        List<Phone> phones = new ArrayList<>();
+        List<Address> addresses = new ArrayList<>();
+        List<Email> emails = new ArrayList<>();
         // etc
-        
         Contact contact = contactBuilder
             .setFirstName((firstName_txtf.getText() != null) ? firstName_txtf.getText().strip() : null)
             .setLasttName(lastName_txtf.getText())
@@ -91,15 +88,12 @@ public class NewContactController implements FxmlController {
             .setPosition(position_txtf.getText())
 //            .setNotes(notes_txtArea.getText())
             .build();
-        
-        contactDetailsDto.setContact(contact);
-        contactDetailsDto.setPhones(phones);
-        contactDetailsDto.setAddresses(addresses);
-        contactDetailsDto.setEmails(emails);
-
-        ValidationService validationService = springContext.getBean(ValidationService.class);
-        
-        validationService.validate(contactDetailsDto);
+        contactInfoDto.setContact(contact);
+        contactInfoDto.setPhones(phones);
+        contactInfoDto.setAddresses(addresses);
+        contactInfoDto.setEmails(emails);
+        Validation validation = springContext.getBean(Validation.class);
+        validation.checkContactInput(contactInfoDto);
     }
     
     @FXML

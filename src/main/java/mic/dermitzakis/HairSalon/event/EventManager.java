@@ -53,11 +53,12 @@ public class EventManager {
                 .filter((t) -> {return ((CustomLabel)t).getIdentity() == dayOverviewController.getSelectedItem();})
                 .findFirst().orElse(new CustomLabel());
             long appointmentId = nameLabel.getAppointmentId();
-            if (appointmentId != 0) {
+            if (appointmentId != 0) /* if not emptyRow */{
                 AppointmentRepository appointmentRepository = springContext.getBean(AppointmentRepository.class);
                 Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);// !!!
                 Contact contact = appointment.getContact();
-                details.setAppCreator("getEmployee().getFullName()"); //appointment.getEmployee().getFullName()
+//                details.setAppCreator(appointment.getEmployee().getFullName());
+                details.setAppCreator("");
                 details.setAppDateCreated(appointment.getTimeCreated().format(dtf));
                 details.setName(contact.getFullName());
                 details.setId(String.valueOf(contact.getContactId()));

@@ -22,8 +22,8 @@ public class ContactDtoManager{
     @Autowired
     private ApplicationContext springContext;
     
-    public ContactDto getContactDto(Contact contact){
-        ContactDto contactDto = springContext.getBean(ContactDto.class);
+    public ContactViewDetailsDto getContactDto(Contact contact){
+        ContactViewDetailsDto contactDto = springContext.getBean(ContactViewDetailsDto.class);
         contactDto.setId(contact.getContactId());
         contactDto.setGender(contact.getGender());
         contactDto.setFirstName(contact.getFirstName());

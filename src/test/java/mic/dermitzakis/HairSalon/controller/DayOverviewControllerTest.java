@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import mic.dermitzakis.HairSalon.database.SampleDataAccessManager;
+import mic.dermitzakis.HairSalon.repository.SampleData;
 import mic.dermitzakis.HairSalon.event.CustomLabel;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.EntityType;
 import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
-import mic.dermitzakis.HairSalon.services.DataLoaderService;
+import mic.dermitzakis.HairSalon.repository.DataLoader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +43,8 @@ import org.springframework.context.ApplicationContext;
 public class DayOverviewControllerTest {
     private final ApplicationContext springContext;
     private DayOverviewController dayOverviewController = null;
-    private SampleDataAccessManager sampleDataAccessManager;
-    private DataLoaderService dataLoaderService;
+    private SampleData sampleDataAccessManager;
+    private DataLoader dataLoaderService;
     private Optional<List<Appointment>> findByAppointedDateBetween;
     
     @MockBean
@@ -66,8 +66,8 @@ public class DayOverviewControllerTest {
     @BeforeEach
     public void setUp(){
         dayOverviewController = springContext.getBean(DayOverviewController.class);
-        sampleDataAccessManager = springContext.getBean(SampleDataAccessManager.class);
-        dataLoaderService = springContext.getBean(DataLoaderService.class);
+        sampleDataAccessManager = springContext.getBean(SampleData.class);
+        dataLoaderService = springContext.getBean(DataLoader.class);
         appointmentRepository = springContext.getBean(AppointmentRepository.class);
         EntityType entityType = dataLoaderService.getEntityType();
         List<Appointment> read = (List<Appointment>) sampleDataAccessManager.read(entityType);

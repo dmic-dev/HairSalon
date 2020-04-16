@@ -19,38 +19,16 @@
          <children>
             <VBox layoutX="6.0" layoutY="-1.0" prefHeight="433.0" prefWidth="217.0">
                <children>
-                  <Pane prefHeight="45.0" prefWidth="217.0">
+                  <Pane prefHeight="41.0" prefWidth="217.0">
                      <children>
-                        <GridPane layoutX="4.0" layoutY="15.0" prefHeight="33.0" prefWidth="209.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.33331298828125" minWidth="10.0" prefWidth="107.33331298828125" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.33331298828125" minWidth="10.0" prefWidth="92.66668701171875" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label prefHeight="31.0" prefWidth="107.0" text="Ημ.Δημ.Ραντεβού:" />
-                              <Text fx:id="appointment_date_created_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="appointment_date" wrappingWidth="102.80334281921387" GridPane.columnIndex="1" />
-                           </children>
-                        </GridPane>
-                     </children>
-                  </Pane>
-                  <AnchorPane prefHeight="23.0" prefWidth="217.0">
-                     <children>
-                        <Separator layoutX="3.0" layoutY="4.0" prefHeight="19.0" prefWidth="209.0" />
-                     </children>
-                  </AnchorPane>
-                  <Pane prefHeight="67.0" prefWidth="217.0">
-                     <children>
-                        <Text fx:id="name_txt" layoutX="-2.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ονοματεπώνυμο" wrappingWidth="218.66666666666674">
+                        <Text fx:id="name_txt" layoutX="-1.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ονοματεπώνυμο" wrappingWidth="218.66666666666674">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Text>
                      </children>
                   </Pane>
-                  <AnchorPane prefHeight="48.0" prefWidth="221.0">
+                  <AnchorPane prefHeight="35.0" prefWidth="217.0">
                      <children>
                         <GridPane prefHeight="23.0" prefWidth="189.0">
                            <columnConstraints>
@@ -79,18 +57,18 @@
                      <children>
                         <SplitPane prefHeight="100.0" prefWidth="100.0">
                            <items>
-                              <StackPane fx:id="picture" prefHeight="100.0" prefWidth="100.0" />
+                              <StackPane fx:id="picture_area" prefHeight="100.0" prefWidth="100.0" />
                            </items>
                         </SplitPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="30.0" prefWidth="221.0" />
-                  <AnchorPane prefHeight="94.0" prefWidth="221.0">
+                  <AnchorPane prefHeight="15.0" prefWidth="217.0" />
+                  <AnchorPane prefHeight="100.0" prefWidth="217.0">
                      <children>
-                        <GridPane prefHeight="89.0" prefWidth="209.0">
+                        <GridPane layoutY="-5.0" prefHeight="94.0" prefWidth="209.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="114.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="95.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="106.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="103.33333333333331" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints maxHeight="47.33333333333333" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
@@ -99,7 +77,7 @@
                               <RowConstraints maxHeight="23.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label prefHeight="31.0" prefWidth="139.0" text="Φύλο:" textFill="#727272">
+                              <Label prefHeight="45.0" prefWidth="139.0" text="Φύλο:" textFill="#727272">
                                  <font>
                                     <Font size="12.0" />
                                  </font>
@@ -119,26 +97,51 @@
                                     <Font size="12.0" />
                                  </font>
                               </Label>
-                              <Text fx:id="gender_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="gender_txt" wrappingWidth="93.205078125" GridPane.columnIndex="1">
+                              <Text fx:id="gender_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="gender_txt" wrappingWidth="105.8717041015625" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="12.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="dob_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="dob_txt" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Text fx:id="dob_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="dob_txt" wrappingWidth="106.44012451171875" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="12.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="date_created_txt" layoutX="124.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="date_created_txt" wrappingWidth="92.7734375" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <Text fx:id="date_created_txt" layoutX="124.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="date_created_txt" wrappingWidth="104.10675048828125" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="12.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="last_modified_txt" layoutX="124.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="last_modified_txt" wrappingWidth="92.7734375" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <Text fx:id="last_modified_txt" layoutX="124.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="last_modified_txt" wrappingWidth="103.44012451171875" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="12.0" />
                                  </font>
                               </Text>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="13.0" prefWidth="217.0">
+                     <children>
+                        <Separator layoutX="4.0" layoutY="7.0" prefHeight="5.0" prefWidth="209.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane>
+                     <children>
+                        <GridPane prefHeight="47.0" prefWidth="209.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.33333333333333" minWidth="10.0" prefWidth="105.33333333333333" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.33331298828125" minWidth="10.0" prefWidth="103.33333333333333" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label prefHeight="31.0" prefWidth="107.0" text="Ημ.Δημ.Ραντεβού:" textFill="#727272" />
+                              <Text fx:id="appointment_date_created_txt" strokeType="OUTSIDE" strokeWidth="0.0" text="appointment_date" wrappingWidth="102.80334281921387" GridPane.columnIndex="1" />
+                              <Label prefHeight="17.0" prefWidth="106.0" text="Δημιουργηθ. απο:" textFill="#727272" GridPane.rowIndex="1" />
+                              <Text fx:id="emp_name" strokeType="OUTSIDE" strokeWidth="0.0" text="emp_name" wrappingWidth="105.47009086608887" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>

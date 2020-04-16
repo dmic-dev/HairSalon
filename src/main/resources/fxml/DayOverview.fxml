@@ -28,6 +28,6 @@
       </TableView>
    </center>
    <right>
-      <fx:include source="DetailsView.fxml" />
+      <fx:include source="DayDetails.fxml" />
    </right>
 </BorderPane>

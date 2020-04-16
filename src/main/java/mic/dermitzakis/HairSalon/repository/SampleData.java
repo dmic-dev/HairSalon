@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.database;
+package mic.dermitzakis.HairSalon.repository;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,7 +23,6 @@ import mic.dermitzakis.HairSalon.model.Picture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import mic.dermitzakis.HairSalon.services.DataLoaderService;
 
 /**
  *
@@ -33,7 +32,7 @@ import mic.dermitzakis.HairSalon.services.DataLoaderService;
  */
 @Service("SampleData")
 // methods must return opperation status (Instead of throwing execption)
-public class SampleDataAccessManager implements DataAccessManager{
+public class SampleData implements DataAccess{
 
     private final ApplicationContext springContext;
     private final List<Picture> pictureList;
@@ -43,7 +42,7 @@ public class SampleDataAccessManager implements DataAccessManager{
 //    private Picture pic;
     
     @Autowired
-    public SampleDataAccessManager(ApplicationContext springContext) throws IOException{
+    public SampleData(ApplicationContext springContext) throws IOException{
         this.springContext = springContext;
 //        this.pic = springContext.getBean(Picture.class);
 //        Image image = new Image("file:"+getClass().getResource("/images/Me.jpg").getPath());
@@ -78,7 +77,7 @@ public class SampleDataAccessManager implements DataAccessManager{
             newContactBean("Mina", "Martinez",Gender.FEMALE, null)
         );
         
-        DataLoaderService dataLoaderService = springContext.getBean(DataLoaderService.class);
+        DataLoader dataLoaderService = springContext.getBean(DataLoader.class);
         LocalDate date = dataLoaderService.calculateWeekStart().toLocalDate();
         
         appointmentList = Arrays.asList(

@@ -22,10 +22,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import mic.dermitzakis.HairSalon.dto.ContactDto;
+import mic.dermitzakis.HairSalon.dto.ContactViewDetailsDto;
 import mic.dermitzakis.HairSalon.model.Contact;
-import mic.dermitzakis.HairSalon.services.DataLoaderService;
+import mic.dermitzakis.HairSalon.repository.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -35,27 +36,30 @@ import org.springframework.stereotype.Controller;
  * @author mderm
  */
 @Controller
-public class ContactOverviewController implements FxmlController, EventHandler<MouseEvent>{
-    
+public class ContactOverviewController implements FxmlController, EventHandler<MouseEvent> {
+
     private final ApplicationContext springContext;
-    private final DataLoaderService dataLoaderService;
-    
+    private final DataLoader dataLoaderService;
+
     @FXML
-    public TableView<ContactDto> contactTable;
+    public TableView<ContactViewDetailsDto> contactTable;
     @FXML
-    private TableColumn<ContactDto,Long> id_Column;
+    private TableColumn<ContactViewDetailsDto, Long> id_Column;
     @FXML
-    private TableColumn<ContactDto,String> firstName_Column;
+    private TableColumn<ContactViewDetailsDto, String> firstName_Column;
     @FXML
-    private TableColumn<ContactDto,String> lastName_Column;
+    private TableColumn<ContactViewDetailsDto, String> lastName_Column;
     @FXML
-    private TableColumn<ContactDto,String> phone_Column;
+    private TableColumn<ContactViewDetailsDto, String> phone_Column;
     @FXML
-    private TableColumn<ContactDto,String> notes_Column;
+    private TableColumn<ContactViewDetailsDto, String> notes_Column;
+
     @FXML
     private Text name_txt;
     @FXML
     private Text id_txt;
+    @FXML
+    private StackPane picture_area;
     @FXML
     private Text gender_txt;
     @FXML
@@ -64,73 +68,75 @@ public class ContactOverviewController implements FxmlController, EventHandler<M
     private Text date_created_txt;
     @FXML
     private Text last_modified_txt;
-//    @FXML
-//    private byte[] img_contact_image = null;
-//    private final SimpleStringProperty name_details = new SimpleStringProperty("");
-    
-    // Constructor
+
     @Autowired
     public ContactOverviewController(ApplicationContext springContext) {
         this.springContext = springContext;
-        this.dataLoaderService = springContext.getBean(DataLoaderService.class);
+        this.dataLoaderService = springContext.getBean(DataLoader.class);
     }
 
     /**
      * Initializes the controller class.
      */
-    @Override
-    public void initialize(){
-        contactTable.setOnMouseClicked(this);
-        
-        //  ******  ASSOCIATE ContactDto FIELDS WITH COLUMNS IN TABLEVIEW ******  //
+    @Override // FxmlController
+    public void initialize() { 
         initializeTableColumns();
-        //   *****  INSERTS DATA INTO TABLE VIEW  *****
-        contactTable.setItems(getContactTable(dataLoaderService.getContacts().orElse(new ArrayList<>())));// get - forget
-        
+        loadContacts();
+        setEventHandler();
         setDetailsArea(0);
     }
 
-    private void initializeTableColumns(){
+    private void initializeTableColumns() {
         id_Column.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstName_Column.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastName_Column.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         phone_Column.setCellValueFactory(new PropertyValueFactory<>("phone"));
         notes_Column.setCellValueFactory(new PropertyValueFactory<>("notes"));
     }
-    
+
     @Override  // Called to display contact details
     public void handle(MouseEvent event) {
         if (event.getSource() == contactTable) {
             setDetailsArea(this.getSelectedItem().getId());
         }
     }
-    
-    public void setDetailsArea(long id){ // todo -> load picture
-        if (!contactTable.getItems().isEmpty()){
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/YY");
-            if (id == 0) contactTable.getSelectionModel().select(Long.signum(id));
-            ContactDto contactDto = this.getSelectedItem();
+
+    public void setDetailsArea(long id) { // todo -> load picture
+        if (!contactTable.getItems().isEmpty()) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            if (id == 0) {
+                contactTable.getSelectionModel().select((int) id);
+            }
+            ContactViewDetailsDto details = this.getSelectedItem();
 //                    ContactList.getTestData().get(id);
-            name_txt.setText(contactDto.getFirstName()+ "  " + contactDto.getLastName());
-            id_txt.setText(String.valueOf(contactDto.getId()));
-            gender_txt.setText(contactDto.getGender().toString());
-            dob_txt.setText(dateTimeFormatter.format(LocalDate.now()));//contactDto.getDob()
-            date_created_txt.setText(dateTimeFormatter.format(LocalDateTime.now()));//contactDto.getDateCreated()
-            last_modified_txt.setText(dateTimeFormatter.format(LocalDateTime.now()));//contactDto.getLastModified())
+            name_txt.setText(details.getFullName());
+            id_txt.setText(String.valueOf(details.getId()));
+//            gender_txt.setText(details.getGender().toString());
+//            dob_txt.setText(dtf.format(LocalDate.now()));//contactDto.getDob()
+//            date_created_txt.setText(dtf.format(LocalDateTime.now()));//contactDto.getDateCreated()
+//            last_modified_txt.setText(dtf.format(LocalDateTime.now()));//contactDto.getLastModified())
         }
     }
 
-    public ContactDto getSelectedItem(){
+    public ContactViewDetailsDto getSelectedItem() {
         return contactTable.getSelectionModel().getSelectedItem();
     }
-    
-    public String getSelectedItemFullName(){
+
+    public String getSelectedItemFullName() {
         return getSelectedItem().getFirstName() + " " + getSelectedItem().getLastName();
     }
-    
-    private ObservableList<ContactDto> getContactTable(List<Contact> contacts){
+
+    private ObservableList<ContactViewDetailsDto> getContactTable(List<Contact> contacts) {
         ContactOverviewManager contactTableManager = springContext.getBean(ContactOverviewManager.class);
         return contactTableManager.getContactDtoList(contacts);
+    }
+
+    private void loadContacts() {
+        contactTable.setItems(getContactTable(dataLoaderService.getContacts().orElse(new ArrayList<>())));// get - forget
+    }
+
+    private void setEventHandler() {
+        contactTable.setOnMouseClicked(this);
     }
 
 }

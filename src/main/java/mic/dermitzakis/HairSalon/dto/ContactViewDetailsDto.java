@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @Scope("prototype")
-public class ContactDto {
-    
+public class ContactViewDetailsDto {
     private long id;
     
     private Gender gender;
@@ -38,4 +37,7 @@ public class ContactDto {
     private Note notes;
     private Picture picture;
     
+    public String getFullName(){
+        return firstName+" "+lastName;
+    }
 }

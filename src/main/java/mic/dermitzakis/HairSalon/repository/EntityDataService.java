@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.services;
+package mic.dermitzakis.HairSalon.repository;
 
 import java.util.List;
 import static java.util.stream.Collectors.toList;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import mic.dermitzakis.HairSalon.database.DataAccessManager;
+import mic.dermitzakis.HairSalon.repository.DataAccess;
 
 /**
  *
@@ -24,12 +24,12 @@ import mic.dermitzakis.HairSalon.database.DataAccessManager;
 @Service
 public class EntityDataService {
     
-    private final DataAccessManager dataAccessManager;
+    private final DataAccess dataAccessManager;
     
     private static final Logger LOG = LoggerFactory.getLogger(EntityDataService.class);
 
     @Autowired
-    public EntityDataService(@Qualifier("h2Database")DataAccessManager dataAccessManager) {
+    public EntityDataService(@Qualifier("h2Database")DataAccess dataAccessManager) {
         this.dataAccessManager = dataAccessManager;
     }
     

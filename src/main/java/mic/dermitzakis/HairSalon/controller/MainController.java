@@ -20,7 +20,8 @@ import javafx.scene.text.Font;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import mic.dermitzakis.HairSalon.services.DataLoaderService;
+import mic.dermitzakis.HairSalon.event.CustomLabel;
+import mic.dermitzakis.HairSalon.repository.DataLoader;
 import mic.dermitzakis.HairSalon.view.FxmlView;
 import mic.dermitzakis.HairSalon.view.StageManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class MainController implements FxmlController{
  
     private final ApplicationContext springContext;
     private final StageManager stageManager;
-    private final DataLoaderService dataLoaderService;
+    private final DataLoader dataLoaderService;
 
     private static final Logger LOG = Logger.getLogger(MainController.class.getName());
     
@@ -50,18 +51,16 @@ public class MainController implements FxmlController{
     
     @Autowired
     @Lazy // lazy since Stage for StageManager not available yet at initialization time 
-    public MainController(ApplicationContext springContext, StageManager stageManager, DataLoaderService dataLoaderService){
+    public MainController(ApplicationContext springContext, StageManager stageManager, DataLoader dataLoaderService){
         this.springContext = springContext;
         this.stageManager = stageManager;
         this.dataLoaderService = dataLoaderService;
     }
-//////////////  INITIALIZATION  ////////////    
     @Override
     public void initialize() {
         dataLoaderService.loadDataFromRepository();
     }
     
-/////////////////////////////////////////////
     public BorderPane getContent(){
         return content;
     }
@@ -81,7 +80,7 @@ public class MainController implements FxmlController{
         if (mainAccordion.getExpandedPane() != null) {
             switch (mainAccordion.getExpandedPane().getText()) {
                 case "Ραντεβού" : { showAppointments(); break; }
-                case "Επαφές"    : { showContactsTable(); break; }
+                case "Επαφές"   : { showContactsTable(); break; }
                 case "Κάδος ανακύκλωσης" : { showRecycleBin(); break; }
                 default : LOG.log(Level.SEVERE, "No such Accordion title: {0}",mainAccordion.getExpandedPane().getText());
             }

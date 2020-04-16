@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
-import mic.dermitzakis.HairSalon.database.SampleDataAccessManager;
+import mic.dermitzakis.HairSalon.repository.SampleData;
 import mic.dermitzakis.HairSalon.model.EntityType;
 import mic.dermitzakis.HairSalon.model.Picture;
 import mic.dermitzakis.HairSalon.repository.PictureRepository;
@@ -27,7 +27,7 @@ import mic.dermitzakis.HairSalon.repository.PictureRepository;
 @Component
 public class LoadReposCommandLineRunner implements CommandLineRunner{
     
-    private final SampleDataAccessManager dataService;
+    private final SampleData dataService;
     private final PictureRepository pictureRepository;
     private final ContactRepository contactRepository;
     private final AppointmentRepository appointmentRepository;
@@ -38,7 +38,7 @@ public class LoadReposCommandLineRunner implements CommandLineRunner{
     
 
     @Autowired
-    public LoadReposCommandLineRunner(SampleDataAccessManager dataService, 
+    public LoadReposCommandLineRunner(SampleData dataService, 
             PictureRepository pictureRepository, 
             ContactRepository contactRepository,
             AppointmentRepository appointmentRepository) {

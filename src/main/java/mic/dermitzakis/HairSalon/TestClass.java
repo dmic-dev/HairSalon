@@ -23,17 +23,17 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import mic.dermitzakis.HairSalon.services.EntityDataService;
+import mic.dermitzakis.HairSalon.repository.EntityDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import mic.dermitzakis.HairSalon.services.EntityDataService;
+import mic.dermitzakis.HairSalon.repository.EntityDataService;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.EntityType;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
-import mic.dermitzakis.HairSalon.services.DataLoaderService;
+import mic.dermitzakis.HairSalon.repository.DataLoader;
 
 
 /**
@@ -82,7 +82,7 @@ public class TestClass {
     }
 
 //    private void calculateStartingDate(){
-//        var dataLoaderService =springContext.getBean(DataLoaderService.class);
+//        var dataLoaderService =springContext.getBean(DataLoader.class);
 //        dataLoaderService.calculateWeekStart();
 //    }
     

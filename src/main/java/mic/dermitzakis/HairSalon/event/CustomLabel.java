@@ -118,10 +118,8 @@ public class CustomLabel extends Label implements RowEventObserver, EventHandler
             if (event.getSource().getClass() == CustomLabel.class){
                 CustomLabel selectedLabel = (CustomLabel)event.getSource();
                 rowEventPublisher.setRowInformation(selectedLabel.getIdentity(), focusedItem, selectedLabel.getAppointmentStatus());
-                EventRowSelected eventRowSelected = eventManager.getEventRowChanged();
-                if (eventBus == null) System.out.println("eventBus == null");
-                eventBus.post(eventRowSelected);
                 
+                eventBus.post(eventManager.getEventRowChanged());
             }
         }
     }

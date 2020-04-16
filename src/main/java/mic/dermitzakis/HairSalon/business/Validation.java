@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.services;
+package mic.dermitzakis.HairSalon.business;
 
 import javafx.scene.control.Alert;
 import mic.dermitzakis.HairSalon.dto.ContactInfoDto;
@@ -14,16 +14,12 @@ import org.springframework.stereotype.Service;
  * @author mderm
  */
 @Service
-public class ValidationService /*implements Validator*/{
+public class Validation /*implements Validator*/{
     
-    private String message;
-    private boolean isValid;
-
-    public boolean validate(ContactInfoDto contactDetailsDto){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        message = "";
-        isValid = true;
-        String firstName = contactDetailsDto.getContact().getFirstName();
+    public boolean checkContactInput(ContactInfoDto contactInfoDto){
+        String message = "";
+        boolean isValid = true;
+        String firstName = contactInfoDto.getContact().getFirstName();
         if (firstName == null || firstName.equals("")) {
             message += "    - Όνομα\n";
             isValid = false;
@@ -35,6 +31,7 @@ public class ValidationService /*implements Validator*/{
         }
         
         if ( !isValid ) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setAlertType(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Παρακαλώ συμπληρώστε τα πεδία :");
             alert.setContentText(message);

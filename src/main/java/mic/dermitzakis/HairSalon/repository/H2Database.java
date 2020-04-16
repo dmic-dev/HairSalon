@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mic.dermitzakis.HairSalon.database;
+package mic.dermitzakis.HairSalon.repository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,9 +17,8 @@ import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
 import mic.dermitzakis.HairSalon.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import mic.dermitzakis.HairSalon.services.CustomQueryService;
+import mic.dermitzakis.HairSalon.business.CustomDataQueries;
 import org.springframework.stereotype.Component;
-import mic.dermitzakis.HairSalon.database.DataAccessManager;
 import mic.dermitzakis.HairSalon.model.Employee;
 import mic.dermitzakis.HairSalon.model.Picture;
 import mic.dermitzakis.HairSalon.repository.EmployeeRepository;
@@ -30,8 +29,8 @@ import org.springframework.context.ApplicationContext;
  *
  * @author mderm
  */
-@Component("h2Database")
-public class H2DataAccessManager implements DataAccessManager{
+@Component
+public class H2Database implements DataAccess{
     
     private final ApplicationContext springContext;
     
@@ -39,15 +38,15 @@ public class H2DataAccessManager implements DataAccessManager{
     private final ContactRepository contactRepository;
     private final AppointmentRepository appointmentRepository;
     private final EmployeeRepository employeeRepository;
-    private final CustomQueryService customQueryService;
+    private final CustomDataQueries customQueryService;
 
-    public H2DataAccessManager(ApplicationContext springContext) {
+    public H2Database(ApplicationContext springContext) {
         this.springContext = springContext;
         pictureRepository = springContext.getBean(PictureRepository.class);
         contactRepository = springContext.getBean(ContactRepository.class);
         appointmentRepository = springContext.getBean(AppointmentRepository.class);
         employeeRepository = springContext.getBean(EmployeeRepository.class);
-        customQueryService = springContext.getBean(CustomQueryService.class);
+        customQueryService = springContext.getBean(CustomDataQueries.class);
     }
 
     
