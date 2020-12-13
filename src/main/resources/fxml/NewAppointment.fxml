@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.NewAppointmentController">
+   <effect>
+      <DropShadow />
+   </effect>
+   <bottom>
+      <AnchorPane prefHeight="62.0" prefWidth="805.0">
+         <children>
+            <HBox layoutX="535.0" prefHeight="62.0" prefWidth="309.0" spacing="25.0">
+               <children>
+                  <Button fx:id="createButton" mnemonicParsing="false" onAction="#createButtonHandler" prefHeight="6.0" prefWidth="122.0" text="Δημιουργία">
+                     <padding>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonHandler" prefHeight="6.0" prefWidth="122.0" text="Ακύρωση">
+                     <padding>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </HBox>
+            <Label fx:id="messageLabel" layoutX="59.0" layoutY="22.0" prefHeight="17.0" prefWidth="419.0" textFill="#ff7000" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </bottom>
+   <top>
+      <HBox prefHeight="54.0" prefWidth="677.0" style="-fx-background-color: #a1b56c;" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="27.0" prefWidth="189.0" text="Νέο Ραντεβού">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="15.0" top="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <AnchorPane prefHeight="435.0" prefWidth="766.0" style="-fx-background-color: beige;">
+         <children>
+            <SplitPane layoutX="185.0" layoutY="40.0">
+               <items>
+                  <VBox prefHeight="372.0" prefWidth="345.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="368.0" style="-fx-background-color: #f2b9b9;" text="   Πελάτες :" />
+                        <TextField fx:id="searchField" onKeyTyped="#searchFieldHandler" prefHeight="25.0" prefWidth="392.0" promptText="Αναζήτηση... ( Ονοματεπώνυμο )" />
+                        <ListView fx:id="listView" prefHeight="278.0" prefWidth="310.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </SplitPane>
+            <SplitPane layoutX="571.0" layoutY="40.0" prefHeight="186.0" prefWidth="247.0">
+               <items>
+                  <VBox prefHeight="165.0" prefWidth="172.0">
+                     <children>
+                        <VBox prefHeight="105.0" prefWidth="194.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="201.0" style="-fx-background-color: #f2b9b9;" text="   Ημερομηνία :" />
+                              <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="197.0" />
+                           </children>
+                        </VBox>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <VBox prefHeight="105.0" prefWidth="194.0" spacing="10.0">
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="204.0" style="-fx-background-color: #f2b9b9;" text="   Ώρα :" />
+                              <SplitPane prefHeight="54.0" prefWidth="203.0">
+                                 <items>
+                                    <HBox prefHeight="26.0" prefWidth="201.0" spacing="10.0">
+                                       <children>
+                                          <Label prefHeight="25.0" prefWidth="27.0" />
+                                          <Spinner fx:id="hourSpinner" prefHeight="25.0" prefWidth="53.0" />
+                                          <Label alignment="CENTER" prefHeight="43.0" prefWidth="8.0" text=":" />
+                                          <Spinner fx:id="minuteSpinner" layoutX="41.0" layoutY="10.0" prefHeight="23.0" prefWidth="53.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </HBox>
+                                 </items>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                              </SplitPane>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </SplitPane>
+            <StackPane layoutX="38.0" layoutY="40.0" prefHeight="120.0" prefWidth="120.0">
+               <children>
+                  <SplitPane>
+                     <items>
+                        <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../OneDrive/Pictures/default-unspecified.jpg" />
+                           </image>
+                        </ImageView>
+                     </items>
+                  </SplitPane>
+               </children>
+            </StackPane>
+            <Button layoutX="38.0" layoutY="201.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="122.0" text="Προσθήκη Εργασιών" textAlignment="CENTER" wrapText="true" />
+            <SplitPane layoutX="571.0" layoutY="240.0" prefHeight="173.0" prefWidth="247.0">
+               <items>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="273.0" style="-fx-background-color: #f2b9b9;" text="   Σημειώσεις :" />
+                        <TextArea fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

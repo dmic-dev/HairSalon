@@ -37,9 +37,9 @@ public class AddressTabController implements FxmlController {
 
     private final ApplicationContext springContext;
     private FadeTransition fadeOutMessage;
-    private int MESSAGE_DURATION;
     private AddressDto addressDtoBuffer;
     private AddressDto editableAddress;
+    private static final int MESSAGE_DURATION = 6000;;
 
     @FXML
     private VBox addressTab;
@@ -73,7 +73,6 @@ public class AddressTabController implements FxmlController {
 
     public AddressTabController(ApplicationContext springContext) {
         this.springContext = springContext;
-        MESSAGE_DURATION = 6000;
     }
 
     @Override

@@ -19,9 +19,7 @@ import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
-import mic.dermitzakis.HairSalon.dto.PhoneDto;
 import mic.dermitzakis.HairSalon.view.FxmlController;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
 /**

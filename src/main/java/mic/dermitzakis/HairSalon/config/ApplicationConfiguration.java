@@ -70,14 +70,14 @@ public class ApplicationConfiguration {
     
     @Bean
     @Scope("prototype")
-    public DayTableLabel dayTableLabel() {
-        return new DayTableLabel();
+    public TimeLabel timeLabel(LocalTime localTime, String text) {
+        return new TimeLabel(localTime, text);
     }
     
     @Bean
     @Scope("prototype")
-    public TimeLabel timeLabel(LocalTime localTime, String text) {
-        return new TimeLabel(localTime, text);
+    public DayTableLabel dayTableLabel() {
+        return new DayTableLabel();
     }
     
     @Bean
