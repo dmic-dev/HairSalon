@@ -37,8 +37,8 @@ public class Note implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notes_id")
-    long notesId; 
+    @Column//(name = "notes_id")
+    long noteId; 
     
     @Column(columnDefinition = "TEXT")
     String text;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="emailTab" prefHeight="153.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.ContactEdit.EmailTabController">
+   <children>
+      <TableView fx:id="emailTable" prefHeight="85.0" prefWidth="933.0">
+         <columns>
+            <TableColumn fx:id="email_Column" minWidth="240.0" prefWidth="240.0" text="Διεύθυνση e-mail" />
+            <TableColumn fx:id="type_Column" maxWidth="-Infinity" minWidth="122.0" prefWidth="122.0" text="Τύπος" />
+         </columns>
+      </TableView>
+      <HBox prefHeight="30.0" prefWidth="570.0" spacing="7.0">
+         <children>
+            <TextField fx:id="email_TextField" minWidth="230.0" prefWidth="230.0" />
+            <ChoiceBox fx:id="type_ChoiceBox" minWidth="115.0" prefWidth="115.0" />
+         </children>
+         <padding>
+            <Insets left="7.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="570.0" spacing="10.0">
+         <children>
+            <Button fx:id="create_Button" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Δημιουργία" />
+            <Button fx:id="delete_Button" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Διαγραφή" />
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

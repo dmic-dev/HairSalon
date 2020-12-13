@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane fx:id="phoneTab" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.ContactEdit.PhoneTabController">
+   <items>
+      <VBox prefHeight="137.0" prefWidth="570.0">
+         <children>
+            <TableView fx:id="phonesTable" prefHeight="85.0" prefWidth="570.0">
+               <columns>
+                  <TableColumn fx:id="number_Column" minWidth="189.33334481716156" prefWidth="189.33334481716156" resizable="false" text="Αριθμός" />
+                  <TableColumn fx:id="type_Column" maxWidth="-1.0" minWidth="122.0" prefWidth="122.0" resizable="false" text="Τύπος" />
+               </columns>
+            </TableView>
+            <HBox prefHeight="30.0" prefWidth="570.0" spacing="7.0">
+               <children>
+                  <TextField fx:id="number_TextField" prefHeight="0.0" prefWidth="180.0" />
+                  <ChoiceBox fx:id="type_ChoiceBox" minWidth="115.0" prefWidth="115.0" />
+               </children>
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="570.0" spacing="10.0">
+               <children>
+                  <Button fx:id="create_Button" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Δημιουργία" />
+                  <Button fx:id="delete_Button" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Διαγραφή" />
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </items>
+</SplitPane>

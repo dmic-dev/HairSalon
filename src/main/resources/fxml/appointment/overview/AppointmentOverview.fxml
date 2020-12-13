@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<SplitPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.AppointmentOverviewController">
+   <items>
+      <TabPane tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="dayTab" closable="false" text="    Ημέρα    ">
+              <content>
+                <fx:include fx:id="dayOverview" source="DayOverview.fxml" />
+              </content>  
+          </Tab>
+          <Tab fx:id="weekTab" closable="false" text="    Εβδομάδα    ">
+              <content>
+                <fx:include fx:id="weekOverview" source="WeekOverview.fxml" />
+              </content>  
+          </Tab>      
+          <Tab closable="true" text="    Μήνας    ">
+              <content>
+              </content>  
+          </Tab>
+          <Tab closable="true" text="    Έτος    ">
+              <content>
+              </content>  
+          </Tab>
+        </tabs>
+      </TabPane>
+   </items>
+</SplitPane>

@@ -10,15 +10,17 @@ import com.google.common.eventbus.EventBus;
 import mic.dermitzakis.HairSalon.view.SpringFXMLLoader;
 import mic.dermitzakis.HairSalon.view.StageManager;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-import mic.dermitzakis.HairSalon.event.CustomChoiceBox;
-import mic.dermitzakis.HairSalon.event.CustomLabel;
-import mic.dermitzakis.HairSalon.model.AppointmentStatus;
+import mic.dermitzakis.HairSalon.custom.ContactTableLabel;
+import mic.dermitzakis.HairSalon.custom.CustomChoiceBox;
+import mic.dermitzakis.HairSalon.custom.DayTableLabel;
+import mic.dermitzakis.HairSalon.custom.TimeLabel;
+import mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus;
 //import mic.dermitzakis.HairSalon.services.AuthenticationManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -31,10 +33,9 @@ import org.springframework.context.annotation.Scope;
 //@ComponentScan(basePackages = {mic.dermitzakis.HairSalon})
 //@EnableJpaRepositories
 public class ApplicationConfiguration {
-    @Autowired 
-    SpringFXMLLoader springFXMLLoader;
-    @Autowired 
-    ApplicationContext springContext;
+    @Autowired
+    private SpringFXMLLoader springFXMLLoader;
+
 //    /**
 //     * Useful when dumping stack trace to a string for logging.
 //     * @return ExceptionWriter contains logging utility methods
@@ -44,22 +45,22 @@ public class ApplicationConfiguration {
 //    public ExceptionWriter exceptionWriter() {
 //        return new ExceptionWriter(new StringWriter());
 //    }
-//
+
     @Bean
     public ResourceBundle resourceBundle() {
         return ResourceBundle.getBundle("bundle");
     }
     
     @Bean
-    @Lazy(value = true) //Stage only created after Spring context bootstap
+    @Lazy(value = true) //Stage is created after Application Context initialized
     public StageManager stageManager(Stage stage) throws IOException {
-        return new StageManager(springContext, springFXMLLoader, stage);
+        return new StageManager(springFXMLLoader, stage);
     }
     
     @Bean
-//    @Lazy
+    @Lazy
     public StageManager stageManager() throws IOException {
-        return new StageManager(springContext, springFXMLLoader);
+        return new StageManager(springFXMLLoader);
     }
     
 //    @Bean
@@ -69,14 +70,26 @@ public class ApplicationConfiguration {
     
     @Bean
     @Scope("prototype")
-    public CustomLabel customLabel() {
-        return new CustomLabel();
+    public DayTableLabel dayTableLabel() {
+        return new DayTableLabel();
     }
     
     @Bean
     @Scope("prototype")
-    public CustomLabel customLabel(String text) {
-        return new CustomLabel(text);
+    public TimeLabel timeLabel(LocalTime localTime, String text) {
+        return new TimeLabel(localTime, text);
+    }
+    
+    @Bean
+    @Scope("prototype")
+    public DayTableLabel dayTableLabel(String text) {
+        return new DayTableLabel(text);
+    }
+    
+    @Bean
+    @Scope("prototype")
+    public ContactTableLabel contactTableLabel() {
+        return new ContactTableLabel();
     }
     
     @Bean
@@ -89,5 +102,5 @@ public class ApplicationConfiguration {
 //    @Scope("singleton")
     public EventBus eventBus() {
         return new EventBus("mainEventBus");
-    }
+    }    
 }

@@ -7,9 +7,7 @@ package mic.dermitzakis.HairSalon.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import mic.dermitzakis.HairSalon.model.Contact.Gender;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,7 +22,7 @@ public class ContactBuilder {
     
     private final ApplicationContext springContext;
     
-    private long contact_id;
+//    private long contact_id;
     private List<Appointment> appointments;
     private boolean deleted;
     private Gender gender;
@@ -35,9 +33,14 @@ public class ContactBuilder {
     private String position;
     private LocalDate dateOfBirth;
     private LocalDateTime dateCreated;
-    private LocalDateTime lastModified;
-//    private Note notes;
-//    private Picture picture;
+    private Employee createdBy;
+    private LocalDateTime lastModifiedDate;
+    private Employee lastModifiedBy;
+    private Note notes;
+    private List<Phone> phones;
+    private List<Address> addresses;
+    private List<Email> emails;
+    private Picture picture;
 
     public ContactBuilder(ApplicationContext springContext) {
         this.springContext = springContext;
@@ -63,7 +66,7 @@ public class ContactBuilder {
         return this;
     }
     
-    public ContactBuilder setLasttName(String lastName){
+    public ContactBuilder setLastName(String lastName){
         this.lastName = lastName;
         return this;
     }
@@ -92,22 +95,46 @@ public class ContactBuilder {
         this.dateCreated = dateCreated;
         return this;
     }
-    
-    public ContactBuilder setLastModified(LocalDateTime lastModified){
-        this.lastModified = lastModified;
+    public ContactBuilder setCreatedBy(Employee createdBy){
+        this.createdBy = createdBy;
         return this;
     }
     
-//    public ContactBuilder setNotes(String notes){
-//        this.notes = notes;
-//        return this;
-//    }
-//    
-//    public ContactBuilder setPicture(byte[] picture){
-//        this.picture = picture;
-//        return this;
-//    }
-//    
+    public ContactBuilder setLastModifiedDate(LocalDateTime lastModifiedDate){
+        this.lastModifiedDate = lastModifiedDate;
+        return this;
+    }
+    
+    public ContactBuilder setLastModifiedBy(Employee lastModifiedBy){
+        this.lastModifiedBy = lastModifiedBy;
+        return this;
+    }
+    
+    public ContactBuilder setNotes(Note notes){
+        this.notes = notes;
+        return this;
+    }
+    
+    public ContactBuilder setPhones(List<Phone> phones){
+        this.phones = phones;
+        return this;
+    }
+    
+    public ContactBuilder setAddresses(List<Address> addresses){
+        this.addresses = addresses;
+        return this;
+    }
+    
+    public ContactBuilder setEmails(List<Email> emails){
+        this.emails = emails;
+        return this;
+    }
+    
+    public ContactBuilder setPicture(Picture picture){
+        this.picture = picture;
+        return this;
+    }
+    
     public Contact build(){
         Contact contact = springContext.getBean(Contact.class);
         contact.setAppointments(appointments);
@@ -120,9 +147,14 @@ public class ContactBuilder {
         contact.setPosition(position);
         contact.setDateOfBirth(dateOfBirth);
         contact.setDateCreated(dateCreated);
-        contact.setLastModified(lastModified);
-//        contact.setNotes(notes);
-//        contact.setPicture(picture);
+        contact.setCreatedBy(createdBy);
+        contact.setLastModifiedDate(lastModifiedDate);
+        contact.setLastModifiedBy(lastModifiedBy);
+        contact.setNotes(notes);
+        contact.setPhones(phones);
+        contact.setAddresses(addresses);
+        contact.setEmails(emails);
+        contact.setPicture(picture);
         
         return contact;
     }

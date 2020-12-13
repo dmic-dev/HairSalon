@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URL;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritablePixelFormat;
 import javax.imageio.ImageIO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,8 +25,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.hibernate.Hibernate;
+//import org.apache.tomcat.util.codec.binary.Base64;
+import java.util.Base64;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -51,28 +48,32 @@ public class Picture implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "picture_id")
-    long pictureId; 
+    @Column//(name = "picture_id")
+    private long pictureId; 
    
     @Column(columnDefinition = "BLOB")
-    byte[] image;
+    private byte[] byteArray;
     
-    public static Image toImage(byte[] buffer){
+    public Image getImage(){
+        return byteArraytoImage(byteArray);
+    }
+    
+    public static Image byteArraytoImage(byte[] buffer){
         InputStream stream = new ByteArrayInputStream(buffer);
         Image img = new Image(stream);
         return img;
     }
     
-    public static byte[] toByteArray(Image img) throws IOException{
+    public static byte[] imageToByteArray(Image img) throws IOException{
         String base64String;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        var outputStream = new ByteArrayOutputStream();
         URI uri = URI.create(img.getUrl());
         BufferedImage bufferedImage = ImageIO.read(new File(uri));
         ImageIO.write(bufferedImage, "jpg", outputStream);
         outputStream.flush();
-        base64String = Base64.encodeBase64String(outputStream.toByteArray());
+        base64String = Base64.getEncoder().encodeToString(outputStream.toByteArray());
         
-        byte[] byteArray = Base64.decodeBase64(base64String);
+        byte[] byteArray = Base64.getDecoder().decode(base64String);
         return byteArray;
     }
     

@@ -5,6 +5,9 @@
  */
 package mic.dermitzakis.HairSalon.view;
 
+import mic.dermitzakis.HairSalon.function_enum.ViewService;
+import mic.dermitzakis.HairSalon.function_enum.TestFxmlView;
+import java.io.IOException;
 import java.util.Objects;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -12,40 +15,37 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Manages switching Scenes on the Primary Stage
  */
 public class StageManager {
-
-    private final ApplicationContext springContext;
     private final SpringFXMLLoader springFXMLLoader;
+    @Autowired
+    private ViewService viewImpl;
     
-    private static final Logger LOG = getLogger(StageManager.class);
-    private Stage primaryStage;
+    @Getter 
     private boolean isPrimaryStage = true;
-            
-    @Autowired
-    public StageManager(ApplicationContext springContext, SpringFXMLLoader springFXMLLoader, Stage stage) {
-        this.springContext = springContext;
+    private Stage primaryStage;
+      
+    private static final Logger LOG = getLogger(StageManager.class);
+   
+    public StageManager(SpringFXMLLoader springFXMLLoader, Stage stage) {
         this.springFXMLLoader = springFXMLLoader;
-        this.primaryStage = stage;
+        primaryStage = stage;
     }
     
-    @Autowired
-    public StageManager(ApplicationContext springContext, SpringFXMLLoader springFXMLLoader) {
-        this.springContext = springContext;
+    public StageManager(SpringFXMLLoader springFXMLLoader) {
         this.springFXMLLoader = springFXMLLoader;
     }
     
-    public void newStage(final FxmlView view){
+    public Stage newStage(FxmlView view) {
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view);
+        
         Scene scene = new Scene(viewRootNodeHierarchy);
         String title = view.getTitle();
         Stage stage = (isPrimaryStage) ? primaryStage : new Stage(StageStyle.DECORATED);
@@ -54,22 +54,23 @@ public class StageManager {
         stage.setScene(scene);
         stage.sizeToScene();
         
-        showStage(stage, view);
+        return showStage(stage, view);
     }
     
-    private void showStage(Stage stage, FxmlView view){
+    private Stage showStage(Stage stage, FxmlView view){
         try {
-            if (isPrimaryStage){ // list.isFirst()
+            if (isPrimaryStage){
                 stage.show();
                 isPrimaryStage = !isPrimaryStage;
             } else {
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.setResizable(false);
-                stage.showAndWait();
+                return stage;
             }
         } catch (Exception exception) {
-            logAndExit ("Unable to show scene for title" + view.getTitle(),  exception);
+            logAndExit ("Unable to show scene for title: " + view.getTitle(),  exception);
         }
+        return null;
     }
     
     /**
@@ -81,13 +82,12 @@ public class StageManager {
      */
     public Parent loadViewNodeHierarchy(FxmlView fxmlView) {
         Parent rootNode = null;
-        String fxmlFilePath = fxmlView.getFxmlFile();
+        String fxmlFilePath = fxmlView.getFileURL();
         try {
             rootNode = springFXMLLoader.load(fxmlView);
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
-        } catch (Exception exception) {
-            System.out.println("message : "+exception.getMessage());
-            logAndExit("Unable to load FXML view: " + fxmlFilePath, exception);
+        } catch (IOException exception) {
+            logAndExit("Unable to load FXML view: "+fxmlFilePath, exception);
         }
         return rootNode;
     }
@@ -96,4 +96,5 @@ public class StageManager {
         LOG.error(errorMsg, exception, exception.getCause());
         Platform.exit();
     }
+
 }

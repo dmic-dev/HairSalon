@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import mic.dermitzakis.HairSalon.repository.SampleData;
-import mic.dermitzakis.HairSalon.event.CustomLabel;
+import mic.dermitzakis.HairSalon.bootstrap.SampleData;
+import mic.dermitzakis.HairSalon.custom.DayTableLabel;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.EntityType;
 import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
-import mic.dermitzakis.HairSalon.repository.DataLoader;
+import mic.dermitzakis.HairSalon.repository.CacheService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +44,7 @@ public class DayOverviewControllerTest {
     private final ApplicationContext springContext;
     private DayOverviewController dayOverviewController = null;
     private SampleData sampleDataAccessManager;
-    private DataLoader dataLoaderService;
+    private CacheService dataLoaderService;
     private Optional<List<Appointment>> findByAppointedDateBetween;
     
     @MockBean
@@ -67,7 +67,7 @@ public class DayOverviewControllerTest {
     public void setUp(){
         dayOverviewController = springContext.getBean(DayOverviewController.class);
         sampleDataAccessManager = springContext.getBean(SampleData.class);
-        dataLoaderService = springContext.getBean(DataLoader.class);
+        dataLoaderService = springContext.getBean(CacheService.class);
         appointmentRepository = springContext.getBean(AppointmentRepository.class);
         EntityType entityType = dataLoaderService.getEntityType();
         List<Appointment> read = (List<Appointment>) sampleDataAccessManager.read(entityType);
@@ -84,15 +84,16 @@ public class DayOverviewControllerTest {
 
     @Test
     public void testGetFirstLabel_ShouldBeEqualToFirstContact(){
-        CustomLabel expected = new CustomLabel("Martin Welsch");
-        CustomLabel actual = dayOverviewController.getFirstNonEmptyLabel();
+        DayTableLabel expected = springContext.getBean(DayTableLabel.class);
+        expected.setText("Martin Welsch");
+        DayTableLabel actual = dayOverviewController.getFirstNonEmptyLabel();
         assertEquals(expected, actual);
     }
     
     @Test
     @DisplayName("Method getFirstVBox should not return null")
-    public void testGetFirstVBoxShouldNotBeNull(){
-         ObservableList<Node> actual = dayOverviewController.getFirstVBox();
+    public void testGetFirstVBox_ShouldNotBeNull(){
+        ObservableList<Node> actual = dayOverviewController.getFirstVBox();
         assertNotNull(actual, "getFirstVBox returns null");
     }
     

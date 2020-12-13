@@ -5,88 +5,124 @@
  */
 package mic.dermitzakis.HairSalon.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import java.time.format.DateTimeFormatter;
-import mic.dermitzakis.HairSalon.view.FxmlController;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
+import java.util.UUID;
+import java.util.function.Predicate;
+import static java.util.stream.Collectors.toList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import mic.dermitzakis.HairSalon.dto.ContactViewDetailsDto;
+import javax.annotation.PostConstruct;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import mic.dermitzakis.HairSalon.custom.ContactTableLabel;
+import mic.dermitzakis.HairSalon.dto.ContactOverviewDto;
+import mic.dermitzakis.HairSalon.dto.ContactSideDetailsDto;
+import mic.dermitzakis.HairSalon.dto.RowDetailsDto;
+import mic.dermitzakis.HairSalon.event.ContactSideDetailsEvent;
 import mic.dermitzakis.HairSalon.model.Contact;
-import mic.dermitzakis.HairSalon.repository.DataLoader;
+import mic.dermitzakis.HairSalon.services.ContactService;
+import mic.dermitzakis.HairSalon.mapper.ContactTableDetailsMapper;
+import mic.dermitzakis.HairSalon.event.RowChangedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author mderm
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Controller
-public class ContactOverviewController implements FxmlController, EventHandler<MouseEvent> {
+public class ContactOverviewController extends AbstractTableViewController implements EventHandler<MouseEvent> {
 
     private final ApplicationContext springContext;
-    private final DataLoader dataLoaderService;
+    private final ContactService contactService;
+    private final EventBus eventBus;
+    private final RowChangedEvent rowChangedEvent;
+    private final RowDetailsDto rowDetailsDto;
+    private final ContactTableIndex tableIndex;
+    
+    private UUID selectedItem;
 
-    @FXML
-    public TableView<ContactViewDetailsDto> contactTable;
-    @FXML
-    private TableColumn<ContactViewDetailsDto, Long> id_Column;
-    @FXML
-    private TableColumn<ContactViewDetailsDto, String> firstName_Column;
-    @FXML
-    private TableColumn<ContactViewDetailsDto, String> lastName_Column;
-    @FXML
-    private TableColumn<ContactViewDetailsDto, String> phone_Column;
-    @FXML
-    private TableColumn<ContactViewDetailsDto, String> notes_Column;
+    /* Controls */
+    @FXML private TextField searchField;
+    @FXML private Button clearButton;
+    
+    /* Table */
+    @FXML private TableView<ContactOverviewDto> contactTable;
+    @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> id_Column;
+    @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> firstName_Column;
+    @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> lastName_Column;
+    @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> phone_Column;
+    @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> notes_Column;
 
-    @FXML
-    private Text name_txt;
-    @FXML
-    private Text id_txt;
-    @FXML
-    private StackPane picture_area;
-    @FXML
-    private Text gender_txt;
-    @FXML
-    private Text dob_txt;
-    @FXML
-    private Text date_created_txt;
-    @FXML
-    private Text last_modified_txt;
+    /* SideDetails */
+//    private Text name_txt;
+//    private Text id_txt;
+//    private StackPane picture_area;
+//    private Text gender_txt;
+//    private Text dob_txt;
+//    private Text date_created_txt;
+//    private Text last_modified_txt;
 
-    @Autowired
-    public ContactOverviewController(ApplicationContext springContext) {
+    public ContactOverviewController(ApplicationContext springContext, ContactService contactService, EventBus eventBus, RowChangedEvent rowChangedEvent, RowDetailsDto rowDetailsDto, ContactTableIndex tableIndex) {
         this.springContext = springContext;
-        this.dataLoaderService = springContext.getBean(DataLoader.class);
+        this.contactService = contactService;
+        this.eventBus = eventBus;
+        this.rowChangedEvent = rowChangedEvent;
+        this.rowDetailsDto = rowDetailsDto;
+        this.tableIndex = tableIndex;
+    }
+    
+
+    @PostConstruct
+    private void init(){
+        eventBus.register(this);
     }
 
     /**
      * Initializes the controller class.
+     * @param event
      */
-    @Override // FxmlController
-    public void initialize() { 
-        initializeTableColumns();
-        loadContacts();
-        setEventHandler();
-        setDetailsArea(0);
+    
+//    @Subscribe
+    @EventListener
+    public void rowChangesListener(RowChangedEvent event){
+        RowDetailsDto data= event.getData();
+        this.selectedItem = data.getSelectedItem();
+    }
+    
+    @Override
+    protected void setEventHandler() {
+        contactTable.setOnMouseExited(this);
+        contactTable.setOnMouseClicked(this);
+        setTableSearchEventListener();
+        setClearButtonHandler();
     }
 
-    private void initializeTableColumns() {
+    @Override
+    protected void assignTableColumns() {
         id_Column.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstName_Column.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastName_Column.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -94,49 +130,111 @@ public class ContactOverviewController implements FxmlController, EventHandler<M
         notes_Column.setCellValueFactory(new PropertyValueFactory<>("notes"));
     }
 
-    @Override  // Called to display contact details
+    @Override
     public void handle(MouseEvent event) {
         if (event.getSource() == contactTable) {
-            setDetailsArea(this.getSelectedItem().getId());
-        }
-    }
-
-    public void setDetailsArea(long id) { // todo -> load picture
-        if (!contactTable.getItems().isEmpty()) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-            if (id == 0) {
-                contactTable.getSelectionModel().select((int) id);
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                setTableIndex();
+                rowDetailsDto.setSelectedItem(selectedItem);
+                rowChangedEvent.setData(rowDetailsDto);
+                eventBus.post(rowChangedEvent);
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED){
+                rowDetailsDto.setFocusedItem(null);
+                rowChangedEvent.setData(rowDetailsDto);
+                eventBus.post(rowChangedEvent);
             }
-            ContactViewDetailsDto details = this.getSelectedItem();
-//                    ContactList.getTestData().get(id);
-            name_txt.setText(details.getFullName());
-            id_txt.setText(String.valueOf(details.getId()));
-//            gender_txt.setText(details.getGender().toString());
-//            dob_txt.setText(dtf.format(LocalDate.now()));//contactDto.getDob()
-//            date_created_txt.setText(dtf.format(LocalDateTime.now()));//contactDto.getDateCreated()
-//            last_modified_txt.setText(dtf.format(LocalDateTime.now()));//contactDto.getLastModified())
         }
     }
 
-    public ContactViewDetailsDto getSelectedItem() {
-        return contactTable.getSelectionModel().getSelectedItem();
+    private void setTableIndex() {
+        tableIndex.setValue(contactTable.getSelectionModel().getSelectedIndex());
     }
 
-    public String getSelectedItemFullName() {
-        return getSelectedItem().getFirstName() + " " + getSelectedItem().getLastName();
+    /**
+     * 
+     * @param contacts
+     * @return 
+     * 
+     * Maybe try ForkJoinPool along with parallel()
+     */
+    private ObservableList<ContactOverviewDto> getTableItems(List<Contact> contacts){
+        final ContactTableDetailsMapper tableDetails  = springContext.getBean(ContactTableDetailsMapper.class);
+
+        List<ContactOverviewDto> collection = contacts
+                .parallelStream()
+                .map(tableDetails::extract)
+                .collect(toList());
+        
+        return FXCollections.observableArrayList(collection);
     }
 
-    private ObservableList<ContactViewDetailsDto> getContactTable(List<Contact> contacts) {
-        ContactOverviewManager contactTableManager = springContext.getBean(ContactOverviewManager.class);
-        return contactTableManager.getContactDtoList(contacts);
+    @Override
+    public void insertDataIntoTable() {
+        List<Contact> contacts = loadDataFromRepository();
+        contactTable.setItems(getTableItems(contacts));
+    }
+    
+    private List<Contact> loadDataFromRepository(){
+        return contactService.findAll().orElseThrow();
+    }
+    
+    @Override
+    protected void restoreState() {
+        selectCurrentTableItem();
+        contactTable.scrollTo(tableIndex.getValue());
+        ContactOverviewDto contactOverviewDto = contactTable.getItems().get(tableIndex.getValue());
+        ContactTableLabel label = contactOverviewDto.getFirstName();
+
+        postRowChangedEvent(label);
+        postSideDetails(label);
     }
 
-    private void loadContacts() {
-        contactTable.setItems(getContactTable(dataLoaderService.getContacts().orElse(new ArrayList<>())));// get - forget
+    private void postSideDetails(ContactTableLabel label) {
+        label.postSideDetails();
     }
 
-    private void setEventHandler() {
-        contactTable.setOnMouseClicked(this);
+    private void postRowChangedEvent(ContactTableLabel label) {
+        rowDetailsDto.setDetails(label.getRowId(), label.getRowId(), null);
+        rowChangedEvent.setData(rowDetailsDto);
+        eventBus.post(rowChangedEvent);
+    }
+    
+    private void setTableSearchEventListener() {
+        ObservableList<ContactOverviewDto> tableData = FXCollections.observableArrayList();
+                tableData.addAll(contactTable.getItems());
+        FilteredList<ContactOverviewDto> filteredData= new FilteredList<>(tableData, e -> true);
+        searchField.setOnKeyReleased( e -> {
+            searchField.textProperty().addListener((observbaleValue, oldValue, newValue) -> {
+                filteredData.setPredicate((Predicate<? super ContactOverviewDto>) contactDto -> {
+                    String lowerCasefilter = newValue.toLowerCase();
+                    if(newValue.isEmpty()) {
+                        return true;
+                    } else if (String.valueOf(contactDto.getContactId()).contains(newValue)) {
+                        return true;
+                    } else if (contactDto.getFirstName().getText().toLowerCase().contains(lowerCasefilter)) {
+                        return true;
+                    } else if (contactDto.getLastName().getText().toLowerCase().contains(lowerCasefilter)) {
+                        return true;
+                    } else if (contactDto.getPhone().getText().toLowerCase().contains(lowerCasefilter)) {
+                        return true;
+                    } else if (contactDto.getNotes().getText().toLowerCase().contains(lowerCasefilter)) {
+                        return true;
+                    }
+                    return false;
+                });
+            });
+            SortedList<ContactOverviewDto> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(contactTable.comparatorProperty());
+            contactTable.setItems(sortedData);
+        });
+    }
+
+    private void selectCurrentTableItem() {
+        contactTable.getSelectionModel().select(tableIndex.getValue());
+    }
+
+    private void setClearButtonHandler() {
+        clearButton.setOnAction((t) -> searchField.clear());
     }
 
 }

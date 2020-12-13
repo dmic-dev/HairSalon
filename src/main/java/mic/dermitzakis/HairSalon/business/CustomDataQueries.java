@@ -24,11 +24,11 @@ import mic.dermitzakis.HairSalon.repository.PictureRepository;
 public class CustomDataQueries {
     
     @Autowired
-    private PictureRepository pictureRepository;
-    @Autowired
     private ContactRepository contactRepo;
     @Autowired
     private AppointmentRepository appointmentRepo;
+    @Autowired
+    private PictureRepository pictureRepository;
     
     /*==== CONTACT ======================*/
     
@@ -55,8 +55,8 @@ public class CustomDataQueries {
         return contactRepo.findByLastNameStartsWith(stringParam);
     }
     
-    public List<Contact> getByAllClassStringsContaining(String stringParam){
-        return contactRepo.findByFirstNameContainingOrLastNameContainingOrProfessionContainingOrCompanyContainingOrNotesContainingAllIgnoreCaseOrderByFirstNameAsc(stringParam, stringParam, stringParam, stringParam, stringParam);
+    public List<Contact> getByAllClassStringsContaining(String stringParam){ //getByAllPropertiesContaining
+        return contactRepo.findByFirstNameContainingOrLastNameContainingOrProfessionContainingOrCompanyContainingAllIgnoreCaseOrderByFirstNameAsc(stringParam, stringParam, stringParam, stringParam);
     }
     
     /*==== APPOINTMENT ==================*/

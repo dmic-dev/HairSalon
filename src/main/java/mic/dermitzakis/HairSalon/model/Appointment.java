@@ -8,6 +8,8 @@ package mic.dermitzakis.HairSalon.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,15 +45,15 @@ public class Appointment implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "appointment_id")
+    @Column//(name = "appointment_id")
     private long appointmentId;
     
     @ManyToOne
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "contactid")
     private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "contact_id")
+    @JoinColumn(name = "employeeid", referencedColumnName = "contactid")
     private Employee employee;
     
     @OneToMany(mappedBy = "appointment")
@@ -69,7 +71,42 @@ public class Appointment implements Serializable{
     @Column(name = "time_created")
     private LocalDateTime timeCreated;
 
+    @Column(name = "last_modified")
+    private LocalDateTime lastModified;
+    
     public String getDetails(){
         return "Date: "+ appointedDateTime.toLocalDate() +",  Time: "+ appointedDateTime.toLocalTime() +",  "+contact.getFirstName()+",\t"+contact.getLastName()+",\tTime Created: "+timeCreated;
     }
+    
+    public static enum AppointmentStatus {
+        COMPLETED("Ολοκληρώθηκε"),
+        CANCELED("Ακύρωση"),
+        PENDING("Εκκρεμεί"),  
+        EMPTY("-");
+
+        private String status;
+        private static final Logger LOG = Logger.getLogger(AppointmentStatus.class.getName());
+
+        private AppointmentStatus(String status) {
+            this.status = status;
+        }
+
+        public static AppointmentStatus extractStatus(Appointment appointment){
+            AppointmentStatus status = AppointmentStatus.PENDING;
+            switch (appointment.getStatus()){
+                case "Εκκρεμεί"     : {status = AppointmentStatus.PENDING; break;}
+                case "Ολοκληρώθηκε" : {status = AppointmentStatus.COMPLETED; break;}
+                case "Ακύρωση"      : {status = AppointmentStatus.CANCELED; break;}
+                case "-"            : {status = AppointmentStatus.EMPTY; break;}
+                default: LOG.log(Level.SEVERE, "No such item in AppointmentStatus: {0}", appointment.getStatus());
+            } 
+            return status;
+        }
+
+        @Override
+        public String toString(){
+            return status;
+        }
+    }
+    
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane fx:id="dayOverview" prefHeight="525.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.DayOverviewController">
+   <center>
+      <SplitPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+         <items>
+            <Group fx:id="tableGoup">
+               <children>
+                <TableView fx:id="appointmentTable" layoutX="-3.0" layoutY="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="831.0" tableMenuButtonVisible="true">
+                   <columns>
+                      <TableColumn fx:id="time_Column" editable="false" prefWidth="64.00002539157867" resizable="false" sortable="false" text="Ώρα" />
+                      <TableColumn fx:id="name_Column" editable="false" minWidth="-Infinity" prefWidth="179.99996948242188" sortable="false" text="Ονοματεπώνυμο" />
+                      <TableColumn fx:id="status_Column" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="84.66670227050781" resizable="false" sortable="false" text="Κατάσταση" />
+                      <TableColumn fx:id="operations_Column" editable="false" minWidth="-Infinity" prefWidth="242.666748046875" sortable="false" text="Εργασίες" />
+                      <TableColumn fx:id="notes_Column" editable="false" minWidth="-Infinity" prefWidth="245.33331298828125" sortable="false" text="Σημειώσεις" />
+                   </columns>
+                </TableView>
+                  <fx:include fx:id="indicator" source="CurrentTimeIndicator.fxml" />
+               </children>
+            </Group>
+         </items>
+      </SplitPane>
+   </center>
+   <right>
+      <fx:include fx:id="daySideDetails" source="DaySideDetails.fxml" />
+   </right>
+   <top>
+      <fx:include fx:id="dayOverviewControls" source="DayOverviewControls.fxml" />
+   </top>
+</BorderPane>

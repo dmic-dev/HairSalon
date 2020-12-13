@@ -5,6 +5,8 @@
  */
 package mic.dermitzakis.HairSalon.controller;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.SplitPane;
 import mic.dermitzakis.HairSalon.view.FxmlController;
 import org.springframework.stereotype.Controller;
 
@@ -15,8 +17,11 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class WeekOverviewController implements FxmlController{
 
+    @FXML private SplitPane weekOverview;
+
     @Override
     public void initialize() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

@@ -5,7 +5,6 @@
  */
 package mic.dermitzakis.HairSalon.repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +25,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @EntityGraph(value = "Appointment.Overview", type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT appointment FROM Appointment appointment WHERE appointedDateTime BETWEEN :startingDate AND :endingDate")
     Optional<List<Appointment>> findByAppointedDateBetween(@Param("startingDate")LocalDateTime startingDate, @Param("endingDate")LocalDateTime endingDate);
+    @Query("SELECT appointment FROM Appointment appointment WHERE appointedDateTime BETWEEN :startingDate AND :endingDate AND contact.firstName = :first" )
+    Optional<List<Appointment>> findByAppointedDateBetweenWhereFirstNameEquals(@Param("startingDate")LocalDateTime startingDate, @Param("endingDate")LocalDateTime endingDate, @Param("first")String firstName);
     Optional<List<Appointment>> findByAppointedDateTime(LocalDateTime date);
+    
+    public Optional<Appointment> findByAppointmentId(Long id);
 
+    public void deleteByAppointmentId(Long id);
+    
 }

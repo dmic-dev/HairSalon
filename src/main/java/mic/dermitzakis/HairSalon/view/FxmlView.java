@@ -18,17 +18,12 @@ public enum FxmlView {
     MAIN {
         @Override
         public String getTitle() {
-            return getStringFromResourceBundle("main.app.title");
+            return getStringFromResourceBundle("main.view.title");
         }
 
         @Override
-        public String getFxmlFile() {
+        public String getFileURL() {
             return "/fxml/Main.fxml";
-        }
-
-        @Override
-        public String getControllerName() {
-            return "mainController";
         }
 
     }, LOGIN {
@@ -38,45 +33,32 @@ public enum FxmlView {
         }
 
         @Override
-        public String getFxmlFile() {
+        public String getFileURL() {
             return "/fxml/Login.fxml";
         }
 
-        @Override
-        public String getControllerName() {
-            return "loginController";
-        }
-
-    }, NEW_APPOINTMENT {
+    }, EDIT_APPOINTMENT {
         @Override
         public String getTitle() {
             return getStringFromResourceBundle("appointment.view.edit.title");
         }
 
         @Override
-        public String getFxmlFile() {
-            return "/fxml/NewAppointment.fxml";
+        public String getFileURL() {
+            return "/fxml/appointment/edit/EditAppointment.fxml";
         }
 
-        @Override
-        public String getControllerName() {
-            return "newAppointmentController";
-        }
-    }, NEW_CONTACT {
+    }, EDIT_CONTACT {
         @Override
         public String getTitle() {
             return getStringFromResourceBundle("contact.view.edit.title");
         }
 
         @Override
-        public String getFxmlFile() {
-            return "/fxml/NewContact.fxml";
+        public String getFileURL() {
+            return "/fxml/contact/edit/EditContact.fxml";
         }
 
-        @Override
-        public String getControllerName() {
-            return "newContactController";
-        }
     }, CONTACT_VIEW {
         @Override
         public String getTitle() {
@@ -84,14 +66,10 @@ public enum FxmlView {
         }
 
         @Override
-        public String getFxmlFile() {
-            return "/fxml/ContactOverview.fxml";
+        public String getFileURL() {
+            return "/fxml/contact/overview/ContactOverview.fxml";
         }
 
-        @Override
-        public String getControllerName() {
-            return "contactOverviewController";
-        }
     }, APPOINTMENT_VIEW {
         @Override
         public String getTitle() {
@@ -99,49 +77,14 @@ public enum FxmlView {
         }
 
         @Override
-        public String getFxmlFile() {
-            return "/fxml/AppointmentOverview.fxml";
+        public String getFileURL() {
+            return "/fxml/appointment/overview/AppointmentOverview.fxml";
         }
 
-        @Override
-        public String getControllerName() {
-            return "appointmentOverviewController";
-        }
-    }, DAY_VIEW {
-        @Override
-        public String getTitle() {
-            return getStringFromResourceBundle("appointment.view.day.title");
-        }
-
-        @Override
-        public String getFxmlFile() {
-            return "/fxml/DayOverview.fxml";
-        }
-
-        @Override
-        public String getControllerName() {
-            return "dayOverviewController";
-        }
-    }, WEEK_VIEW {
-        @Override
-        public String getTitle() {
-            return getStringFromResourceBundle("appointment.view.week.title");
-        }
-
-        @Override
-        public String getFxmlFile() {
-            return "/fxml/WeekOverview.fxml";
-        }
-
-        @Override
-        public String getControllerName() {
-            return "weekOverviewController";
-        }
     };
     
     public abstract String getTitle();
-    public abstract String getFxmlFile();
-    public abstract String getControllerName();
+    public abstract String getFileURL();
     
     
     public String getStringFromResourceBundle(String key){

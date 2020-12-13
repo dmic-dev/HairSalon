@@ -51,7 +51,9 @@ public class Employee extends Contact implements Serializable{
         super.setPicture(employee.getPicture());
         super.setDateOfBirth(employee.getDateOfBirth());
         super.setDateCreated(employee.getDateCreated());
-        super.setLastModified(employee.getLastModified());
+        super.setCreatedBy(employee.getCreatedBy());
+        super.setLastModifiedDate(employee.getLastModifiedDate());
+        super.setLastModifiedBy(employee.getLastModifiedBy());
         this.type = employee.getType();
         this.log = employee.log;
         this.bookedAppointments = employee.bookedAppointments;

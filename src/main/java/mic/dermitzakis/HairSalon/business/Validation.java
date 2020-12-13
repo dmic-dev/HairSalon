@@ -5,41 +5,24 @@
  */
 package mic.dermitzakis.HairSalon.business;
 
-import javafx.scene.control.Alert;
-import mic.dermitzakis.HairSalon.dto.ContactInfoDto;
-import org.springframework.stereotype.Service;
+import mic.dermitzakis.HairSalon.model.Contact;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author mderm
  */
-@Service
+@Component
 public class Validation /*implements Validator*/{
-    
-    public boolean checkContactInput(ContactInfoDto contactInfoDto){
-        String message = "";
-        boolean isValid = true;
-        String firstName = contactInfoDto.getContact().getFirstName();
-        if (firstName == null || firstName.equals("")) {
-            message += "    - Όνομα\n";
-            isValid = false;
-        }
-        
-        if (firstName == null || firstName.equals("")) {
-            message += "    - Τηλέφωνο\n";
-            isValid = false;
-        }
-        
-        if ( !isValid ) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Παρακαλώ συμπληρώστε τα πεδία :");
-            alert.setContentText(message);
-            alert.showAndWait();
-        }
-        
-        return isValid;
-    }
 
+    
+    public static boolean checkAppointmentInput(Appointment appointment){
+        return false;
+    }
+    
+    public static boolean checkContactInput(Contact contact){
+        String firstName = contact.getFirstName();
+        return !(firstName == null || firstName.isBlank());
+    }
+    
 }
-//JOptionPane.showMessageDialog(null, message);

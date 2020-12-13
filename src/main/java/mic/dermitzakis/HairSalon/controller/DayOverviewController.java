@@ -7,203 +7,257 @@ package mic.dermitzakis.HairSalon.controller;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import java.net.URL;
-import java.util.ArrayList;
-import mic.dermitzakis.HairSalon.view.FxmlController;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javax.annotation.PostConstruct;
 import lombok.Data;
-import lombok.Getter;
-import mic.dermitzakis.HairSalon.dto.AppointmentDto;
-import mic.dermitzakis.HairSalon.dto.AppointmentViewDetailsDto;
+import lombok.EqualsAndHashCode;
+import static mic.dermitzakis.HairSalon.controller.TableIndex.MINUS_ONE;
+import mic.dermitzakis.HairSalon.dto.DayOverviewDto;
 import mic.dermitzakis.HairSalon.model.Appointment;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import mic.dermitzakis.HairSalon.event.CustomLabel;
-import mic.dermitzakis.HairSalon.event.EventRowSelected;
-import mic.dermitzakis.HairSalon.event.RowEventObserver;
-import mic.dermitzakis.HairSalon.event.RowEventPublisher;
-import mic.dermitzakis.HairSalon.model.AppointmentStatus;
-import mic.dermitzakis.HairSalon.model.Contact;
-import mic.dermitzakis.HairSalon.model.Contact.Gender;
-import mic.dermitzakis.HairSalon.repository.DefaultImages;
-import mic.dermitzakis.HairSalon.repository.DataLoader;
+import mic.dermitzakis.HairSalon.custom.DayTableLabel;
+import mic.dermitzakis.HairSalon.custom.TimeLabel;
+import mic.dermitzakis.HairSalon.dto.RowDetailsDto;
+import mic.dermitzakis.HairSalon.event.RowChangedEvent;
+import mic.dermitzakis.HairSalon.repository.CacheService;
+import mic.dermitzakis.HairSalon.services.AppointmentService;
+import static mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus.extractStatus;
 
-@Data
 @Controller
-public class DayOverviewController implements FxmlController, RowEventObserver, EventHandler<MouseEvent> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class DayOverviewController extends AbstractTableViewController implements EventHandler<MouseEvent> {
     private final ApplicationContext springContext;
     private final EventBus eventBus;
-    private final DataLoader dataLoaderService;
-    private final RowEventPublisher rowEventPublisher;
+    private final CacheService cacheService;
+    private final AppointmentService appointmentService;
+    private final RowDetailsDto rowDetailsDto;
+    private final RowChangedEvent rowChangedEvent;
+    private final DayTableIndex tableIndex;  // for restoreState
     private static final Logger LOG = Logger.getLogger(DayOverviewController.class.getName());
     
-    @FXML
-    private TableView<AppointmentDto> appointmentTable;
-    @FXML
-    private TableColumn<AppointmentDto, Label> time_Column;
-    @FXML
-    private TableColumn<AppointmentDto, VBox> status_Column;
-    @FXML 
-    @Getter 
-    private TableColumn<AppointmentDto, VBox> name_Column;
-    @FXML
-    private TableColumn<AppointmentDto, VBox> operations_Column;
-    @FXML
-    private TableColumn<AppointmentDto, VBox> notes_Column;
-
-    
-    @FXML
-    private Text name_txt;
-    @FXML
-    private Text id_txt;
-    @FXML
-    private StackPane picture_area;
-    @FXML
-    private Text gender_txt;
-    @FXML
-    private Text dob_txt;
-    @FXML
-    private Text date_created_txt;
-    @FXML
-    private Text last_modified_txt;
-
-    @FXML
-    private Text appointment_date_created_txt;
-    @FXML
-    private Text emp_name;
-
-    private List<Appointment> appointments;
+    private final HashMap<LocalTime, Bounds> boundsHashMap = new HashMap<>();
+    private LocalDate currentDate = LocalDate.now();
+    private Optional<List<Appointment>> appointments;
     private UUID selectedItem;
-    private static DayOverviewController instance;
-    
-    public static DayOverviewController getInstance(){
-        return instance;
-    }
-    
-    @Autowired
-    public DayOverviewController(ApplicationContext springContext) {
+
+    @FXML private BorderPane dayOverview;
+    @FXML private Group tableGoup;
+    @FXML private Group indicator;
+
+    /*  Table */
+    @FXML private TableView<DayOverviewDto> appointmentTable;
+    @FXML private TableColumn<DayOverviewDto, TimeLabel> time_Column;
+    @FXML private TableColumn<DayOverviewDto, VBox> status_Column;
+    @FXML private TableColumn<DayOverviewDto, VBox> name_Column;
+    @FXML private TableColumn<DayOverviewDto, VBox> operations_Column;
+    @FXML private TableColumn<DayOverviewDto, VBox> notes_Column;
+
+
+    public DayOverviewController(ApplicationContext springContext, EventBus eventBus, CacheService cacheService, AppointmentService appointmentService, RowDetailsDto rowDetailsDto, RowChangedEvent rowChangedEvent, DayTableIndex tableIndex) {
         this.springContext = springContext;
-        this.eventBus = springContext.getBean(EventBus.class);
-        this.dataLoaderService = springContext.getBean(DataLoader.class);
-        this.rowEventPublisher = springContext.getBean(RowEventPublisher.class);
-        instance = this;
+        this.eventBus = eventBus;
+        this.cacheService = cacheService;
+        this.appointmentService = appointmentService;
+        this.rowDetailsDto = rowDetailsDto;
+        this.rowChangedEvent = rowChangedEvent;
+        this.tableIndex = tableIndex;
+    }
+
+    
+    @Override
+    public void initialize(){
+        super.initialize();
     }
 
     @PostConstruct
-    public void init() {
+    private void init() {
         eventBus.register(this);
     }
-    
+
     @Subscribe
-    public void appointmentDetailsListener(EventRowSelected event){
-        AppointmentViewDetailsDto details = event.getDetails();
-        name_txt.setText(details.getName());/*contactDetailsDto.getName()*/
-        id_txt.setText(details.getId());/*contactDetailsDto.getId()*/
-        picture_area.getChildren().add(getImageView(details.getPicture()));
-        gender_txt.setText(details.getGender());
-        dob_txt.setText(details.getDob());
-        date_created_txt.setText(details.getDateCreated());
-        last_modified_txt.setText(details.getLastModified());
-        appointment_date_created_txt.setText(details.getAppDateCreated());
-        emp_name.setText(details.getAppCreator());
-    }
-    
-    @Override
-    public void update(UUID selectedItem, UUID focusedItem, AppointmentStatus status) {
-        this.selectedItem = selectedItem;
+    public void rowChangesListener(RowChangedEvent event) {
+        RowDetailsDto data = event.getData();
+        this.selectedItem = data.getSelectedItem();
     }
 
     @Override
-    public void initialize() {
-        assignTableColumns();
-        insertDataIntoTable(); ///// ???????????????
-        assignTableEventHandler();
-        notifyTableRows();
-        setDetailsArea(); // Boooo!!!!
-    }
-
-    private void assignTableEventHandler(){
+    protected void setEventHandler() {
         appointmentTable.setOnMouseExited(this);
-        rowEventPublisher.registerObserver(this);
+        appointmentTable.setOnMouseClicked(this);
     }
-    
-    private void assignTableColumns(){
+
+    @Override
+    protected void assignTableColumns() {
         time_Column.setCellValueFactory(new PropertyValueFactory<>("timeLabel"));
         status_Column.setCellValueFactory(new PropertyValueFactory<>("statusVbox"));
         name_Column.setCellValueFactory(new PropertyValueFactory<>("namesVbox"));
         operations_Column.setCellValueFactory(new PropertyValueFactory<>("operationsVbox"));
         notes_Column.setCellValueFactory(new PropertyValueFactory<>("notesVbox"));
+        setRowFactory();
     }
-    
-    private void insertDataIntoTable(){
-        appointments = getTodaysAppointments();
+
+    @Override
+    protected void insertDataIntoTable() {
+        getTodaysAppointments();
+//        getWeeksAppointments();   // for testing reasons
         appointmentTable.setItems(getTimetable());
     }
-    
-    public List<Appointment> getTodaysAppointments(){
-        // Should be todays appointments
-        return dataLoaderService.getWeeksAppointments().orElse(new ArrayList<>());// Should be todays appointments normaly
+
+    public void getTodaysAppointments() {
+        getAppointmentsByDate(currentDate);
     }
-    
+
+    private void getAppointmentsByDate(LocalDate date) {
+        appointments = appointmentService.findAppointmentsByDate(date);
+    }
+
+    private void getWeeksAppointments() {
+        appointments = cacheService.getWeeksAppointments();
+    }
+
+    /**
+     * Should be changed... No use Of Manager...
+     *
+     * @return
+     */
+    private ObservableList<DayOverviewDto> getTimetable() {
+        var tableLoader = springContext.getBean(DayOverviewTableLoader.class);
+        return tableLoader.getTableItems(appointments);
+    }
+
     @Override
     public void handle(MouseEvent event) {
-        if (event.getSource().getClass() == TableView.class){
-            rowEventPublisher.setRowInformation(selectedItem, null, null);
-        }
-    }
+        if (event.getSource().getClass() == appointmentTable.getClass()) {
 
-    private void setDetailsArea() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
- 
-    private ObservableList<AppointmentDto> getTimetable(){
-        DayOverviewManager dayOverviewManager = springContext.getBean(DayOverviewManager.class);
-        return dayOverviewManager.getAppointmentDtoList(appointments);
-    }
-
-    private void notifyTableRows(){
-        CustomLabel label = getFirstNonEmptyLabel();
-        Appointment appointment = appointments.get((int)label.getAppointmentId());/// How does it work? //check!
-        rowEventPublisher.setRowInformation(label.getIdentity(), label.getIdentity(), AppointmentStatus.extractStatus(appointment));
-    }
- 
-    public CustomLabel getFirstNonEmptyLabel(){ // !!!!!  επικίνδυνη ρουτίνα!!!!
-        ObservableList<Node> namesVBox = getFirstVBox();
-        for (var dto : appointmentTable.getItems()){
-            namesVBox = dto.getNamesVbox().getChildrenUnmodifiable();
-            if (((CustomLabel)namesVBox.get(0)).isEmpty() == false){
-                break;
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                setTableIndex();
+                rowDetailsDto.setSelectedItem(selectedItem);
+                rowChangedEvent.setData(rowDetailsDto);
+                eventBus.post(rowChangedEvent);
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
+                rowDetailsDto.setFocusedItem(null);
+                rowChangedEvent.setData(rowDetailsDto);
+                eventBus.post(rowChangedEvent);
             }
         }
-        return (CustomLabel)namesVBox.get(0); // !!!!!!!! get first Label
     }
 
-    public ObservableList<Node> getFirstVBox() {
-        return appointmentTable.getItems().get(0).getNamesVbox().getChildrenUnmodifiable();
+    /**
+     * Apparently FIX this!!!.
+     */
+    private void setTableIndex() {
+        int value = 0;
+        int prevOffset = tableIndex.calcPrevOffset(appointmentTable);
+        int rowOffset = tableIndex.getRowsFrom9oClockOnwards(appointmentTable); // bull
+
+//        if (prevOffset == 0)
+//            value = appointmentTable.getSelectionModel().getSelectedIndex();
+//        
+//        tableIndex.setValue(value);
+        tableIndex.setValue(appointmentTable.getSelectionModel().getSelectedIndex());
     }
-    
-    private ImageView getImageView(Image image) {
+
+    /**
+     * Fix This.
+     *
+     * Maybe by adding postRowChangedEvent to label
+     */
+    @Override
+    protected void restoreState() { // table.restoreState();
+        Optional<DayTableLabel> label = getFirstNonEmptyLabel(); // table.getFirstNonEmptyRow();
+        if (label.isPresent()) { // !row.isEmpty();
+//            row.postRowChangedEvent(); // Theoretically
+            selectRow(tableIndex.getValue()); // row.select();
+/////  Perhaps should put this chunk of code inside (Row class)
+            Appointment appointment = appointmentService.findAppointmentById(label.get().getAppointmentId()).orElseThrow(); // How does it work? //checked!
+            rowDetailsDto.setDetails(label.get().getRowId(), label.get().getRowId(), extractStatus(appointment));
+            rowChangedEvent.setData(rowDetailsDto);
+            eventBus.post(rowChangedEvent);
+/////-------------------------------------            
+            label.get().postSideDetails(); // row.postSideDetails(); //
+
+        } else {
+//            selectRow(tableIndex.getValue()); // row.select();
+            DayTableLabel nameLabel = (DayTableLabel) appointmentTable.getItems().get(0).getNamesVbox().getChildrenUnmodifiable().get(0);
+            nameLabel.postSideDetails();
+        }
+
+        DayOverviewControlsController controlsController = springContext.getBean(DayOverviewControlsController.class);
+        controlsController.getDatePicker().setValue(currentDate);
+    }
+
+    private void selectRow(Integer value) {
+        appointmentTable.getSelectionModel().select(value);
+        appointmentTable.getSelectionModel().focus(value);
+    }
+
+    // !!!!!  επικίνδυνη ρουτίνα (-not any more-)!!!!  FIXED!!!!! Yeepy!!!!!
+    public Optional<DayTableLabel> getFirstNonEmptyLabel() {
+        DayTableLabel nameLabel;
+        tableIndex.setValue(MINUS_ONE);
+        for (var dto : appointmentTable.getItems()) {
+            tableIndex.increase();
+            nameLabel = (DayTableLabel) dto.getNamesVbox().getChildrenUnmodifiable().get(0);
+            if (!nameLabel.getText().equals("")) {
+                return Optional.of(nameLabel);
+            }
+        }
+        tableIndex.setValue(MINUS_ONE);
+        return Optional.empty();
+    }
+
+    private ImageView newImageView(Image image) {
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
         return imageView;
     }
+
+//    @Override
+//    public void restoreState() {
+//        appointmentTable.scrollTo(tableIndex.getValue());
+//        appointmentTable.getSelectionModel().select(tableIndex.getValue());
+////        appointmentTable.getFocusModel().focus(currentItemPosition);
+//        rowDetailsDto.setDetails(selectedItem, selectedItem, Appointment.AppointmentStatus.EMPTY);
+//        rowChangedEvent.setData(rowDetailsDto);
+//        eventBus.post(rowChangedEvent);
+//    }
+    
+    public void setRowFactory() {
+        appointmentTable.setRowFactory((TableView<DayOverviewDto> tableView) -> {
+            TableRow<DayOverviewDto> row = new TableRow<>();
+            row.boundsInParentProperty().addListener((ObservableValue<? extends Bounds> ObservableValue, Bounds oldBounds, Bounds newBounds) -> {
+                if (row.getItem() != null){
+                    LocalTime time = row.getItem().getTimeLabel().getTime();
+                    boundsHashMap.put(time, newBounds);
+                }
+            });
+            return row;
+        });
+    }
+
+    
 }

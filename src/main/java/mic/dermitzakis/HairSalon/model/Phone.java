@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,11 +39,11 @@ public class Phone implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "phone_id")
+    @Column//(name = "phone_id")
     private long phoneId;
     
     @ManyToOne
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "contactid")
     private Contact contact;
     
     private String number;

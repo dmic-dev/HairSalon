@@ -35,10 +35,11 @@ public class SpringFXMLLoader {
 
     public Parent load(FxmlView fxmlView) throws IOException {      
         FXMLLoader loader = new FXMLLoader();
-        loader.setControllerFactory((p) -> springContext.getBean(fxmlView.getControllerName()));// springContext::getBean
+        loader.setLocation(getClass().getResource(fxmlView.getFileURL()));
+        loader.setControllerFactory(springContext::getBean);
         loader.setResources(resourceBundle);
-        loader.setLocation(getClass().getResource(fxmlView.getFxmlFile()));
         return loader.load();
     }
     
 }
+//(p) -> springContext.getBean(fxmlView.getControllerName())

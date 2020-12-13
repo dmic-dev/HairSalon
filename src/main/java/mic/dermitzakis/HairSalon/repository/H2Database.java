@@ -6,31 +6,24 @@
 package mic.dermitzakis.HairSalon.repository;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import mic.dermitzakis.HairSalon.model.Appointment;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.model.EntityType;
-import mic.dermitzakis.HairSalon.repository.AppointmentRepository;
-import mic.dermitzakis.HairSalon.repository.ContactRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import mic.dermitzakis.HairSalon.business.CustomDataQueries;
-import org.springframework.stereotype.Component;
 import mic.dermitzakis.HairSalon.model.Employee;
 import mic.dermitzakis.HairSalon.model.Picture;
-import mic.dermitzakis.HairSalon.repository.EmployeeRepository;
-import mic.dermitzakis.HairSalon.repository.PictureRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author mderm
  */
-@Component
-public class H2Database implements DataAccess{
+@Service
+public class H2Database implements DataAccessService{
     
     private final ApplicationContext springContext;
     
@@ -40,6 +33,7 @@ public class H2Database implements DataAccess{
     private final EmployeeRepository employeeRepository;
     private final CustomDataQueries customQueryService;
 
+    @Autowired
     public H2Database(ApplicationContext springContext) {
         this.springContext = springContext;
         pictureRepository = springContext.getBean(PictureRepository.class);
@@ -73,7 +67,11 @@ public class H2Database implements DataAccess{
             case APPOINTMENT : {
                 Optional<List<Appointment>> appointmentList =
                         customQueryService.getAppointmentsBetween(entityType.getStartingDate(), entityType.getEndingDate());
-                if (appointmentList.isPresent()) list.addAll(appointmentList.get());
+                if (appointmentList.isPresent()) {
+                    List<Appointment> appointments = appointmentList.get();
+                    appointments.sort((Appointment o1, Appointment o2) -> o1.getAppointedDateTime().compareTo(o2.getAppointedDateTime()));
+                    list.addAll(appointments);
+                }// get-forget
                 break;
             }
             case PICTURE : {
@@ -82,7 +80,7 @@ public class H2Database implements DataAccess{
                 if (pictureList.isPresent()) list.addAll(pictureList.get());
                 break;
             }
-            default :
+            default : //  Could not find object
         }
         return list;
     }
@@ -104,7 +102,7 @@ public class H2Database implements DataAccess{
                 appointmentRepository.delete((Appointment)entity);
                 break;
             }
-            default : break; // Could not find object
+            default : throw new RuntimeException("Entity Name does not exist"); // Could not find object
         }
     }
 

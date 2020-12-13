@@ -15,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,7 @@ public class LogSession implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log_session_id")
+    @Column//(name = "log_session_id")
     private long logSessionId;
     
 //    @Temporal(TemporalType.TIMESTAMP)
@@ -51,6 +49,6 @@ public class LogSession implements Serializable{
     private LocalDateTime logout;
     
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "contact_id")
+    @JoinColumn(name = "employeeid", referencedColumnName = "contactid")
     private Employee employee;
 }

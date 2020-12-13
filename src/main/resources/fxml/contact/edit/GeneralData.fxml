@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane fx:id="generalData" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.ContactEdit.GeneralDataController">
+   <items>
+      <VBox prefHeight="103.0" prefWidth="377.0" spacing="10.0">
+         <children>
+            <Label prefHeight="27.0" prefWidth="528.0" styleClass="group-label" text="   Γενικά στοιχεία" />
+            <TextField fx:id="firstName_txtf" promptText="Όνομα" />
+            <TextField fx:id="lastName_txtf" promptText="Επώνυμο" />
+            <Separator prefWidth="200.0" />
+            <TextField fx:id="profession_txtf" promptText="Επάγγελμα" />
+            <TextField fx:id="company_txtf" promptText="Οργανισμός/Εταιρία" />
+            <TextField fx:id="position_txtf" promptText="Θέση" />
+         </children>
+         <padding>
+            <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
+         </padding>
+      </VBox>
+   </items>
+</SplitPane>

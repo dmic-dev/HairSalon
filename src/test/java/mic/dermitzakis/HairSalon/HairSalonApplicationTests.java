@@ -2,6 +2,7 @@ package mic.dermitzakis.HairSalon;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.junit.jupiter.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +22,7 @@ public class HairSalonApplicationTests {
 
 	@Test
 	public void contextLoads() {
-            assertTrue(springContext != null, "ApplicationContext found to be null");
+            assertTrue(springContext != null, "ApplicationContext springContext found to be null");
 	}
 
 }

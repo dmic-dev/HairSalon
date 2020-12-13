@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,18 +39,18 @@ public class Address implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="address_id")
+    @Column//(name="address_id")
     private long addressId;
     
     @ManyToOne
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "contactid")
     private Contact contact;
     
     private String street;
     
     private String number;
     
-    @Column(name="post_code")
+    @Column(name="post_code", length = 5)
     private String postCode;
     
     private String region;

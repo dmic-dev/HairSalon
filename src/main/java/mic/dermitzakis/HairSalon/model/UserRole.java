@@ -8,6 +8,7 @@ package mic.dermitzakis.HairSalon.model;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,7 +40,8 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roleId;
     
-    private String role;
+    @Column(name="a_role")
+    private String arole;
     
     @ManyToMany
     private List<Employee> employee = new LinkedList<>();
