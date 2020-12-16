@@ -52,7 +52,7 @@ public class StageManager {
         
         stage.setTitle(title);
         stage.setScene(scene);
-        stage.sizeToScene();
+//        stage.sizeToScene();
         
         return showStage(stage, view);
     }
@@ -60,6 +60,7 @@ public class StageManager {
     private Stage showStage(Stage stage, FxmlView view){
         try {
             if (isPrimaryStage){
+                stage.setMaximized(true);
                 stage.show();
                 isPrimaryStage = !isPrimaryStage;
             } else {

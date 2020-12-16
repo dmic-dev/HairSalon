@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ContactTableDetailsMapper implements Mapper<ContactOverviewDto>{
     private final ApplicationContext springContext;
-    private UUID identity;
     
     @Autowired
     public ContactTableDetailsMapper(ApplicationContext springContext) {
@@ -31,19 +30,19 @@ public final class ContactTableDetailsMapper implements Mapper<ContactOverviewDt
     public final ContactOverviewDto extract(Object object) {
         final ContactOverviewDto dto = springContext.getBean(ContactOverviewDto.class);
         Contact contact = (Contact)object;
-        identity = UUID.randomUUID();
+        UUID identity = UUID.randomUUID();
 //        dto.setIdentity(identity); /// ??????????
-        dto.setContactId(contact.getContactId());
-        setLabel(dto.getId(), String.valueOf(contact.getContactId()));
-        setLabel(dto.getFirstName(), contact.getFirstName());
-        setLabel(dto.getLastName(), contact.getLastName());
-        setLabel(dto.getPhone(), "SomePhone");
-        setLabel(dto.getNotes(), "");
+        dto.getId().setContactId(contact.getContactId());
+        setLabel(identity, dto.getId(), String.valueOf(contact.getContactId()));
+        setLabel(identity, dto.getFirstName(), contact.getFirstName());
+        setLabel(identity, dto.getLastName(), contact.getLastName());
+        setLabel(identity, dto.getPhone(), "SomePhone");
+        setLabel(identity, dto.getNotes(), "Some Notes .......");
         
         return dto;
     }
     
-    private void setLabel(ContactTableLabel label, String text) {
+    private void setLabel(UUID identity, ContactTableLabel label, String text) {
         label.setText(text);
         label.setRowId(identity);
     }

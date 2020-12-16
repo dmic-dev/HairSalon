@@ -22,26 +22,20 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class ContactOverviewDto {
     private final ApplicationContext springContext;
-    private long contactId;
-    
+    @Autowired
     private ContactTableLabel id;
+    @Autowired
     private ContactTableLabel firstName;
+    @Autowired
     private ContactTableLabel lastName;
+    @Autowired
     private ContactTableLabel phone;
+    @Autowired
     private ContactTableLabel notes;
     
     @Autowired
     public ContactOverviewDto(ApplicationContext springContext){
         this.springContext = springContext;
-        initializeFields();
-    }
-    
-    private void initializeFields(){
-        id        = springContext.getBean(ContactTableLabel.class);
-        firstName = springContext.getBean(ContactTableLabel.class);
-        lastName  = springContext.getBean(ContactTableLabel.class);
-        phone     = springContext.getBean(ContactTableLabel.class);
-        notes     = springContext.getBean(ContactTableLabel.class);
     }
     
     public String getFullName(){
@@ -50,14 +44,15 @@ public class ContactOverviewDto {
     
     @Override
     public boolean equals(Object obj){
-        if (this == obj) return true;
+//        if (this == obj) return true;
         return false;
     }
 
     @Override
     public int hashCode() {
+//        super.hashCode();
         int hash = 3;
-        hash = 29 * hash + (int) (this.contactId ^ (this.contactId >>> 32));
+        hash = 29 * hash + (int) (this.id.getContactId() ^ (this.id.getContactId() >>> 32));
         return hash;
     }
 }

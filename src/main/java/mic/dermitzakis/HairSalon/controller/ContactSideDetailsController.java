@@ -6,7 +6,6 @@
 package mic.dermitzakis.HairSalon.controller;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import java.time.format.DateTimeFormatter;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -17,6 +16,7 @@ import javax.annotation.PostConstruct;
 import mic.dermitzakis.HairSalon.dto.ContactSideDetailsDto;
 import mic.dermitzakis.HairSalon.event.ContactSideDetailsEvent;
 import mic.dermitzakis.HairSalon.view.FxmlController;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -48,7 +48,8 @@ public class ContactSideDetailsController implements FxmlController{
     public void initialize() {
     }
 
-    @Subscribe
+//    @Subscribe
+    @EventListener
     public void contactDetailsListener(ContactSideDetailsEvent event){
         ContactSideDetailsDto data = event.getData();
         name_txt.setText(data.getFullName());/*contactDetailsDto.getName()*/

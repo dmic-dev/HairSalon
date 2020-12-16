@@ -7,12 +7,11 @@ package mic.dermitzakis.HairSalon.controller;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,30 +20,22 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javax.annotation.PostConstruct;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import mic.dermitzakis.HairSalon.custom.ContactTableLabel;
 import mic.dermitzakis.HairSalon.dto.ContactOverviewDto;
-import mic.dermitzakis.HairSalon.dto.ContactSideDetailsDto;
 import mic.dermitzakis.HairSalon.dto.RowDetailsDto;
-import mic.dermitzakis.HairSalon.event.ContactSideDetailsEvent;
 import mic.dermitzakis.HairSalon.model.Contact;
 import mic.dermitzakis.HairSalon.services.ContactService;
 import mic.dermitzakis.HairSalon.mapper.ContactTableDetailsMapper;
 import mic.dermitzakis.HairSalon.event.RowChangedEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -77,15 +68,6 @@ public class ContactOverviewController extends AbstractTableViewController imple
     @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> phone_Column;
     @FXML private TableColumn<ContactOverviewDto, ContactTableLabel> notes_Column;
 
-    /* SideDetails */
-//    private Text name_txt;
-//    private Text id_txt;
-//    private StackPane picture_area;
-//    private Text gender_txt;
-//    private Text dob_txt;
-//    private Text date_created_txt;
-//    private Text last_modified_txt;
-
     public ContactOverviewController(ApplicationContext springContext, ContactService contactService, EventBus eventBus, RowChangedEvent rowChangedEvent, RowDetailsDto rowDetailsDto, ContactTableIndex tableIndex) {
         this.springContext = springContext;
         this.contactService = contactService;
@@ -106,8 +88,8 @@ public class ContactOverviewController extends AbstractTableViewController imple
      * @param event
      */
     
-//    @Subscribe
-    @EventListener
+    @Subscribe
+//    @EventListener
     public void rowChangesListener(RowChangedEvent event){
         RowDetailsDto data= event.getData();
         this.selectedItem = data.getSelectedItem();
@@ -161,7 +143,8 @@ public class ContactOverviewController extends AbstractTableViewController imple
         final ContactTableDetailsMapper tableDetails  = springContext.getBean(ContactTableDetailsMapper.class);
 
         List<ContactOverviewDto> collection = contacts
-                .parallelStream()
+                .stream()
+                .parallel() // Maybe responsible for the multiple focused, selected rows
                 .map(tableDetails::extract)
                 .collect(toList());
         
@@ -209,11 +192,11 @@ public class ContactOverviewController extends AbstractTableViewController imple
                     String lowerCasefilter = newValue.toLowerCase();
                     if(newValue.isEmpty()) {
                         return true;
-                    } else if (String.valueOf(contactDto.getContactId()).contains(newValue)) {
+                    } else if (String.valueOf(contactDto.getId().getContactId()).contains(newValue)) {
                         return true;
-                    } else if (contactDto.getFirstName().getText().toLowerCase().contains(lowerCasefilter)) {
+                    } else if (contactDto.getFirstName().getText().toLowerCase().startsWith(lowerCasefilter)) {
                         return true;
-                    } else if (contactDto.getLastName().getText().toLowerCase().contains(lowerCasefilter)) {
+                    } else if (contactDto.getLastName().getText().toLowerCase().startsWith(lowerCasefilter)) {
                         return true;
                     } else if (contactDto.getPhone().getText().toLowerCase().contains(lowerCasefilter)) {
                         return true;
@@ -236,5 +219,5 @@ public class ContactOverviewController extends AbstractTableViewController imple
     private void setClearButtonHandler() {
         clearButton.setOnAction((t) -> searchField.clear());
     }
-
+    
 }

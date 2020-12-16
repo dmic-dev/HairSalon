@@ -19,6 +19,7 @@ import mic.dermitzakis.HairSalon.event.EventFactory;
 import mic.dermitzakis.HairSalon.event.RowChangedEvent;
 import mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  *
@@ -28,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AbstractLabel extends Label implements EventHandler<MouseEvent>{
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
     @Autowired
     private EventBus eventBus;
     @Autowired
@@ -59,7 +62,7 @@ public class AbstractLabel extends Label implements EventHandler<MouseEvent>{
     }
     
     @Subscribe
-    public void rowChangesListener(RowChangedEvent event){
+    public void rowChangedListener(RowChangedEvent event){
         RowDetailsDto data = event.getData();
         selectedItem = data.getSelectedItem();
         focusedItem = data.getFocusedItem();
@@ -91,7 +94,8 @@ public class AbstractLabel extends Label implements EventHandler<MouseEvent>{
     }
     
     public void postSideDetails(){
-        eventBus.post(eventFactory.createEvent(this.getClass().getSimpleName()+"Event"));
+//        eventBus.post(eventFactory.createEvent(this.getClass().getSimpleName()+"Event"));
+        eventPublisher.publishEvent(eventFactory.createEvent(this.getClass().getSimpleName()+"Event"));
     }
 
     private Class<? extends AbstractLabel> subClass(){

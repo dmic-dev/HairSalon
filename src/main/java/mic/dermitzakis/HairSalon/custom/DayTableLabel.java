@@ -47,8 +47,8 @@ public class DayTableLabel extends AbstractLabel {
     
     @Subscribe
     @Override
-    public void rowChangesListener(RowChangedEvent event){
-        super.rowChangesListener(event);
+    public void rowChangedListener(RowChangedEvent event){
+        super.rowChangedListener(event);
         if (rowId == focusedItem) appointmentStatus = event.getData().getStatus();
         setStyle(getLabelStyle());
     }

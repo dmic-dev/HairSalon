@@ -86,12 +86,6 @@ public class DayOverviewController extends AbstractTableViewController implement
         this.tableIndex = tableIndex;
     }
 
-    
-    @Override
-    public void initialize(){
-        super.initialize();
-    }
-
     @PostConstruct
     private void init() {
         eventBus.register(this);
@@ -249,7 +243,7 @@ public class DayOverviewController extends AbstractTableViewController implement
     public void setRowFactory() {
         appointmentTable.setRowFactory((TableView<DayOverviewDto> tableView) -> {
             TableRow<DayOverviewDto> row = new TableRow<>();
-            row.boundsInParentProperty().addListener((ObservableValue<? extends Bounds> ObservableValue, Bounds oldBounds, Bounds newBounds) -> {
+            row.boundsInParentProperty().addListener((ObservableValue, oldBounds, newBounds) -> {
                 if (row.getItem() != null){
                     LocalTime time = row.getItem().getTimeLabel().getTime();
                     boundsHashMap.put(time, newBounds);

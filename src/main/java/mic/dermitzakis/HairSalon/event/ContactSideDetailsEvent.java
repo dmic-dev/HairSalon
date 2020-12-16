@@ -63,7 +63,7 @@ public final class ContactSideDetailsEvent implements Event{
     }
 
     private long getSelectedItemId(ContactOverviewDto contactOverviewDto) {
-        return contactOverviewDto.getContactId();
+        return contactOverviewDto.getId().getContactId();
     }
 
     private ContactOverviewDto getSelectedItemFromTable() {

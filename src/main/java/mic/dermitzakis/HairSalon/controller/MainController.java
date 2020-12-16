@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
@@ -55,7 +54,7 @@ public class MainController implements Initializable{
     @FXML private BorderPane homeStage;
     @FXML private Accordion mainAccordion;
     @FXML private BorderPane userProfile;
-    @FXML private SplitPane content;
+    @FXML private BorderPane mainContentArea;
     
     @Autowired
     @Lazy // lazy since Stage for StageManager not available yet at initialization time 
@@ -88,6 +87,11 @@ public class MainController implements Initializable{
     }
     
     @FXML
+    public void nextAppointmentButtonHandler(){
+        
+    }
+    
+    @FXML
     public void newContactButtonHandler(){
         stageManager.newStage(FxmlView.EDIT_CONTACT).showAndWait();
     }
@@ -112,7 +116,7 @@ public class MainController implements Initializable{
         if (mainAccordion.getExpandedPane() != null) {
             switch (mainAccordion.getExpandedPane().getText()) {
                 case "Ραντεβού" : { showAppointmentsPerDay(); break; }
-                case "Επαφές"   : { showContactsTable(); break; }
+                case "Πελάτες"   : { showContactsTable(); break; }
                 case "Κάδος ανακύκλωσης" : { showRecycleBin(); break; }
                 default : LOG.log(Level.SEVERE, "No such Accordion title: {0}",mainAccordion.getExpandedPane().getText());
             }
@@ -157,9 +161,9 @@ public class MainController implements Initializable{
     private void setContent(FxmlView fxmlView) {
         Parent root = stageManager.loadViewNodeHierarchy(fxmlView);
         if (root == null) System.out.println("\nRoot is NULL\n");
-        homeStage.setCenter(root);  // check! "root" becomes "content" check OK!
-//        ((Region)root).prefWidthProperty().bind(content.widthProperty());
-//        ((Region)root).prefHeightProperty().bind(content.heightProperty());
+        mainContentArea.setCenter(root);  // check! "root" becomes "content" check OK!
+//        ((Region)root).prefWidthProperty().bind(mainContentArea.widthProperty());
+//        ((Region)root).prefHeightProperty().bind(mainContentArea.heightProperty());
     }
 
     
@@ -168,17 +172,17 @@ public class MainController implements Initializable{
      * TEST METHODS    
     */
     private void showEmptyContentLabel() { 
-        Label label = new Label("Εμφάνιση περιεχομένων");
+        Label label = new Label("<Εμφάνιση περιεχομένων>");
         label.setFont(new Font(12));
         label.setTextFill(Paint.valueOf("#a0acd0"));
-        homeStage.setCenter(label);
+        mainContentArea.setCenter(label);
     }
     
     private void showValidContent(){
-        Label label = new Label("View Selected");
+        Label label = new Label("<View Selected>");
         label.setFont(new Font(12));
         label.setTextFill(Paint.valueOf("red"));
-        homeStage.setCenter(label);
+        mainContentArea.setCenter(label);
     }
 
 }

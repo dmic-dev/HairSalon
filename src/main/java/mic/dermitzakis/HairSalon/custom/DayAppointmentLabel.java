@@ -7,21 +7,16 @@ package mic.dermitzakis.HairSalon.custom;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import java.time.LocalTime;
 import javafx.geometry.Insets;
-import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
-import mic.dermitzakis.HairSalon.controller.DayOverviewController;
 import mic.dermitzakis.HairSalon.dto.DayTableRow;
-import mic.dermitzakis.HairSalon.dto.RowDetailsDto;
 import mic.dermitzakis.HairSalon.event.EventFactory;
 import mic.dermitzakis.HairSalon.event.RowChangedEvent;
 import mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus;
 import static mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus.CANCELED;
 import static mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus.COMPLETED;
 import static mic.dermitzakis.HairSalon.model.Appointment.AppointmentStatus.PENDING;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -29,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 //@Data
 public class DayAppointmentLabel extends AbstractLabel {
-//    private final EventBus eventBus;
     
     @Getter
     private AppointmentStatus appointmentStatus;
@@ -47,23 +41,16 @@ public class DayAppointmentLabel extends AbstractLabel {
     
     public DayAppointmentLabel(EventBus eventBus, EventFactory eventFactory) {
         super();
-//        this.eventBus = eventBus;
     }
     
     public DayAppointmentLabel(EventBus eventBus, EventFactory eventFactory, String text) {
         super(text);
-//        this.eventBus = eventBus;
     }
-    
-//    @PostConstruct
-//    private void init(){
-//        eventBus.register(this);
-//    } 
     
     @Subscribe
     @Override
-    public void rowChangesListener(RowChangedEvent event){
-        super.rowChangesListener(event);
+    public void rowChangedListener(RowChangedEvent event){
+        super.rowChangedListener(event);
         if (rowId == focusedItem) appointmentStatus = event.getData().getStatus();
         setStyle(getLabelStyle());
     }
@@ -85,11 +72,6 @@ public class DayAppointmentLabel extends AbstractLabel {
             default : return "-fx-text-fill: black;";
         }
     }
-    
-//    @Override
-//    protected void postSideDetails() {
-//        eventBus.post(eventFactory.createEvent("AppointmentRowEvent"));
-//    }
     
     public void setColumnType(ColumnType columnType){
         this.columnType = columnType;

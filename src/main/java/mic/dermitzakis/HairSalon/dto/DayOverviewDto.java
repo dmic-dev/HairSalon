@@ -31,8 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class DayOverviewDto{
-    @Autowired
-    ApplicationContext springContext;
+    private final ApplicationContext springContext;
     
     private TimeLabel timeLabel;
     private VBox namesVbox;
@@ -40,8 +39,16 @@ public class DayOverviewDto{
     private VBox operationsVbox;
     private VBox notesVbox;
 
-    public DayOverviewDto() {
+    public DayOverviewDto(ApplicationContext springContext) {
+        this.springContext = springContext;
         initializeFields();
+    }
+
+    private void initializeFields() {
+        statusVbox = new VBox();
+        notesVbox = new VBox();
+        operationsVbox = new VBox();
+        namesVbox = new VBox();
     }
 
     public void insertRow(Appointment appointment){
@@ -112,13 +119,6 @@ public class DayOverviewDto{
     private CustomChoiceBox getChoiceBoxWithProperties(DayTableRow row){
         CustomChoiceBoxManager choiceBoxManager = springContext.getBean(CustomChoiceBoxManager.class);
         return choiceBoxManager.getChoiceBoxWithProperties(row);
-    }
-
-    private void initializeFields() {
-        statusVbox = new VBox();
-        notesVbox = new VBox();
-        operationsVbox = new VBox();
-        namesVbox = new VBox();
     }
 
     private void insertValues(Appointment appointment) {

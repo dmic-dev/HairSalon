@@ -33,7 +33,7 @@ public final class DayTableDetailsMapper implements Mapper<DayTableRow> {
         return newRow(appointment);
     }
     
-    private final DayTableRow newEmptyRow(){
+    private DayTableRow newEmptyRow(){
         final DayTableRow row = springContext.getBean(DayTableRow.class);
         row.setIdentity(UUID.randomUUID());
         row.setAppointmentId(0);
@@ -44,7 +44,7 @@ public final class DayTableDetailsMapper implements Mapper<DayTableRow> {
         return row;
     }
     
-    private final DayTableRow newRow(Appointment appointment){
+    private DayTableRow newRow(Appointment appointment){
         final NotesItemImpl notesItem = springContext.getBean(NotesItemImpl.class);
         final OperationsItemImpl operationsItem = springContext.getBean(OperationsItemImpl.class);
         final DayTableRow rowData = springContext.getBean(DayTableRow.class);

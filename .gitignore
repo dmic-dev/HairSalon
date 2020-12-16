@@ -34,7 +34,7 @@ out/
 ### VS Code ###
 .vscode/
 
-# Gradle
+### Gradle ###
 .gradle
 /build/
 

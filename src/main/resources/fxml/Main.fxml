@@ -14,146 +14,234 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1010.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.MainController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1013.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.MainController">
    <children>
-      <BorderPane fx:id="homeStage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1010.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="homeStage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1010.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane prefHeight="81.0" prefWidth="906.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="26.0" prefWidth="1010.0" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0" prefWidth="906.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <top>
-                        <MenuBar BorderPane.alignment="CENTER">
-                          <menus>
-                            <Menu mnemonicParsing="false" text="File">
-                              <items>
-                                <MenuItem mnemonicParsing="false" text="Close" />
-                              </items>
-                            </Menu>
-                            <Menu mnemonicParsing="false" text="Edit">
-                              <items>
-                                <MenuItem mnemonicParsing="false" text="Delete" />
-                              </items>
-                            </Menu>
-                            <Menu mnemonicParsing="false" text="Help">
-                              <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
-                              </items>
-                            </Menu>
-                          </menus>
-                        </MenuBar>
-                     </top>
-                     <center>
-                        <AnchorPane prefHeight="54.0" prefWidth="597.0" styleClass="background-blue" />
-                     </center>
-                     <left>
-                        <AnchorPane prefHeight="54.0" prefWidth="64.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <ImageView fitHeight="56.0" fitWidth="56.0" layoutX="7.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
-                                 <effect>
-                                    <Reflection />
-                                 </effect>
-                              </ImageView>
-                           </children></AnchorPane>
-                     </left>
-                     <right>
-                        <AnchorPane prefHeight="59.0" prefWidth="237.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <ImageView fitHeight="56.0" fitWidth="56.0" layoutX="169.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../../OneDrive/Pictures/Eleni.jpg" />
-                                 </image>
-                              </ImageView>
-                              <BorderPane fx:id="userProfile" layoutX="-229.0" layoutY="-88.0">
-                                 <center>
-                                    <Label text="Εμφάνιση περιεχομένων" textFill="#a0acd0" BorderPane.alignment="CENTER" />
-                                    <!--<fx:include source="AppointmentView.fxml"/>-->
-                                 </center>
-                              </BorderPane>
-                              <Label alignment="TOP_RIGHT" layoutX="36.0" layoutY="7.0" opacity="0.52" prefHeight="51.0" prefWidth="117.0" text="Ελένη Καπαδουκάκη" textAlignment="RIGHT" wrapText="true">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                           </children></AnchorPane>
-                     </right>
-                  </BorderPane>
+                  <MenuBar prefHeight="26.0" prefWidth="1010.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
                </children>
             </AnchorPane>
          </top>
          <left>
-            <Accordion fx:id="mainAccordion" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="224.0" styleClass="background-blue" BorderPane.alignment="CENTER">
-              <panes>
-                <TitledPane animated="false" onMouseClicked="#showContent" text="Ραντεβού" textAlignment="CENTER" wrapText="true">
-                  <content>
-                        <VBox prefHeight="177.0" prefWidth="184.0" spacing="25.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#newAppointmentButtonHandler" prefHeight="39.0" prefWidth="187.0" text="Νέο Ραντεβού" />
-                              <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Επεξεργασία" />
-                              <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="183.0" styleClass="button-delete" text="Διαγραφή" />
-                           </children>
-                           <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
-                           </padding>
-                        </VBox>
-                  </content>
-                </TitledPane>
-                <TitledPane animated="false" onMouseClicked="#showContent" text="Επαφές">
-                  <content>
-                        <VBox prefHeight="177.0" prefWidth="184.0" spacing="25.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#newContactButtonHandler" prefHeight="39.0" prefWidth="187.0" text="Νέα Επαφή" />
-                              <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Επεξεργασία" />
-                              <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="183.0" styleClass="button-delete" text="Διαγραφή" />
-                              <Label />
-                              <Button mnemonicParsing="false" onAction="#newAppointmentByContactsButtonHandler" prefHeight="39.0" prefWidth="183.0" styleClass="button-new_appointment" text="Νέο Ραντεβού" />
-                           </children>
-                           <padding>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
-                           </padding>
-                        </VBox>
-                  </content>
-                </TitledPane>
-                  <TitledPane animated="false" onMouseClicked="#showContent" text="Αναφορές">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </TitledPane>
-                  <TitledPane animated="false" onMouseClicked="#showContent" text="Κάδος ανακύκλωσης">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <VBox layoutX="-12.0" layoutY="-2.0" prefHeight="333.3333333333333" prefWidth="222.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox prefWidth="262.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+               <children>
+                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="255.0" style="-fx-background-color: lightgrey;" text="Κύριο Μενού">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Accordion fx:id="mainAccordion" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="262.0" styleClass="background-blue">
+                    <panes>
+                      <TitledPane animated="false" onMouseClicked="#showContent" text="Ραντεβού" textAlignment="CENTER" wrapText="true">
+                        <content>
+                              <AnchorPane>
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Εμφάνιση" />
-                                    <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Ανάκτηση Όλων" />
-                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="177.0" text="Ανάκτηση Επιλεγμένων" />
-                                    <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="163.0" styleClass="button-delete" text="Οριστική Διαγραφή Επιλεγμένων" textAlignment="CENTER" wrapText="true" />
+                                    <VBox prefHeight="374.6666666666667" prefWidth="247.33333333333334" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#newAppointmentButtonHandler" prefHeight="39.0" prefWidth="187.0" text="Νέο Ραντεβού" />
+                                          <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Επεξεργασία" />
+                                          <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="187.0" styleClass="button-delete" text="Διαγραφή" />
+                                          <Label />
+                                          <Button mnemonicParsing="false" onAction="#nextAppointmentButtonHandler" prefHeight="39.0" prefWidth="187.0" text="Επόμενο Ραντεβού" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
+                                       </padding>
+                                    </VBox>
                                  </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
-                                 </padding>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </TitledPane>
-              </panes>
-            </Accordion>
+                              </AnchorPane>
+                        </content>
+                           <padding>
+                              <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                      </TitledPane>
+                      <TitledPane animated="false" onMouseClicked="#showContent" text="Πελάτες">
+                        <content>
+                              <AnchorPane>
+                                 <children>
+                                    <VBox prefHeight="374.6666666666667" prefWidth="247.33333333333334" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#newContactButtonHandler" prefHeight="39.0" prefWidth="187.0" text="Νέα Επαφή" />
+                                          <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Επεξεργασία" />
+                                          <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="183.0" styleClass="button-delete" text="Διαγραφή" />
+                                          <Label />
+                                          <Button mnemonicParsing="false" onAction="#newAppointmentByContactsButtonHandler" prefHeight="39.0" prefWidth="183.0" styleClass="button-new_appointment" text="Νέο Ραντεβού" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                           <padding>
+                              <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                      </TitledPane>
+                        <TitledPane animated="false" onMouseClicked="#showContent" text="Αναφορές">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                           <padding>
+                              <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TitledPane>
+                        <TitledPane animated="false" onMouseClicked="#showContent" text="Κάδος ανακύκλωσης">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox layoutX="22.2" layoutY="22.2" prefHeight="370.0" prefWidth="254.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Εμφάνιση" />
+                                          <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="187.0" text="Ανάκτηση Όλων" />
+                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="187.0" text="Ανάκτηση Επιλεγμένων" />
+                                          <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="187.0" styleClass="button-delete" text="Οριστική Διαγραφή Επιλεγμένων" textAlignment="CENTER" wrapText="true" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="40.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                           <padding>
+                              <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TitledPane>
+                    </panes>
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                  </Accordion>
+               </children>
+            </VBox>
          </left>
          <bottom>
-            <SplitPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="837.0" BorderPane.alignment="CENTER">
-               <items>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="background-white" />
-               </items>
-            </SplitPane>
+            <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Δημιουργήθηκε από τον Μιχάλης Δερμιτζάκης" />
+                  <Label text="(mic.dermitzakis@gmail.com)">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+                  <Label text="(c) 2018 -2020">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
          </bottom>
-         <right>
-            <Pane prefHeight="200.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
-         </right>
+         <center>
+            <VBox BorderPane.alignment="CENTER">
+               <children>
+                  <SplitPane prefHeight="60.0" prefWidth="735.0" style="-fx-background-color: white; -fx-border-color: black;">
+                     <items>
+                        <HBox>
+                           <children>
+                              <AnchorPane prefHeight="56.0" prefWidth="56.0">
+                                 <children>
+                                    <ImageView fitHeight="56.0" fitWidth="56.0" layoutX="7.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                                       <effect>
+                                          <Reflection />
+                                       </effect>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="57.0" prefWidth="709.0" styleClass="background-blue">
+                                 <children>
+                                    <Label layoutX="8.0" text="Hair Art">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="8.0" layoutY="35.0" text="Σύστημα διαχείρισης Ραντεβού και Πελατών Κομμωτηρίου">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="59.0" prefWidth="237.0">
+                                 <children>
+                                    <ImageView fitHeight="56.0" fitWidth="56.0" layoutX="169.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../OneDrive/Pictures/Eleni.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <BorderPane fx:id="userProfile" layoutX="-229.0" layoutY="-88.0">
+                                       <center>
+                                          <Label text="Εμφάνιση περιεχομένων" textFill="#a0acd0" BorderPane.alignment="CENTER" />
+                                          <!--<fx:include source="AppointmentView.fxml"/>-->
+                                       </center>
+                                    </BorderPane>
+                                    <Label alignment="TOP_RIGHT" layoutX="36.0" layoutY="7.0" opacity="0.52" prefHeight="51.0" prefWidth="117.0" text="Ελένη Καπαδουκάκη" textAlignment="RIGHT" wrapText="true">
+                                       <font>
+                                          <Font name="Cambria Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                     </items>
+                  </SplitPane>
+                  <BorderPane fx:id="mainContentArea" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>

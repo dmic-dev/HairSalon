@@ -6,7 +6,7 @@
 
 <Group fx:id="indicator" visible="false" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mic.dermitzakis.HairSalon.controller.CurrentTimeIndicatorController">
    <children>
-      <Line endX="751.0" fill="RED" stroke="RED" />
+      <Line endX="731.0" fill="RED" stroke="RED" />
       <Circle fill="RED" radius="3.5" stroke="RED" strokeType="INSIDE" />
    </children>
 </Group>

@@ -16,7 +16,7 @@ import lombok.Setter;
 //@Data
 //@Component
 //@Scope("prototype")
-public final class ContactTableLabel extends AbstractLabel {
+public class ContactTableLabel extends AbstractLabel {
     @Getter @Setter
     private long contactId = 0;
  
@@ -33,7 +33,7 @@ public final class ContactTableLabel extends AbstractLabel {
     
     @Override
     public boolean equals(Object obj){
-//        if (this == obj) return true;
+        if (this == obj) return true;
         return false;
     }
 

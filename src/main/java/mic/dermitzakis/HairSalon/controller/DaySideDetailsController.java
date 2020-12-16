@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import mic.dermitzakis.HairSalon.dto.AppointmentSideDetailsDto;
 import mic.dermitzakis.HairSalon.event.AppointmentSideDetailsEvent;
 import mic.dermitzakis.HairSalon.view.FxmlController;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,8 +49,9 @@ public class DaySideDetailsController implements FxmlController{
     public void init() {
         eventBus.register(this);
     }
-    
-    @Subscribe
+
+//   e @Subscribe
+    @EventListener
     public void appointmentDetailsListener(AppointmentSideDetailsEvent event){
         AppointmentSideDetailsDto data = event.getData();
         name_txt.setText(data.getName());
